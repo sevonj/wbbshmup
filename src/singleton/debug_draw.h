@@ -28,6 +28,9 @@ private:
 	Vector<QueuePoint> point_queue;
 	Vector<QueueLine> line_queue;
 
+	DebugDraw();
+	~DebugDraw();
+
 	void clear_queues();
 	void draw_text(String text);
 
@@ -41,9 +44,6 @@ public:
 	static void draw_line_2d(Vector2 a, Vector2 b, Color color);
 	static void draw_point_3d(Vector3 a, Color color);
 	static void draw_point_2d(Vector2 a, Color color);
-
-	DebugDraw();
-	~DebugDraw();
 
 	void _ready() override;
 	void _process(double delta) override;

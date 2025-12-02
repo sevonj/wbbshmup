@@ -1,6 +1,6 @@
 #include "wbb_input.h"
 
-#define MAX_WIIMOTES 2
+#define MAX_WIIMOTES 1
 
 WbbInput *WbbInput::singleton = nullptr;
 wiimote **WbbInput::wiimotes = nullptr;
@@ -31,19 +31,74 @@ WbbInput::~WbbInput() {
 	singleton = nullptr;
 }
 
+void WbbInput::poll() {
+	if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
+		/*
+		 *	This happens if something happened on any wiimote.
+		 *	So go through each one and check if anything happened.
+		 */
+		int i = 0;
+		for (; i < MAX_WIIMOTES; ++i) {
+			wiimote *wm = wiimotes[i];
+			switch (wm->event) {
+				case WIIUSE_EVENT: {
+					if (wm->exp.type != EXP_WII_BOARD) {
+						// You are not a balance board; we don't care what you have to say.
+						break;
+					}
+					wii_board_t *wb = (wii_board_t *)&wm->exp.wb;
+
+					tl = wb->tl;
+					tr = wb->tr;
+					bl = wb->bl;
+					br = wb->br;
+
+					break;
+				}
+
+				default:
+					break;
+			}
+		}
+	}
+}
+
 void WbbInput::_ready() {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
 	wiimotes = wiiuse_init(MAX_WIIMOTES);
-}
 
-void WbbInput::_process(double delta) {
-}
-
-void WbbInput::_physics_process(double delta) {
 	int found = get_found_motes();
 	print_line("found: ", found);
 
 	int connected = get_connected_motes();
 	print_line("connected: ", connected);
+
+	for (int i = 0; i < MAX_WIIMOTES; i++) {
+		wiimote *wm = wiimotes[i];
+		print_line("mote exp: ", wm->exp.type);
+		if (wm->exp.type == EXP_WII_BOARD) {
+			wiiuse_set_leds(wiimotes[i], 0xf0);
+		}
+	}
+}
+
+void WbbInput::_process(double delta) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+}
+
+void WbbInput::_physics_process(double delta) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	// Polling is done twice on purpose. Otherwise there's like a whole second of input lag.
+	// I assume physics ticks are too slow, causing events piling up?
+	poll();
+	poll();
 }
 
 int32_t WbbInput::get_found_motes() {
@@ -65,11 +120,7 @@ int32_t WbbInput::get_connected_motes() {
 /// @brief
 /// @return first balance board or nullptr
 wii_board_t *WbbInput::get_balance_board() {
-	int32_t connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
-	if (!connected) {
-		return nullptr;
-	}
-	for (int i = 0; i < connected; i++) {
+	for (int i = 0; i < MAX_WIIMOTES; i++) {
 		wiimote *wm = wiimotes[i];
 		if (wm->exp.type == EXP_WII_BOARD) {
 			return (wii_board_t *)&wm->exp.wb;
@@ -78,15 +129,23 @@ wii_board_t *WbbInput::get_balance_board() {
 	return nullptr;
 }
 
-Vector2 WbbInput::get_axis() {
-	wii_board_t *wb = get_balance_board();
-	if (!wb) {
-		return Vector2();
+float deadzone(double value) {
+	if (value > 0) {
+		value -= 3;
+		return Math::max(value, 0.0);
+	} else {
+		value += 3;
+		return Math::min(value, 0.0);
 	}
+}
 
-	float total = wb->tl + wb->tr + wb->bl + wb->br;
-	float x = ((wb->tr + wb->br) / total) * 2 - 1;
-	float y = ((wb->tl + wb->tr) / total) * 2 - 1;
+Vector2 WbbInput::get_axis() {
+	float total = tl + tr + bl + br;
 
-	return Vector2(x, y);
+	float x = deadzone(tr + br) - deadzone(tl + bl);
+	float y = deadzone(br + bl) - deadzone(tr + tl);
+
+	print_line("Weight: ", total, " kg @ (", x, ", ", y, ")\n");
+	print_line("Interpolated weight: TL", tl, "  TR:", tr, "   BL", bl, "  BR:", br);
+	return Vector2(x, y) / 70;
 }

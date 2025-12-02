@@ -67,7 +67,24 @@ void Player::_process(double delta) {
 
 	DebugDraw::draw_line_3d(origin, origin + up, Color(1, 0, 0));
 	DebugDraw::draw_line_3d(origin, origin + input_dir, Color(1, 1, 0));
-	DebugDraw::draw_line_3d(origin, origin + input_dir, Color(0, 0, 1));
+	DebugDraw::draw_line_3d(origin, origin + orientation, Color(0, 0, 1));
+
+	mdl->set_rotation(Vector3(Vector3(input_axis.y, 0, -input_axis.x) * MDL_LEAN_SCALE));
+
+	Vector3 pos = get_position();
+
+	pos += input_dir * delta * 8;
+	if (pos.x > MAX_X) {
+		pos.x = MAX_X;
+	} else if (pos.x < -MAX_X) {
+		pos.x = -MAX_X;
+	}
+	if (pos.z > MAX_Z) {
+		pos.z = MAX_Z;
+	} else if (pos.z < -MAX_Z) {
+		pos.z = -MAX_Z;
+	}
+	set_position(pos);
 }
 
 void Player::_physics_process(double delta) {

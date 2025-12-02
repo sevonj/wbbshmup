@@ -19,6 +19,13 @@ private:
 
 	const String MDL_PATH = "res://assets/entities/player/mdl_player_ship.blend";
 
+	/// @brief How much does the model rotate towards the movement direction
+	static constexpr float MDL_LEAN_SCALE = 0.4;
+	/// @brief Maximum position offset X
+	static constexpr float MAX_X = 12.0;
+	/// @brief Maximum position offset Z
+	static constexpr float MAX_Z = 6.0;
+
 	Node3D *mdl;
 	CollisionShape3D *coll;
 
