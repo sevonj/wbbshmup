@@ -1,0 +1,15 @@
+project(gameplay)
+
+# Automatically pick up files added to src
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+
+# Add a dynamic library called gameplay - this builds gameplay.dll
+add_library(${LIBNAME} SHARED ${SOURCES})
+
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(${LIBNAME} PUBLIC godot::cpp)
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX . FILES ${SOURCES})

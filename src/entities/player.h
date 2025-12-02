@@ -1,0 +1,40 @@
+#pragma once
+
+#include <entities/base_character.h>
+#include <godot_cpp/classes/character_body3d.hpp>
+#include <godot_cpp/classes/collision_shape3d.hpp>
+#include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/wrapped.hpp>
+#include <godot_cpp/variant/variant.hpp>
+
+using namespace godot;
+
+class Player : public BaseCharacter {
+	GDCLASS(Player, BaseCharacter)
+
+private:
+	static constexpr float COLL_H = 1.7;
+	static constexpr float COLL_R = 0.3;
+
+	const String MDL_PATH = "res://assets/entities/player/mdl_player_ship.blend";
+
+	Node3D *mdl;
+	CollisionShape3D *coll;
+
+	bool noclip;
+
+	void setup_model();
+	void setup_collider();
+
+protected:
+	static void _bind_methods();
+
+public:
+	Player();
+	~Player();
+
+	void _ready() override;
+	void _process(double delta) override;
+	void _physics_process(double delta) override;
+};

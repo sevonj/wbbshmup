@@ -1,25 +1,29 @@
 #pragma once
 
 #include <wiiuse.h>
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/wrapped.hpp>
 #include <godot_cpp/variant/variant.hpp>
 
 using namespace godot;
 
-class ExampleClass : public Node {
-	GDCLASS(ExampleClass, Node)
+class WbbInput : public Node {
+	GDCLASS(WbbInput, Node)
 
-	wiimote **wiimotes;
+private:
+	static WbbInput *singleton;
+
+	static wiimote **wiimotes;
 
 protected:
 	static void _bind_methods();
 
 public:
-	ExampleClass() {
-		wiimotes = nullptr;
-	};
-	~ExampleClass() {};
+	static WbbInput *get_singleton();
+	WbbInput();
+	~WbbInput();
 
 	void _ready() override;
 	void _process(double delta) override;

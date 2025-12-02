@@ -1,18 +1,44 @@
-#include "example_class.h"
+#include "wbb_input.h"
 
 #define MAX_WIIMOTES 2
 
-void ExampleClass::_bind_methods() {
+WbbInput *WbbInput::singleton = nullptr;
+wiimote **WbbInput::wiimotes = nullptr;
+
+void WbbInput::_bind_methods() {
 }
 
-void ExampleClass::_ready() {
+WbbInput *WbbInput::get_singleton() {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		print_error("Something loaded WbbInput in editor!");
+	}
+	if (unlikely(singleton == nullptr)) {
+		singleton = memnew(WbbInput);
+		SceneTree *scene_tree = (SceneTree *)Engine::get_singleton()->get_main_loop();
+		scene_tree->get_current_scene()->add_child(singleton);
+	}
+	return singleton;
+}
+
+WbbInput::WbbInput() {
+	CRASH_COND(singleton != nullptr);
+	singleton = this;
+	wiimotes = nullptr;
+}
+
+WbbInput::~WbbInput() {
+	CRASH_COND(singleton == nullptr);
+	singleton = nullptr;
+}
+
+void WbbInput::_ready() {
 	wiimotes = wiiuse_init(MAX_WIIMOTES);
 }
 
-void ExampleClass::_process(double delta) {
+void WbbInput::_process(double delta) {
 }
 
-void ExampleClass::_physics_process(double delta) {
+void WbbInput::_physics_process(double delta) {
 	int found = get_found_motes();
 	print_line("found: ", found);
 
@@ -20,7 +46,7 @@ void ExampleClass::_physics_process(double delta) {
 	print_line("connected: ", connected);
 }
 
-int32_t ExampleClass::get_found_motes() {
+int32_t WbbInput::get_found_motes() {
 	if (wiimotes == nullptr) {
 		return 0;
 	}
@@ -28,7 +54,7 @@ int32_t ExampleClass::get_found_motes() {
 	return found;
 }
 
-int32_t ExampleClass::get_connected_motes() {
+int32_t WbbInput::get_connected_motes() {
 	if (wiimotes == nullptr) {
 		return 0;
 	}
@@ -38,7 +64,7 @@ int32_t ExampleClass::get_connected_motes() {
 
 /// @brief
 /// @return first balance board or nullptr
-wii_board_t *ExampleClass::get_balance_board() {
+wii_board_t *WbbInput::get_balance_board() {
 	int32_t connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
 	if (!connected) {
 		return nullptr;
@@ -52,7 +78,7 @@ wii_board_t *ExampleClass::get_balance_board() {
 	return nullptr;
 }
 
-Vector2 ExampleClass::get_axis() {
+Vector2 WbbInput::get_axis() {
 	wii_board_t *wb = get_balance_board();
 	if (!wb) {
 		return Vector2();

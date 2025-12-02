@@ -2,4 +2,12 @@
 
 [node name="Node3D" type="Node3D"]
 
-[node name="ExampleClass" type="ExampleClass" parent="."]
+[node name="Player" type="Player" parent="."]
+collision_layer = 2
+collision_mask = 13
+
+[node name="Camera3D" type="CameraRig" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.92473215, 0.3806185, 0, -0.3806185, 0.92473215, 0, 5.076869, 8.000816)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.19969292, -0.0494715, -0.97860885, 0.97985864, 0.01008218, 0.19943827, 0, -0.99872476, 0.05048842, 0, 3.8448553, 0)
