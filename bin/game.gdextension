@@ -1,0 +1,45 @@
+[configuration]
+
+entry_symbol = "game_library_init"
+compatibility_minimum = "4.4"
+reloadable = true
+
+[libraries]
+
+macos.debug = "res://bin/game.macos.template_debug.framework"
+macos.release = "res://bin/game.macos.template_release.framework"
+ios.debug = "res://bin/game.ios.template_debug.xcframework"
+ios.release = "res://bin/game.ios.template_release.xcframework"
+windows.debug.x86_32 = "res://bin/game.windows.template_debug.x86_32.dll"
+windows.release.x86_32 = "res://bin/game.windows.template_release.x86_32.dll"
+windows.debug.x86_64 = "res://bin/game.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "res://bin/game.windows.template_release.x86_64.dll"
+linux.debug.x86_64 = "res://bin/game.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "res://bin/game.linux.template_release.x86_64.so"
+linux.debug.arm64 = "res://bin/game.linux.template_debug.arm64.so"
+linux.release.arm64 = "res://bin/game.linux.template_release.arm64.so"
+linux.debug.rv64 = "res://bin/game.linux.template_debug.rv64.so"
+linux.release.rv64 = "res://bin/game.linux.template_release.rv64.so"
+android.debug.x86_64 = "res://bin/game.android.template_debug.x86_64.so"
+android.release.x86_64 = "res://bin/game.android.template_release.x86_64.so"
+android.debug.arm64 = "res://bin/game.android.template_debug.arm64.so"
+android.release.arm64 = "res://bin/game.android.template_release.arm64.so"
+
+[dependencies]
+ios.debug = {
+    "res://bin/libgodot-cpp.ios.template_debug.xcframework": ""
+}
+ios.release = {
+    "res://bin/libgodot-cpp.ios.template_release.xcframework": ""
+}
+
+[icons]
+
+AiHint = "res://editor/icons/ai_hint.png"
+BaseCharacter = "res://editor/icons/base_character.png"
+Enemy = "res://editor/icons/enemy.png"
+InfoEntSpawnPoint = "res://editor/icons/info_ent_spawn_point.png"
+InfoPlayerStart = "res://editor/icons/info_player_start.png"
+Room = "res://editor/icons/room.png"
+Stage = "res://editor/icons/stage.png"
+WpnStickyGun = "res://editor/icons/wpn_sticky_gun.png"
