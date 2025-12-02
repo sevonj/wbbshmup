@@ -43,15 +43,16 @@ project(godot-cpp-template
     LANGUAGES CXX
 )
 
-add_library(${LIBNAME} SHARED)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
-target_sources(${LIBNAME}
-    PRIVATE
-    src/register_types.cpp
-    src/register_types.h
-    src/example_class.cpp
-    src/example_class.h
-)
+add_library(${LIBNAME} SHARED ${SOURCES})
+
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_link_libraries(${LIBNAME} PUBLIC godot::cpp)
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX src FILES ${SOURCES})
 
 # Fetch a list of the xml files to use for documentation and add to our target
 file(GLOB_RECURSE DOC_XML LIST_DIRECTORIES NO CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/doc_classes/*.xml")
