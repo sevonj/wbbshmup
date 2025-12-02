@@ -65,6 +65,11 @@ endif()
 
 target_link_libraries(${LIBNAME} PRIVATE godot-cpp)
 
+add_subdirectory(wiiuse SYSTEM)
+target_link_libraries(${LIBNAME} PRIVATE wiiuse)
+target_include_directories(${LIBNAME} PUBLIC "wiiuse/src/")
+set_property(TARGET wiiuse PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 
 # Require at least C++17 for this target
 set_property(TARGET ${LIBNAME} PROPERTY CXX_STANDARD 17)

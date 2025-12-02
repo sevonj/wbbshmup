@@ -25,7 +25,8 @@ public:
 	void _process(double delta) override;
 	void _physics_process(double delta) override;
 
-	void print_type(const Variant &p_variant) const;
-	uint32_t get_found_motes();
-	uint32_t get_connected_motes();
+	int32_t get_found_motes();
+	int32_t get_connected_motes();
+	wii_board_t *get_balance_board();
+	Vector2 get_axis();
 };
