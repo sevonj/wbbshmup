@@ -1,4 +1,5 @@
 #include "camera_rig_orbit.h"
+
 #include <config.h>
 #include <entities/player.h>
 #include <game.h>
@@ -8,6 +9,7 @@
 #include <godot_cpp/classes/physics_ray_query_parameters3d.hpp>
 #include <godot_cpp/classes/world3d.hpp>
 #include <godot_cpp/core/class_db.hpp>
+
 namespace godot {
 
 void CameraRigOrbit::_bind_methods() {}

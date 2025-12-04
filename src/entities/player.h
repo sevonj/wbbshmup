@@ -1,6 +1,6 @@
 #pragma once
 
-#include <entities/base_character.h>
+#include <entities/character.h>
 #include <godot_cpp/classes/character_body3d.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -10,12 +10,13 @@
 
 using namespace godot;
 
-class Player : public BaseCharacter {
-	GDCLASS(Player, BaseCharacter)
+class Player : public Character {
+	GDCLASS(Player, Character)
 
 private:
 	static constexpr float COLL_H = 1.7;
 	static constexpr float COLL_R = 0.3;
+	const double FIRE_RATE = 3.0;
 
 	const String MDL_PATH = "res://assets/entities/player/mdl_player_ship.blend";
 
@@ -29,10 +30,13 @@ private:
 	Node3D *mdl;
 	CollisionShape3D *coll;
 
+	double fire_timer;
+
 	bool noclip;
 
 	void setup_model();
 	void setup_collider();
+	void fire();
 
 protected:
 	static void _bind_methods();
@@ -44,4 +48,7 @@ public:
 	void _ready() override;
 	void _process(double delta) override;
 	void _physics_process(double delta) override;
+
+	bool get_noclip();
+	void set_noclip(bool value);
 };

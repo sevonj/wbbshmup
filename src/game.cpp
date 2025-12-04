@@ -1,4 +1,5 @@
 #include "game.h"
+
 #include <godot_cpp/classes/engine.hpp>
 
 namespace godot {
@@ -6,7 +7,7 @@ namespace godot {
 Game *Game::singleton = nullptr;
 CameraRig *Game::current_camera = nullptr;
 Player *Game::player = nullptr;
-//Stage *Game::stage = nullptr;
+Stage *Game::stage = nullptr;
 
 Game *Game::get_singleton() {
 	if (unlikely(singleton == nullptr)) {
@@ -36,7 +37,6 @@ void Game::set_player(Player *value) {
 	player = value;
 }
 
-/*
 Stage *Game::get_stage() {
 	if (!stage) {
 		print_error("Game::get_stage() - Someone asked for the stage, but it's null!");
@@ -47,7 +47,6 @@ Stage *Game::get_stage() {
 void Game::set_stage(Stage *value) {
 	stage = value;
 }
-//*/
 
 bool Game::is_out_of_bounds(Vector3 position) {
 	return !DEFAULT_STAGE_BOUNDS.has_point(position);

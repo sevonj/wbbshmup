@@ -1,0 +1,144 @@
+[gd_scene load_steps=14 format=3 uid="uid://bnlbmhxoh42ei"]
+
+[ext_resource type="Environment" uid="uid://dqx2pp8dxtr4r" path="res://assets/env/env_uranus.tres" id="1_8520i"]
+[ext_resource type="Texture2D" uid="uid://smd54alqfset" path="res://assets/env/bg_objects/tex_uranus.png" id="2_jm80a"]
+[ext_resource type="Material" uid="uid://xr553culru8q" path="res://assets/vfx/mat_part_spacedust2.tres" id="3_m2cra"]
+[ext_resource type="Material" uid="uid://ef54bf0qnk8y" path="res://assets/materials/mat_grid.tres" id="4_toxpe"]
+[ext_resource type="PackedScene" uid="uid://c5k30qcjm66lt" path="res://assets/entities/enemy_boss_cocklobster/mdl_cock_lobster.blend" id="5_sso6q"]
+[ext_resource type="Texture2D" uid="uid://c7q0t1ukig1ij" path="res://assets/textures/tex_mod_metal1.png" id="6_ryfyu"]
+[ext_resource type="Texture2D" uid="uid://beccfc7pawcdl" path="res://assets/ui/tex_hud_powerbutton.png" id="7_evt3k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6qdhj"]
+transparency = 4
+shading_mode = 0
+albedo_color = Color(0.22310299, 0.22310287, 0.22310284, 1)
+albedo_texture = ExtResource("2_jm80a")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_i6vto"]
+material = SubResource("StandardMaterial3D_6qdhj")
+size = Vector2(4000, 4000)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k27tg"]
+emission_shape_scale = Vector3(100, 100, 100)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 40.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_jmfav"]
+material = ExtResource("3_m2cra")
+size = 0.1
+sections = 2
+section_segments = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lxd4n"]
+size = Vector2(24, 96)
+subdivide_width = 3
+subdivide_depth = 3
+
+[sub_resource type="QuadMesh" id="QuadMesh_unxsn"]
+
+[node name="stage" type="Stage"]
+
+[node name="static" type="Node" parent="."]
+
+[node name="env" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(0.13887368, -0.7520756, -0.64428, 0.9798585, 0.01008219, 0.19943817, -0.14349684, -0.65899986, 0.73832774, 0, 3.8448553, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="env"]
+environment = ExtResource("1_8520i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2000, 0, -1500)
+mesh = SubResource("QuadMesh_i6vto")
+
+[node name="entities" type="Node" parent="."]
+
+[node name="vfx_part_spacedust" type="GPUParticles3D" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 8, -47)
+amount = 64
+lifetime = 1.99
+trail_enabled = true
+trail_lifetime = 7.2
+process_material = SubResource("ParticleProcessMaterial_k27tg")
+draw_pass_1 = SubResource("RibbonTrailMesh_jmfav")
+
+[node name="camera_rig" type="CameraRig" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 0.92473215, 0.3806185, 0, -0.3806185, 0.92473215, 0, 8, 13.25)
+
+[node name="Camera3D" type="Camera3D" parent="entities/camera_rig"]
+current = true
+
+[node name="grid" type="MeshInstance3D" parent="entities"]
+material_override = ExtResource("4_toxpe")
+mesh = SubResource("PlaneMesh_lxd4n")
+skeleton = NodePath("../..")
+
+[node name="mdl_cock_lobster" parent="entities" instance=ExtResource("5_sso6q")]
+transform = Transform3D(0.99960524, 0, 0.028096104, 0, 1, 0, -0.028096104, 0, 0.99960524, 0.6204262, -7.6293945e-06, -80.90027)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, -0.026543286, 0.9996477, 0, -0.9996477, -0.026543286, 0, 9.151215, 0)
+visible = false
+material_override = ExtResource("3_m2cra")
+mesh = SubResource("QuadMesh_unxsn")
+
+[node name="ui" type="Node" parent="."]
+
+[node name="hud" type="MarginContainer" parent="ui"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/hud"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ui/hud/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer3" type="MarginContainer" parent="ui/hud/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 8.0
+
+[node name="MarginContainer2" type="MarginContainer" parent="ui/hud/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ui/hud/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
+texture_progress = ExtResource("6_ryfyu")
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer/AspectRatioContainer"]
+layout_mode = 2
+texture = ExtResource("7_evt3k")
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer/AspectRatioContainer"]
+layout_mode = 2
+text = "SUPER"

@@ -1,9 +1,11 @@
 #include "wbb_input.h"
 
+#include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/viewport.hpp>
+
 #define MAX_WIIMOTES 1
 
 WbbInput *WbbInput::singleton = nullptr;
-wiimote **WbbInput::wiimotes = nullptr;
 
 void WbbInput::_bind_methods() {
 }
@@ -24,6 +26,8 @@ WbbInput::WbbInput() {
 	CRASH_COND(singleton != nullptr);
 	singleton = this;
 	wiimotes = nullptr;
+
+	initialized = false;
 }
 
 WbbInput::~WbbInput() {
@@ -68,6 +72,20 @@ void WbbInput::_ready() {
 		return;
 	}
 	wiimotes = wiiuse_init(MAX_WIIMOTES);
+}
+
+void WbbInput::_process(double delta) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+}
+
+void WbbInput::init() {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	initialized = true;
 
 	int found = get_found_motes();
 	print_line("found: ", found);
@@ -81,12 +99,6 @@ void WbbInput::_ready() {
 		if (wm->exp.type == EXP_WII_BOARD) {
 			wiiuse_set_leds(wiimotes[i], 0xf0);
 		}
-	}
-}
-
-void WbbInput::_process(double delta) {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
 	}
 }
 
@@ -140,12 +152,24 @@ float deadzone(double value) {
 }
 
 Vector2 WbbInput::get_axis() {
-	float total = tl + tr + bl + br;
+	if (initialized) {
+		float total = tl + tr + bl + br;
 
-	float x = deadzone(tr + br) - deadzone(tl + bl);
-	float y = deadzone(br + bl) - deadzone(tr + tl);
+		float x = deadzone(tr + br) - deadzone(tl + bl);
+		float y = deadzone(br + bl) - deadzone(tr + tl);
 
-	print_line("Weight: ", total, " kg @ (", x, ", ", y, ")\n");
-	print_line("Interpolated weight: TL", tl, "  TR:", tr, "   BL", bl, "  BR:", br);
-	return Vector2(x, y) / 70;
+		return Vector2(x, y) / 70;
+	} else {
+		Input *input = Input::get_singleton();
+		Viewport *vp = get_viewport();
+
+		Rect2 rect = vp->get_visible_rect();
+		Vector2 axis = vp->get_mouse_position();
+		if (!rect.has_point(axis)) {
+			return Vector2();
+		}
+		axis -= rect.get_size() / 2;
+		axis /= rect.get_size() * .25;
+		return axis;
+	}
 }

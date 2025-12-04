@@ -36,7 +36,7 @@ ios.release = {
 [icons]
 
 AiHint = "res://editor/icons/ai_hint.png"
-BaseCharacter = "res://editor/icons/base_character.png"
+Character = "res://editor/icons/character.png"
 Enemy = "res://editor/icons/enemy.png"
 InfoEntSpawnPoint = "res://editor/icons/info_ent_spawn_point.png"
 InfoPlayerStart = "res://editor/icons/info_player_start.png"

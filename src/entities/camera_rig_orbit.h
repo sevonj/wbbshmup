@@ -1,7 +1,7 @@
 #pragma once
 
-#include <entities/camera_rig.h>
 #include <consts.h>
+#include <entities/camera_rig.h>
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 

@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://xr553culru8q"]
+
+[ext_resource type="Shader" uid="uid://3mp8fphxndr" path="res://assets/vfx/shad_part_spacedust.gdshader" id="1_e8ig7"]
+[ext_resource type="Texture2D" uid="uid://ckablhkjq85hs" path="res://assets/vfx/tex_part_spacedust.png" id="2_x2yra"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_e8ig7")
+shader_parameter/tex = ExtResource("2_x2yra")

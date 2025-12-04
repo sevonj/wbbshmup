@@ -38,5 +38,6 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "vector": "cpp"
-    }
+    },
+    "editor.formatOnSave": true
 }

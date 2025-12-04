@@ -2,7 +2,7 @@
 
 #include <entities/camera_rig.h>
 #include <entities/player.h>
-//#include <stage.h>
+#include <stage.h>
 #include <godot_cpp/variant/aabb.hpp>
 #include <godot_cpp/variant/variant.hpp>
 
@@ -19,7 +19,7 @@ private:
 	static Vector<CameraRig *> cameras;
 	static CameraRig *current_camera;
 	static Player *player;
-	//static Stage *stage;
+	static Stage *stage;
 
 	Game();
 
@@ -31,8 +31,8 @@ public:
 	static void set_current_camera(CameraRig *camera);
 	static Player *get_player();
 	static void set_player(Player *value);
-	//static Stage *get_stage();
-	//static void set_stage(Stage *value);
+	static Stage *get_stage();
+	static void set_stage(Stage *value);
 
 	static bool is_out_of_bounds(Vector3 node);
 	static bool is_out_of_bounds(Node3D *node);

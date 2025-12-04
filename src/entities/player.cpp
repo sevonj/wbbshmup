@@ -1,4 +1,6 @@
 #include "player.h"
+
+#include <entities/projectile_player_laser.h>
 #include <game.h>
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
@@ -33,6 +35,12 @@ void Player::setup_collider() {
 	coll->set_position(Vector3(0, COLL_H / 2.0, 0));
 }
 
+void Player::fire() {
+	ProjectilePlayerLaser *projectile = memnew(ProjectilePlayerLaser);
+	Game::get_stage()->add_entity(projectile);
+	projectile->set_global_position(get_global_position());
+}
+
 void Player::_bind_methods() {
 }
 
@@ -40,6 +48,7 @@ Player::Player() {
 	mdl = nullptr;
 	coll = nullptr;
 
+	fire_timer = 0;
 	noclip = false;
 }
 
@@ -91,4 +100,17 @@ void Player::_physics_process(double delta) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+	fire_timer -= delta * FIRE_RATE;
+	if (fire_timer <= 0) {
+		fire();
+		fire_timer = 1;
+	}
+}
+
+bool Player::get_noclip() {
+	return noclip;
+}
+
+void Player::set_noclip(bool value) {
+	noclip = value;
 }

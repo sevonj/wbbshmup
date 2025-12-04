@@ -5,13 +5,20 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include <entities/base_character.h>
 #include <entities/camera_rig.h>
 #include <entities/camera_rig_orbit.h>
 #include <entities/camera_rig_tp.h>
+#include <entities/character.h>
+#include <entities/enemy.h>
+#include <entities/enm_boss_cocklobster.h>
+#include <entities/item.h>
+#include <entities/item_energy.h>
 #include <entities/player.h>
+#include <entities/projectile.h>
+#include <entities/projectile_player_laser.h>
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
+#include <stage.h>
 
 using namespace godot;
 
@@ -19,14 +26,22 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
-	GDREGISTER_CLASS(BaseCharacter);
 	GDREGISTER_CLASS(CameraRig);
 	GDREGISTER_CLASS(CameraRigOrbit);
 	GDREGISTER_CLASS(CameraRigTp);
+	GDREGISTER_CLASS(Character);
+	GDREGISTER_CLASS(Enemy);
+	GDREGISTER_CLASS(EnmBossCocklobster);
+	GDREGISTER_CLASS(Item);
+	GDREGISTER_CLASS(ItemEnergy);
 	GDREGISTER_CLASS(Player);
+	GDREGISTER_CLASS(Projectile);
+	GDREGISTER_CLASS(ProjectilePlayerLaser);
 
 	GDREGISTER_CLASS(DebugDraw);
 	GDREGISTER_CLASS(WbbInput);
+
+	GDREGISTER_CLASS(Stage);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {

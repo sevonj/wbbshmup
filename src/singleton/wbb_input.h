@@ -14,7 +14,9 @@ class WbbInput : public Node {
 
 private:
 	static WbbInput *singleton;
-	static wiimote **wiimotes;
+	wiimote **wiimotes;
+
+	bool initialized;
 
 	float tl;
 	float tr;
@@ -35,6 +37,8 @@ public:
 	void _ready() override;
 	void _physics_process(double delta) override;
 	void _process(double delta) override;
+
+	void init();
 
 	int32_t get_found_motes();
 	int32_t get_connected_motes();

@@ -1,15 +1,14 @@
 #pragma once
 
 #include <data/damage_info.h>
-
 #include <godot_cpp/classes/character_body3d.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
 namespace godot {
 
-class BaseCharacter : public CharacterBody3D {
-	GDCLASS(BaseCharacter, CharacterBody3D)
+class Character : public CharacterBody3D {
+	GDCLASS(Character, CharacterBody3D)
 
 private:
 protected:
@@ -21,10 +20,10 @@ protected:
 	static void _bind_methods();
 
 public:
-	BaseCharacter();
-	~BaseCharacter();
+	Character();
+	~Character();
 
-	void _ready() override;
+	virtual void _ready() override;
 
 	virtual int32_t get_max_health() final;
 	virtual void set_max_health(int32_t value) final;

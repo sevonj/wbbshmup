@@ -1,4 +1,5 @@
 #include "camera_rig.h"
+
 #include <game.h>
 #include <godot_cpp/core/class_db.hpp>
 
