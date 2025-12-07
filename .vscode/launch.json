@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "run",
+            "type": "cppdbg",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/../../Godot_v4.5.1-stable_linux.x86_64",
+            "args": [],
+            "cwd": "${workspaceFolder}/",
+            "stopAtEntry": false,
+        }
+    ]
+}
