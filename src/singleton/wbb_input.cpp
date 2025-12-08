@@ -78,6 +78,16 @@ void WbbInput::_process(double delta) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+
+	Input *input = Input::get_singleton();
+	if (input->is_key_pressed(KEY_P)) {
+		if (!get_found_motes()) {
+			return;
+		}
+		if (!get_connected_motes()) {
+			return;
+		}
+	}
 }
 
 void WbbInput::init() {

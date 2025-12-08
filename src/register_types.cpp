@@ -19,6 +19,7 @@
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
 #include <stage.h>
+#include <ui/ui_debug_wbbstate.h>
 
 using namespace godot;
 
@@ -37,6 +38,8 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(Player);
 	GDREGISTER_CLASS(Projectile);
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
+
+	GDREGISTER_CLASS(UiDebugWbbstate);
 
 	GDREGISTER_CLASS(DebugDraw);
 	GDREGISTER_CLASS(WbbInput);

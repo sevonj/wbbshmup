@@ -3,6 +3,7 @@
 //#include <entities/camera_rig_tp.h>
 #include <entities/player.h>
 #include <game.h>
+#include <ui/ui_debug_wbbstate.h>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/scene_tree_timer.hpp>
@@ -37,6 +38,7 @@ void Stage::_ready() {
 
 	spawn_player();
 	// toast("real yakuza use a balance board"); TODO
+	add_ui(memnew(UiDebugWbbstate));
 }
 
 void Stage::_process(double delta) {
