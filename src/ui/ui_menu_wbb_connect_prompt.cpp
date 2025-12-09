@@ -1,5 +1,6 @@
 #include "ui_menu_wbb_connect_prompt.h"
 
+#include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/texture2d.hpp>
 
@@ -42,6 +43,11 @@ void UiMenuWbbConnectPrompt::_ready() {
 
 void UiMenuWbbConnectPrompt::_process(double delta) {
 	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	if (Input::get_singleton()->is_key_pressed(KEY_ESCAPE)) {
+		complete();
 		return;
 	}
 
