@@ -14,9 +14,8 @@ class WbbInput : public Node {
 
 private:
 	static WbbInput *singleton;
-	wiimote **wiimotes;
-
-	bool initialized;
+	static wiimote **wiimotes;
+	static bool initialized;
 
 	float tl;
 	float tr;
@@ -37,8 +36,6 @@ public:
 	void _ready() override;
 	void _physics_process(double delta) override;
 	void _process(double delta) override;
-
-	void init();
 
 	void try_connect();
 	wii_board_t *get_balance_board();

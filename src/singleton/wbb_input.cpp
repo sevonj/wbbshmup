@@ -10,6 +10,8 @@
 #define MAX_WIIMOTES 1
 
 WbbInput *WbbInput::singleton = nullptr;
+wiimote **WbbInput::wiimotes = wiiuse_init(MAX_WIIMOTES);
+bool WbbInput::initialized = false;
 
 void WbbInput::_bind_methods() {
 }
@@ -29,9 +31,6 @@ WbbInput *WbbInput::get_singleton() {
 WbbInput::WbbInput() {
 	CRASH_COND(singleton != nullptr);
 	singleton = this;
-	wiimotes = nullptr;
-
-	initialized = false;
 }
 
 WbbInput::~WbbInput() {
@@ -75,7 +74,6 @@ void WbbInput::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
-	wiimotes = wiiuse_init(MAX_WIIMOTES);
 }
 
 void WbbInput::_process(double delta) {
@@ -87,14 +85,6 @@ void WbbInput::_process(double delta) {
 	if (input->is_key_pressed(KEY_P)) {
 		try_connect();
 	}
-}
-
-void WbbInput::init() {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-
-	initialized = true;
 }
 
 void WbbInput::_physics_process(double delta) {
@@ -124,6 +114,7 @@ void WbbInput::try_connect() {
 		print_line("mote exp: ", wm->exp.type);
 		if (wm->exp.type == EXP_WII_BOARD) {
 			wiiuse_set_leds(wiimotes[i], 0xf0);
+			initialized = true;
 		}
 	}
 }
