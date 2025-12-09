@@ -11,6 +11,6 @@ config_version=5
 [application]
 
 config/name="wbbshmup"
-run/main_scene="uid://bnlbmhxoh42ei"
+run/main_scene="uid://cv1326jnpbdfp"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
