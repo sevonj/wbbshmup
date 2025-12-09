@@ -40,8 +40,7 @@ public:
 
 	void init();
 
-	int32_t get_found_motes();
-	int32_t get_connected_motes();
+	void try_connect();
 	wii_board_t *get_balance_board();
 	Vector2 get_axis();
 };

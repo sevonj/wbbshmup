@@ -16,10 +16,13 @@
 #include <entities/player.h>
 #include <entities/projectile.h>
 #include <entities/projectile_player_laser.h>
+#include <main_menu.h>
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
 #include <stage.h>
 #include <ui/ui_debug_wbbstate.h>
+#include <ui/ui_menu_wbb_connect_prompt.h>
+#include <ui/ui_startup_wbb_disclaimer.h>
 
 using namespace godot;
 
@@ -39,7 +42,10 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(Projectile);
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
 
+	GDREGISTER_CLASS(MainMenu);
 	GDREGISTER_CLASS(UiDebugWbbstate);
+	GDREGISTER_CLASS(UiMenuWbbConnectPrompt);
+	GDREGISTER_CLASS(UiStartupWbbDisclaimer);
 
 	GDREGISTER_CLASS(DebugDraw);
 	GDREGISTER_CLASS(WbbInput);

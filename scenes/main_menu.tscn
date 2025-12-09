@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cv1326jnpbdfp"]
+
+[node name="MainMenu" type="MainMenu"]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_right = 54.0
+offset_bottom = 58.0
+text = "main menu"

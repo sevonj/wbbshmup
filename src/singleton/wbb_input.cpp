@@ -81,12 +81,7 @@ void WbbInput::_process(double delta) {
 
 	Input *input = Input::get_singleton();
 	if (input->is_key_pressed(KEY_P)) {
-		if (!get_found_motes()) {
-			return;
-		}
-		if (!get_connected_motes()) {
-			return;
-		}
+		try_connect();
 	}
 }
 
@@ -96,20 +91,6 @@ void WbbInput::init() {
 	}
 
 	initialized = true;
-
-	int found = get_found_motes();
-	print_line("found: ", found);
-
-	int connected = get_connected_motes();
-	print_line("connected: ", connected);
-
-	for (int i = 0; i < MAX_WIIMOTES; i++) {
-		wiimote *wm = wiimotes[i];
-		print_line("mote exp: ", wm->exp.type);
-		if (wm->exp.type == EXP_WII_BOARD) {
-			wiiuse_set_leds(wiimotes[i], 0xf0);
-		}
-	}
 }
 
 void WbbInput::_physics_process(double delta) {
@@ -123,20 +104,24 @@ void WbbInput::_physics_process(double delta) {
 	poll();
 }
 
-int32_t WbbInput::get_found_motes() {
+void WbbInput::try_connect() {
 	if (wiimotes == nullptr) {
-		return 0;
+		print_line("try_connect(): wiimotes = nullptr");
+		return;
 	}
 	int32_t found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);
-	return found;
-}
+	print_line("found: ", found);
 
-int32_t WbbInput::get_connected_motes() {
-	if (wiimotes == nullptr) {
-		return 0;
-	}
 	int32_t connected = wiiuse_connect(wiimotes, MAX_WIIMOTES);
-	return connected;
+	print_line("connected: ", connected);
+
+	for (int i = 0; i < MAX_WIIMOTES; i++) {
+		wiimote *wm = wiimotes[i];
+		print_line("mote exp: ", wm->exp.type);
+		if (wm->exp.type == EXP_WII_BOARD) {
+			wiiuse_set_leds(wiimotes[i], 0xf0);
+		}
+	}
 }
 
 /// @brief
