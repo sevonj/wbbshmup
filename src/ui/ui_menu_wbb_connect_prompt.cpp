@@ -25,7 +25,6 @@ UiMenuWbbConnectPrompt::UiMenuWbbConnectPrompt() {
 	status_label = nullptr;
 	button_center = nullptr;
 	connect_button = nullptr;
-	connect_label = nullptr;
 	exit_button = nullptr;
 }
 
@@ -61,7 +60,7 @@ void UiMenuWbbConnectPrompt::_process(double delta) {
 
 	switch (st) {
 		case WbbPromptState::Init: {
-			status_label->set_text("");
+			status_label->set_text(" ");
 			connect_button->show();
 			exit_button->hide();
 			break;
@@ -75,7 +74,7 @@ void UiMenuWbbConnectPrompt::_process(double delta) {
 		}
 
 		case WbbPromptState::Success: {
-			status_label->set_text("Balance board connected!");
+			status_label->set_text("[color=black]Balance board connected!");
 			connect_button->hide();
 			exit_button->show();
 			break;
@@ -128,11 +127,6 @@ void UiMenuWbbConnectPrompt::setup_layout() {
 	infographic_b->set_h_size_flags(SIZE_EXPAND_FILL);
 	infographic_hbox->add_child(infographic_b);
 
-	status_label = memnew(RichTextLabel);
-	status_label->set_use_bbcode(true);
-	status_label->set_fit_content(true);
-	content_vbox->add_child(status_label);
-
 	info_label = memnew(RichTextLabel);
 	info_label->set_use_bbcode(true);
 	info_label->set_v_size_flags(SIZE_EXPAND_FILL);
@@ -141,6 +135,11 @@ void UiMenuWbbConnectPrompt::setup_layout() {
 	info_label->set_text("[color=dimgray]Connect your Wii balance board now.\nMake sure that Bluetooth is enabled. Click the button below and then press the Sync button on the balance board.");
 	content_vbox->add_child(info_label);
 
+	status_label = memnew(RichTextLabel);
+	status_label->set_use_bbcode(true);
+	status_label->set_fit_content(true);
+	content_vbox->add_child(status_label);
+
 	button_center = memnew(CenterContainer);
 	content_vbox->add_child(button_center);
 
@@ -148,13 +147,6 @@ void UiMenuWbbConnectPrompt::setup_layout() {
 	connect_button->set_text("Connect");
 	connect_button->connect("pressed", callable_mp(this, &UiMenuWbbConnectPrompt::connect_wbb));
 	button_center->add_child(connect_button);
-
-	connect_label = memnew(RichTextLabel);
-	connect_label->set_use_bbcode(true);
-	connect_label->set_fit_content(true);
-	connect_label->set_text("[color=dimgray]Connecting...");
-	connect_label->hide();
-	button_center->add_child(connect_label);
 
 	exit_button = memnew(Button);
 	exit_button->set_text("Ok");

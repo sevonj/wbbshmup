@@ -40,7 +40,6 @@ private:
 	RichTextLabel *status_label;
 	CenterContainer *button_center;
 	Button *connect_button;
-	RichTextLabel *connect_label;
 	Button *exit_button;
 
 	void setup_layout();
