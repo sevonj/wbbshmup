@@ -1,5 +1,6 @@
 #include "player.h"
 
+#include <assets.h>
 #include <entities/projectile_player_laser.h>
 #include <game.h>
 #include <singleton/debug_draw.h>
@@ -11,12 +12,12 @@
 #include <godot_cpp/variant/variant.hpp>
 
 void Player::setup_model() {
-	Ref<PackedScene> res = ResourceLoader::get_singleton()->load(MDL_PATH, "PackedScene");
-	if (res == nullptr) {
-		print_error(get_class_static(), " Failed to load mdl");
-		return;
+	Ref<PackedScene> mdl_res = ResourceLoader::get_singleton()->load(MDL_PATH, "PackedScene");
+	if (mdl_res != nullptr) {
+		mdl = (Node3D *)mdl_res->instantiate();
+	} else {
+		mdl = Assets::instance_error_model();
 	}
-	mdl = (Node3D *)res->instantiate();
 	mdl->set_name("mdl");
 	add_child(mdl);
 }

@@ -1,5 +1,6 @@
 #include "enm_boss_cocklobster.h"
 
+#include <assets.h>
 #include <game.h>
 #include <godot_cpp/classes/capsule_shape3d.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
@@ -18,7 +19,11 @@ EnmBossCocklobster::~EnmBossCocklobster() {}
 
 void EnmBossCocklobster::setup_model() {
 	Ref<PackedScene> mdl_res = ResourceLoader::get_singleton()->load(MDL_PATH, "PackedScene");
-	mdl = (Node3D *)mdl_res->instantiate();
+	if (mdl_res != nullptr) {
+		mdl = (Node3D *)mdl_res->instantiate();
+	} else {
+		mdl = Assets::instance_error_model();
+	}
 	mdl->set_name("mdl");
 	add_child(mdl);
 }
