@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bnlbmhxoh42ei"]
+[gd_scene load_steps=15 format=3 uid="uid://bnlbmhxoh42ei"]
 
 [ext_resource type="Environment" uid="uid://dqx2pp8dxtr4r" path="res://assets/env/env_uranus.tres" id="1_8520i"]
 [ext_resource type="Texture2D" uid="uid://smd54alqfset" path="res://assets/env/bg_objects/tex_uranus.png" id="2_jm80a"]
@@ -42,6 +42,13 @@ subdivide_depth = 3
 
 [sub_resource type="QuadMesh" id="QuadMesh_unxsn"]
 
+[sub_resource type="Curve3D" id="Curve3D_8520i"]
+_data = {
+"points": PackedVector3Array(0.23566914, 0.00020599365, 6.276363, -0.23566914, -0.00020599365, -6.276363, -11.780626, 0, 48.295116, -34.71826, 0, 24.123487, 34.71826, 0, -24.123487, -10.965654, 0, -24.890303, -0.17243958, 0, -21.066729, 0.17243958, 0, 21.066729, 83.89833, 0, -21.95637, 43.35707, 0, -1.6299667, -43.35707, 0, 1.6299667, 23.426619, 0, 40.145298, 2.4232059, 0, 4.677784, -2.4232059, 0, -4.677784, -5.2607746, 0, -23.586332, 7.334839, 0, 3.7489185, -7.334839, 0, -3.7489185, -16.181536, 0, -34.6701),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
 [node name="stage" type="Stage"]
 
 [node name="static" type="Node" parent="."]
@@ -70,7 +77,7 @@ process_material = SubResource("ParticleProcessMaterial_k27tg")
 draw_pass_1 = SubResource("RibbonTrailMesh_jmfav")
 
 [node name="camera_rig" type="CameraRig" parent="entities"]
-transform = Transform3D(1, 0, 0, 0, 0.92473215, 0.3806185, 0, -0.3806185, 0.92473215, 0, 8, 13.25)
+transform = Transform3D(1, -6.6549454e-08, 1.616853e-07, 0, 0.92473215, 0.3806185, -1.7484555e-07, -0.3806185, 0.92473215, 0, 8, 13.25)
 
 [node name="Camera3D" type="Camera3D" parent="entities/camera_rig"]
 current = true
@@ -88,6 +95,81 @@ transform = Transform3D(1, 0, 0, 0, -0.026543286, 0.9996477, 0, -0.9996477, -0.0
 visible = false
 material_override = ExtResource("3_m2cra")
 mesh = SubResource("QuadMesh_unxsn")
+
+[node name="EnmTank" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.112297, 0, 3.339466)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank2" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.99237, 0, -1.6374836)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank3" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 78.6427, 0, -28.95508)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank4" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.6427, 0, -32.95508)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank5" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.783756, 0, -40.20604)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank6" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.52734, 0, -38.258217)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank7" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.255142, 0, 39.653877)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank8" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.255142, 0, 42.653877)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank9" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.53195, 0, 3.7655315)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank10" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.189064, 0, 25.553345)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank11" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.674242, 0, 8.250278)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank12" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.674242, 0, 3.2502785)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank13" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76.45263, 0, -37.102654)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank14" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.394342, 0, -33.372467)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmTank15" type="EnmTank" parent="entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1031284, 0, -21.657272)
+collision_layer = 8
+collision_mask = 3
 
 [node name="ui" type="Node" parent="."]
 
@@ -142,3 +224,6 @@ stretch_mode = 6
 [node name="Label" type="Label" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer/AspectRatioContainer"]
 layout_mode = 2
 text = "SUPER"
+
+[node name="rail" type="Path3D" parent="."]
+curve = SubResource("Curve3D_8520i")

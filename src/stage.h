@@ -2,8 +2,10 @@
 
 //#include <entities/info_player_start.h>
 #include <godot_cpp/classes/control.hpp>
+#include <godot_cpp/classes/marker3d.hpp>
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
+#include <godot_cpp/classes/path3d.hpp>
 #include <godot_cpp/variant/aabb.hpp>
 
 namespace godot {
@@ -17,6 +19,16 @@ private:
 	Node *local_entities;
 	Node *local_static;
 	Node *local_ui;
+
+	/// @brief Path for the on-rail gameplay.
+	Path3D *rail;
+	/// @brief Parent of player. Is moved along the path.
+	Marker3D *rail_follow;
+	/// @brief Offset of rail follower
+	double rail_offset;
+
+	void tool_setup_rail();
+	void tool_setup_rail_curve();
 
 	//Vector<InfoPlayerStart *> player_starts;
 

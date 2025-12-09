@@ -2,6 +2,7 @@
 
 #include <game.h>
 #include <godot_cpp/classes/csg_sphere3d.hpp>
+#include <godot_cpp/classes/material.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/sphere_shape3d.hpp>
@@ -60,6 +61,12 @@ void ProjectilePlayerLaser::setup_model() {
 	sphere->set_radius(.1);
 	mdl = sphere;
 	mdl->set_name("mdl");
+
+	Ref<Material> mat = ResourceLoader::get_singleton()->load(MAT_PATH, "Material");
+	if (mat != nullptr) {
+		sphere->set_material(mat);
+	}
+
 	add_child(mdl);
 }
 

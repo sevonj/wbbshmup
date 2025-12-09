@@ -40,6 +40,7 @@ void Player::fire() {
 	ProjectilePlayerLaser *projectile = memnew(ProjectilePlayerLaser);
 	Game::get_stage()->add_entity(projectile);
 	projectile->set_global_position(get_global_position());
+	projectile->set_global_rotation(get_global_rotation());
 }
 
 void Player::_bind_methods() {

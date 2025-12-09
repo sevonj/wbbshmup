@@ -6,11 +6,13 @@
 #include <godot_cpp/godot.hpp>
 
 #include <entities/camera_rig.h>
+#include <entities/camera_rig_follow.h>
 #include <entities/camera_rig_orbit.h>
 #include <entities/camera_rig_tp.h>
 #include <entities/character.h>
 #include <entities/enemy.h>
 #include <entities/enm_boss_cocklobster.h>
+#include <entities/enm_tank.h>
 #include <entities/item.h>
 #include <entities/item_energy.h>
 #include <entities/player.h>
@@ -31,11 +33,13 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 		return;
 	}
 	GDREGISTER_CLASS(CameraRig);
+	GDREGISTER_CLASS(CameraRigFollow);
 	GDREGISTER_CLASS(CameraRigOrbit);
 	GDREGISTER_CLASS(CameraRigTp);
 	GDREGISTER_CLASS(Character);
 	GDREGISTER_CLASS(Enemy);
 	GDREGISTER_CLASS(EnmBossCocklobster);
+	GDREGISTER_CLASS(EnmTank);
 	GDREGISTER_CLASS(Item);
 	GDREGISTER_CLASS(ItemEnergy);
 	GDREGISTER_CLASS(Player);

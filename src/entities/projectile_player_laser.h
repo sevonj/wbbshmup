@@ -11,8 +11,10 @@ class ProjectilePlayerLaser : public Projectile {
 	GDCLASS(ProjectilePlayerLaser, Projectile)
 
 private:
-	const double LIFETIME = 10.;
-	const double SPEED = 80.;
+	static constexpr double LIFETIME = 10.;
+	static constexpr double SPEED = 80.;
+
+	const String MAT_PATH = "res://assets/materials/mat_fx_playerlaser.tres";
 
 	double lifetimer;
 
