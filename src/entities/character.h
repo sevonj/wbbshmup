@@ -29,13 +29,10 @@ public:
 	virtual void set_max_health(int32_t value) final;
 	virtual int32_t get_health() final;
 	virtual void set_health(int32_t value) final;
-	/// @brief Add or remove health.
 	virtual void add_health(int32_t value);
-	/// @brief Treated as damage, even if the value is negative.
 	virtual void take_damage(DamageInfo damage);
 	virtual void die();
 
-	/// @brief Visual center point
 	virtual Vector3 get_focus_point();
 
 	virtual String get_display_name();

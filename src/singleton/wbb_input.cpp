@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// This file contains code from WiiUse.
+
 #include "wbb_input.h"
 
 #include <godot_cpp/classes/input.hpp>
@@ -47,7 +51,7 @@ void WbbInput::poll() {
 			switch (wm->event) {
 				case WIIUSE_EVENT: {
 					if (wm->exp.type != EXP_WII_BOARD) {
-						// You are not a balance board; we don't care what you have to say.
+						// If you aren't a balance board, then I don't care what you have to say.
 						break;
 					}
 					wii_board_t *wb = (wii_board_t *)&wm->exp.wb;
@@ -124,8 +128,8 @@ void WbbInput::try_connect() {
 	}
 }
 
-/// @brief
-/// @return first balance board or nullptr
+/// @brief Get first connected balance board
+/// @return Balance board or nullptr
 wii_board_t *WbbInput::get_balance_board() {
 	for (int i = 0; i < MAX_WIIMOTES; i++) {
 		wiimote *wm = wiimotes[i];
@@ -146,6 +150,8 @@ float deadzone(double value) {
 	}
 }
 
+/// @brief Get a pseudo-joystick axis from the balance board. Falls back to mouse if not initialized.
+/// @return
 Vector2 WbbInput::get_axis() {
 	if (initialized) {
 		float total = tl + tr + bl + br;

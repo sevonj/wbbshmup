@@ -47,14 +47,17 @@ int32_t Character::get_health() {
 	return health;
 }
 
+/// @brief Set health. Not considered damage or healing; shouldn't trigger a reaction.
 void Character::set_health(int32_t value) {
 	health = Math::clamp(value, 0, max_health);
 }
 
+/// @brief Add or remove health. Not considered damage or healing; shouldn't trigger a reaction.
 void Character::add_health(int32_t value) {
 	health = Math::clamp(health + value, 0, max_health);
 }
 
+/// @brief Treated as damage, even if the value is negative and character gains health.
 void Character::take_damage(DamageInfo damage) {
 	if (invincible) {
 		print_line(get_class(), " invincible");
@@ -74,6 +77,7 @@ void Character::die() {
 	queue_free();
 }
 
+/// @brief Visual center point
 Vector3 Character::get_focus_point() {
 	return get_global_position();
 }

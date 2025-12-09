@@ -3,6 +3,7 @@
 namespace godot {
 
 typedef enum {
+	COL_LAYER_NONE = 0,
 	COL_LAYER_WORLD = 1 << 0,
 	COL_LAYER_PLAYER = 1 << 1,
 	COL_LAYER_PROPS = 1 << 2,
@@ -26,4 +27,4 @@ typedef enum {
 	COL_MASK_ITEMS = COL_LAYER_PLAYER,
 } CollisionMasks;
 
-}
+} //namespace godot
