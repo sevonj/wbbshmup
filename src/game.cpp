@@ -56,8 +56,4 @@ bool Game::is_out_of_bounds(Node3D *node) {
 	return is_out_of_bounds(node->get_global_position());
 }
 
-bool Game::is_editor() {
-	return Engine::get_singleton()->is_editor_hint();
-}
-
 } //namespace godot

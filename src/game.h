@@ -36,8 +36,6 @@ public:
 
 	static bool is_out_of_bounds(Vector3 node);
 	static bool is_out_of_bounds(Node3D *node);
-
-	static bool is_editor();
 };
 
 } //namespace godot
