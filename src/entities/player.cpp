@@ -74,11 +74,9 @@ void Player::_process(double delta) {
 	Vector3 up = Vector3(0, 1, 0);
 	Vector3 orientation = (up + input_dir).normalized();
 
-	Vector3 origin = get_global_position();
-
-	DebugDraw::draw_line_3d(origin, origin + up, Color(1, 0, 0));
-	DebugDraw::draw_line_3d(origin, origin + input_dir, Color(1, 1, 0));
-	DebugDraw::draw_line_3d(origin, origin + orientation, Color(0, 0, 1));
+	Transform3D xform = get_global_transform();
+	DebugDraw::draw_line_3d(xform.origin, xform.xform(up), Color(1, 0, 0));
+	DebugDraw::draw_line_3d(xform.origin, xform.xform(orientation), Color(0, 0, 1));
 
 	mdl->set_rotation(Vector3(Vector3(input_axis.y, 0, -input_axis.x) * MDL_LEAN_SCALE));
 
