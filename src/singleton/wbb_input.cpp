@@ -149,8 +149,11 @@ Vector2 WbbInput::get_axis() {
 
 		float x = deadzone(tr + br) - deadzone(tl + bl);
 		float y = deadzone(br + bl) - deadzone(tr + tl);
-
-		return Vector2(x, y) / 70;
+		Vector2 axis = Vector2(x, y) / 70;
+		if (axis.length() > 1.) {
+			axis.normalize();
+		}
+		return axis;
 	} else {
 		Input *input = Input::get_singleton();
 		Viewport *vp = get_viewport();
@@ -162,6 +165,12 @@ Vector2 WbbInput::get_axis() {
 		}
 		axis -= rect.get_size() / 2;
 		axis /= rect.get_size() * .25;
+		if (axis.length() > 1.) {
+			axis.normalize();
+		} else if (axis.length() < .05) {
+			return Vector2();
+		}
+
 		return axis;
 	}
 }
