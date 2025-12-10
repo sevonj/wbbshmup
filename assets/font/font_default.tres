@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://bishirregvo1x"]
+
+[ext_resource type="FontFile" uid="uid://pqkl8jwridfs" path="res://assets/font/ricasso/Ricasso-Regular.otf" id="1_df2yj"]
+
+[resource]
+base_font = ExtResource("1_df2yj")

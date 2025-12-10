@@ -5,6 +5,7 @@
 #include <entities/player.h>
 #include <game.h>
 #include <ui/ui_debug_wbbstatus.h>
+#include <ui/ui_stage_begin_screen.h>
 #include <godot_cpp/classes/curve3d.hpp>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
@@ -25,6 +26,7 @@ Stage::Stage() {
 	rail_follow = nullptr;
 
 	rail_offset = 0.;
+	intro_wait_timer = INTRO_WAIT_DURATION;
 
 	Game::set_stage(this);
 }
@@ -50,6 +52,7 @@ void Stage::_ready() {
 	spawn_player();
 	// toast("real yakuza use a balance board"); TODO
 	add_ui(memnew(UiDebugWbbstatus));
+	add_ui(memnew(UiStageBeginScreen));
 }
 
 void Stage::_process(double delta) {
@@ -61,7 +64,16 @@ void Stage::_process(double delta) {
 		return;
 	}
 
-	rail_offset += delta * 8.;
+	intro_wait_timer -= delta;
+	bool intro_wait = intro_wait_timer > 0.;
+
+	if (!intro_wait) {
+		rail_offset += delta * 8.;
+	}
+	Player *player = Game::get_player();
+	if (player) {
+		player->set_enabled(!intro_wait);
+	}
 
 	if (rail_follow) {
 		Transform3D sampled_xform = rail->get_curve()->sample_baked_with_rotation(rail_offset);

@@ -9,7 +9,7 @@ class Assets {
 private:
 protected:
 public:
-	static Node3D *instance_error_model();
+	static Node3D *instance_fallback_model();
 };
 
 } //namespace godot

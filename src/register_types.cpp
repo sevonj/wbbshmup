@@ -24,6 +24,7 @@
 #include <stage.h>
 #include <ui/ui_debug_wbbstatus.h>
 #include <ui/ui_menu_wbb_connect_prompt.h>
+#include <ui/ui_stage_begin_screen.h>
 #include <ui/ui_startup_wbb_disclaimer.h>
 
 using namespace godot;
@@ -49,6 +50,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(MainMenu);
 	GDREGISTER_CLASS(UiDebugWbbstatus);
 	GDREGISTER_CLASS(UiMenuWbbConnectPrompt);
+	GDREGISTER_CLASS(UiStageBeginScreen);
 	GDREGISTER_CLASS(UiStartupWbbDisclaimer);
 
 	GDREGISTER_CLASS(DebugDraw);

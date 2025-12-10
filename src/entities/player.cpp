@@ -16,7 +16,7 @@ void Player::setup_model() {
 	if (mdl_res != nullptr) {
 		mdl = (Node3D *)mdl_res->instantiate();
 	} else {
-		mdl = Assets::instance_error_model();
+		mdl = Assets::instance_fallback_model();
 	}
 	mdl->set_name("mdl");
 	add_child(mdl);
@@ -51,7 +51,10 @@ Player::Player() {
 	coll = nullptr;
 
 	fire_timer = 0;
+	enabled = true;
 	noclip = false;
+
+	Game::set_player(this);
 }
 
 Player::~Player() {
@@ -78,6 +81,10 @@ void Player::_process(double delta) {
 	DebugDraw::draw_line_3d(xform.origin, xform.xform(up), Color(1, 0, 0));
 	DebugDraw::draw_line_3d(xform.origin, xform.xform(orientation), Color(0, 0, 1));
 
+	if (!enabled) {
+		return;
+	}
+
 	mdl->set_rotation(Vector3(Vector3(input_axis.y, 0, -input_axis.x) * MDL_LEAN_SCALE));
 
 	Vector3 pos = get_position();
@@ -100,11 +107,25 @@ void Player::_physics_process(double delta) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+
 	fire_timer -= delta * FIRE_RATE;
+
+	if (!enabled) {
+		return;
+	}
+
 	if (fire_timer <= 0) {
 		fire();
 		fire_timer = 1;
 	}
+}
+
+bool Player::get_enabled() {
+	return enabled;
+}
+
+void Player::set_enabled(bool value) {
+	enabled = value;
 }
 
 bool Player::get_noclip() {

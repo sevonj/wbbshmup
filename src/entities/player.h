@@ -32,6 +32,7 @@ private:
 
 	double fire_timer;
 
+	bool enabled;
 	bool noclip;
 
 	void setup_model();
@@ -49,6 +50,8 @@ public:
 	void _process(double delta) override;
 	void _physics_process(double delta) override;
 
+	bool get_enabled();
+	void set_enabled(bool value);
 	bool get_noclip();
 	void set_noclip(bool value);
 };

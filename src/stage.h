@@ -14,6 +14,8 @@ class Stage : public Node3D {
 	GDCLASS(Stage, Node3D)
 
 private:
+	static constexpr double INTRO_WAIT_DURATION = 10.;
+
 	AABB stage_bounds;
 	Node *local_env;
 	Node *local_entities;
@@ -26,6 +28,8 @@ private:
 	Marker3D *rail_follow;
 	/// @brief Offset of rail follower
 	double rail_offset;
+
+	double intro_wait_timer;
 
 	void tool_setup_rail();
 	void tool_setup_rail_curve();

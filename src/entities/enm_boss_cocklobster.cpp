@@ -22,7 +22,7 @@ void EnmBossCocklobster::setup_model() {
 	if (mdl_res != nullptr) {
 		mdl = (Node3D *)mdl_res->instantiate();
 	} else {
-		mdl = Assets::instance_error_model();
+		mdl = Assets::instance_fallback_model();
 	}
 	mdl->set_name("mdl");
 	add_child(mdl);
