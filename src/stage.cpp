@@ -4,7 +4,7 @@
 #include <entities/camera_rig_follow.h>
 #include <entities/player.h>
 #include <game.h>
-#include <ui/ui_debug_wbbstate.h>
+#include <ui/ui_debug_wbbstatus.h>
 #include <godot_cpp/classes/curve3d.hpp>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
@@ -49,7 +49,7 @@ void Stage::_ready() {
 
 	spawn_player();
 	// toast("real yakuza use a balance board"); TODO
-	add_ui(memnew(UiDebugWbbstate));
+	add_ui(memnew(UiDebugWbbstatus));
 }
 
 void Stage::_process(double delta) {

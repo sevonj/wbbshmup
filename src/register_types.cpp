@@ -22,7 +22,7 @@
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
 #include <stage.h>
-#include <ui/ui_debug_wbbstate.h>
+#include <ui/ui_debug_wbbstatus.h>
 #include <ui/ui_menu_wbb_connect_prompt.h>
 #include <ui/ui_startup_wbb_disclaimer.h>
 
@@ -47,7 +47,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
 
 	GDREGISTER_CLASS(MainMenu);
-	GDREGISTER_CLASS(UiDebugWbbstate);
+	GDREGISTER_CLASS(UiDebugWbbstatus);
 	GDREGISTER_CLASS(UiMenuWbbConnectPrompt);
 	GDREGISTER_CLASS(UiStartupWbbDisclaimer);
 
