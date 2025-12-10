@@ -15,6 +15,10 @@ run/main_scene="uid://cv1326jnpbdfp"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/sticky_tools/plugin.cfg")
+
 [gui]
 
 theme/custom="uid://djegfnxmrse85"

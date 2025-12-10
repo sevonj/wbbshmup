@@ -18,6 +18,7 @@
 #include <entities/player.h>
 #include <entities/projectile.h>
 #include <entities/projectile_player_laser.h>
+#include <entities/stage_path_grid.h>
 #include <main_menu.h>
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
@@ -46,6 +47,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(Player);
 	GDREGISTER_CLASS(Projectile);
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
+	GDREGISTER_CLASS(StagePathGrid);
 
 	GDREGISTER_CLASS(MainMenu);
 	GDREGISTER_CLASS(UiDebugWbbstatus);

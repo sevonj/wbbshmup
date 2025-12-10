@@ -13,7 +13,9 @@
 
 namespace godot {
 
-void Stage::_bind_methods() {}
+void Stage::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("_tool_rebuild_grid"), &Stage::tool_rebuild_grid);
+}
 
 Stage::Stage() {
 	stage_bounds = DEFAULT_STAGE_BOUNDS;
@@ -22,8 +24,9 @@ Stage::Stage() {
 	local_static = nullptr;
 	local_ui = nullptr;
 
-	rail = nullptr;
+	rail_path = nullptr;
 	rail_follow = nullptr;
+	rail_grid = nullptr;
 
 	rail_offset = 0.;
 	intro_wait_timer = INTRO_WAIT_DURATION;
@@ -35,8 +38,8 @@ Stage::~Stage() {}
 
 void Stage::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
-		tool_setup_rail();
-		tool_setup_rail_curve();
+		tool_ensure_rail_path();
+		tool_ensure_rail_grid();
 		return;
 	}
 
@@ -45,7 +48,7 @@ void Stage::_ready() {
 	local_static = get_node<Node>("static");
 	local_ui = get_node<Node>("ui");
 
-	rail = get_node<Path3D>("rail");
+	rail_path = get_node<Path3D>("rail_path");
 
 	//find_player_starts();
 
@@ -76,7 +79,7 @@ void Stage::_process(double delta) {
 	}
 
 	if (rail_follow) {
-		Transform3D sampled_xform = rail->get_curve()->sample_baked_with_rotation(rail_offset);
+		Transform3D sampled_xform = rail_path->get_curve()->sample_baked_with_rotation(rail_offset);
 		rail_follow->set_transform(sampled_xform);
 	}
 }
@@ -113,44 +116,52 @@ void Stage::add_ui(Control *ui) {
 // 	}
 // }
 
-/// @brief TOOL: Makes sure that rail node exists.
-void Stage::tool_setup_rail() {
-	if (!Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-
-	Node *child = get_node_or_null("rail");
-	if (child) {
-		child->set_owner(get_tree()->get_edited_scene_root()); // Probably is already, but justin case
-
-		rail = cast_to<Path3D>(child);
-		if (rail) {
-			return;
+/// @brief Ensures that rail_path exists and is safe to use
+void Stage::tool_ensure_rail_path() {
+	Node *child = get_node_or_null("rail_path");
+	rail_path = cast_to<Path3D>(child);
+	if (!rail_path) {
+		if (child) {
+			// Correctly named node exists but it's not a Path3D!
+			child->set_name("rail_path_wtf");
 		}
-		// Correctly named node exists but it's not a Path3D!
-		child->set_name("rail_wtf");
+		rail_path = memnew(Path3D);
+		rail_path->set_name("rail_path");
+		add_child(rail_path);
+		rail_path->set_owner(get_tree()->get_edited_scene_root());
 	}
 
-	rail = memnew(Path3D);
-	rail->set_name("rail");
-	add_child(rail);
-	rail->set_owner(get_tree()->get_edited_scene_root());
-}
-
-/// @brief TOOL: Makes sure that path's Curve3D is setup.
-void Stage::tool_setup_rail_curve() {
-	if (!Engine::get_singleton()->is_editor_hint()) {
-		return;
+	if (rail_path->get_curve() == nullptr) {
+		rail_path->set_curve(memnew(Curve3D));
 	}
-
-	if (rail->get_curve() == nullptr) {
-		rail->set_curve(memnew(Curve3D));
-	}
-	Ref<Curve3D> curve = rail->get_curve();
-
+	Ref<Curve3D> curve = rail_path->get_curve();
 	while (curve->get_point_count() < 2) {
 		curve->add_point(Vector3(0., 0., 10.) * curve->get_point_count());
 	}
+}
+
+/// @brief Ensures that rail_grid exists and is safe to use
+void Stage::tool_ensure_rail_grid() {
+	tool_ensure_rail_path();
+
+	Node *child = get_node_or_null("rail_grid");
+	rail_grid = cast_to<StagePathGrid>(child);
+	if (!rail_grid) {
+		if (child) {
+			// Correctly named node exists but it's not a StagePathGrid!
+			child->set_name("rail_grid_wtf");
+		}
+		rail_grid = memnew(StagePathGrid);
+		rail_grid->set_name("rail_grid");
+		add_child(rail_grid);
+		rail_grid->set_owner(get_tree()->get_edited_scene_root());
+	}
+}
+
+void Stage::tool_rebuild_grid() {
+	tool_ensure_rail_grid();
+	rail_grid->rebuild_mesh(rail_path->get_curve());
+	rail_grid->set_transform(rail_path->get_transform());
 }
 
 void Stage::spawn_player() {

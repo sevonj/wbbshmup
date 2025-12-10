@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bn2aefmqj8avp"]
+
+[ext_resource type="Shader" uid="uid://h62snf1oxv3g" path="res://assets/materials/shad_grid_old.gdshader" id="1_ddjpo"]
+[ext_resource type="Texture2D" uid="uid://dqejto2onek7o" path="res://assets/textures/tex_grid.png" id="2_lidwx"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ddjpo")
+shader_parameter/grid_map = ExtResource("2_lidwx")

@@ -1,6 +1,7 @@
 #pragma once
 
 //#include <entities/info_player_start.h>
+#include <entities/stage_path_grid.h>
 #include <godot_cpp/classes/control.hpp>
 #include <godot_cpp/classes/marker3d.hpp>
 #include <godot_cpp/classes/node.hpp>
@@ -23,16 +24,18 @@ private:
 	Node *local_ui;
 
 	/// @brief Path for the on-rail gameplay.
-	Path3D *rail;
+	Path3D *rail_path;
 	/// @brief Parent of player. Is moved along the path.
 	Marker3D *rail_follow;
 	/// @brief Offset of rail follower
 	double rail_offset;
+	StagePathGrid *rail_grid;
 
 	double intro_wait_timer;
 
-	void tool_setup_rail();
-	void tool_setup_rail_curve();
+	void tool_ensure_rail_path();
+	void tool_ensure_rail_grid();
+	void tool_rebuild_grid();
 
 	//Vector<InfoPlayerStart *> player_starts;
 
