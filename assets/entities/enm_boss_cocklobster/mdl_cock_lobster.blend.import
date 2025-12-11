@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c5k30qcjm66lt"
-path="res://.godot/imported/mdl_cock_lobster.blend-380babea138fa24999ddd20c3e3b0eb2.scn"
+path="res://.godot/imported/mdl_cock_lobster.blend-c7ced6f8593026688d93025d44a57b50.scn"
 
 [deps]
 
-source_file="res://assets/entities/enemy_boss_cocklobster/mdl_cock_lobster.blend"
-dest_files=["res://.godot/imported/mdl_cock_lobster.blend-380babea138fa24999ddd20c3e3b0eb2.scn"]
+source_file="res://assets/entities/enm_boss_cocklobster/mdl_cock_lobster.blend"
+dest_files=["res://.godot/imported/mdl_cock_lobster.blend-c7ced6f8593026688d93025d44a57b50.scn"]
 
 [params]
 
