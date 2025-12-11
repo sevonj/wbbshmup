@@ -4,6 +4,7 @@
 #include <godot_cpp/classes/capsule_shape3d.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/scene_tree_timer.hpp>
 
 namespace godot {
 
@@ -23,10 +24,40 @@ void Character::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "editor_model_path"), "", "get_editor_model_path");
 }
 
+void Character::trigger_hitflash() {
+	set_hitflash(true);
+	get_tree()->create_timer(HITFLASH_DURATION)->connect("timeout", callable_mp(this, &Character::set_hitflash).bind(false));
+}
+
+void Character::set_hitflash(bool enable) {
+	TypedArray<Node> mdl_nodes = TypedArray<Node>();
+	mdl_nodes.append(get_node_or_null("mdl"));
+
+	while (!mdl_nodes.is_empty()) {
+		Node *node = cast_to<Node>(mdl_nodes.pop_front());
+		if (!node) {
+			continue;
+		}
+		mdl_nodes.append_array(node->get_children());
+		MeshInstance3D *meshinst = cast_to<MeshInstance3D>(node);
+		if (!meshinst) {
+			continue;
+		}
+		if (enable && mat_hitflash != nullptr) {
+			meshinst->set_material_override(mat_hitflash);
+		} else {
+			meshinst->set_material_override(Ref<Material>());
+		}
+	}
+}
+
 Character::Character() {
 	health = 100;
 	max_health = 100;
 	invincible = false;
+	hitflash_enabled = true;
+
+	mat_hitflash = ResourceLoader::get_singleton()->load("res://assets/materials/mat_fx_hitflash.tres", "Material");
 }
 
 Character::~Character() {}
@@ -62,6 +93,9 @@ void Character::take_damage(DamageInfo damage) {
 	if (invincible) {
 		print_line(get_class(), " invincible");
 		return;
+	}
+	if (hitflash_enabled) {
+		trigger_hitflash();
 	}
 	print_line(get_class(), " took dmg: ", damage.value);
 	health = Math::clamp(health - damage.value, 0, max_health);

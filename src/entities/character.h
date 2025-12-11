@@ -3,6 +3,7 @@
 #include <data/damage_info.h>
 #include <godot_cpp/classes/character_body3d.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
+#include <godot_cpp/classes/material.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
 namespace godot {
@@ -12,12 +13,20 @@ class Character : public CharacterBody3D {
 
 private:
 protected:
+	static constexpr double HITFLASH_DURATION = 0.1;
+
 	int32_t max_health;
 	int32_t health;
 	/// @brief Ignore damage. Use for iframe or godmode.
 	bool invincible;
+	bool hitflash_enabled;
+
+	Ref<Material> mat_hitflash;
 
 	static void _bind_methods();
+
+	void trigger_hitflash();
+	void set_hitflash(bool enabled);
 
 public:
 	Character();
