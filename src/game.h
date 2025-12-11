@@ -3,14 +3,9 @@
 #include <entities/camera_rig.h>
 #include <entities/player.h>
 #include <stage.h>
-#include <godot_cpp/variant/aabb.hpp>
 #include <godot_cpp/variant/variant.hpp>
 
 namespace godot {
-
-const AABB DEFAULT_STAGE_BOUNDS = AABB(
-		Vector3(-512, -64, -512),
-		Vector3(1024, 512, 1024));
 
 class Game {
 private:

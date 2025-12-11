@@ -18,19 +18,6 @@ void Stage::_bind_methods() {
 }
 
 Stage::Stage() {
-	stage_bounds = DEFAULT_STAGE_BOUNDS;
-	local_env = nullptr;
-	local_entities = nullptr;
-	local_static = nullptr;
-	local_ui = nullptr;
-
-	rail_path = nullptr;
-	rail_follow = nullptr;
-	rail_grid = nullptr;
-
-	rail_offset = 0.;
-	intro_wait_timer = INTRO_WAIT_DURATION;
-
 	Game::set_stage(this);
 }
 
@@ -70,9 +57,7 @@ void Stage::_process(double delta) {
 	intro_wait_timer -= delta;
 	bool intro_wait = intro_wait_timer > 0.;
 
-	if (!intro_wait) {
-		rail_offset += delta * 8.;
-	}
+	rail_offset += delta * rail_speed;
 	Player *player = Game::get_player();
 	if (player) {
 		player->set_enabled(!intro_wait);
