@@ -7,6 +7,7 @@
 
 namespace godot {
 
+/// @brief Part cock. Part lobster. The future of bossfights.
 class EnmBossCocklobster : public Enemy {
 	GDCLASS(EnmBossCocklobster, Enemy)
 

@@ -60,6 +60,7 @@ void Stage::_process(double delta) {
 	rail_offset += delta * rail_speed;
 	Player *player = Game::get_player();
 	if (player) {
+		player->set_rail_vel(rail_follow->get_basis().get_column(2) * rail_speed);
 		player->set_enabled(!intro_wait);
 	}
 

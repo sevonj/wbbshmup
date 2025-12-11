@@ -27,13 +27,15 @@ private:
 	/// @brief Maximum position offset Z
 	static constexpr float MAX_Z = 6.0;
 
-	Node3D *mdl;
-	CollisionShape3D *coll;
+	Node3D *mdl = nullptr;
+	CollisionShape3D *coll = nullptr;
 
-	double fire_timer;
+	double fire_timer = 0.;
+	/// @brief On-rail velocity. Not used by this class, but added to velocity so enemies can track player velocity.
+	Vector3 rail_vel = Vector3();
 
-	bool enabled;
-	bool noclip;
+	bool enabled = true;
+	bool noclip = false;
 
 	void setup_model();
 	void setup_collider();
@@ -50,6 +52,7 @@ public:
 	void _process(double delta) override;
 	void _physics_process(double delta) override;
 
+	void set_rail_vel(Vector3 value);
 	bool get_enabled();
 	void set_enabled(bool value);
 	bool get_noclip();

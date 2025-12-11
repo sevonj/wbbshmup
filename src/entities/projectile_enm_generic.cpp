@@ -1,4 +1,4 @@
-#include "projectile_player_laser.h"
+#include "projectile_enm_generic.h"
 
 #include <game.h>
 #include <godot_cpp/classes/csg_sphere3d.hpp>
@@ -9,24 +9,24 @@
 
 namespace godot {
 
-void ProjectilePlayerLaser::_bind_methods() {
+void ProjectileEnmGeneric::_bind_methods() {
 }
 
-ProjectilePlayerLaser::ProjectilePlayerLaser() {
+ProjectileEnmGeneric::ProjectileEnmGeneric() {
 	lifetimer = LIFE_DISTANCE;
 }
 
-ProjectilePlayerLaser::~ProjectilePlayerLaser() {}
+ProjectileEnmGeneric::~ProjectileEnmGeneric() {}
 
-void ProjectilePlayerLaser::_ready() {
+void ProjectileEnmGeneric::_ready() {
 	Projectile::_ready();
-	set_collision_mask(COL_MASK_PLAYER_PROJECTILE);
+	set_collision_mask(COL_MASK_ENEMY_PROJECTILE);
 
 	setup_model();
 	setup_collider();
 }
 
-void ProjectilePlayerLaser::_physics_process(double delta) {
+void ProjectileEnmGeneric::_physics_process(double delta) {
 	lifetimer -= delta * SPEED;
 
 	if (lifetimer <= 0) {
@@ -56,9 +56,9 @@ void ProjectilePlayerLaser::_physics_process(double delta) {
 	}
 }
 
-void ProjectilePlayerLaser::setup_model() {
+void ProjectileEnmGeneric::setup_model() {
 	CSGSphere3D *sphere = memnew(CSGSphere3D);
-	sphere->set_radius(.1);
+	sphere->set_radius(.2);
 	mdl = sphere;
 	mdl->set_name("mdl");
 
@@ -70,7 +70,7 @@ void ProjectilePlayerLaser::setup_model() {
 	add_child(mdl);
 }
 
-void ProjectilePlayerLaser::setup_collider() {
+void ProjectileEnmGeneric::setup_collider() {
 	SphereShape3D *sphere = memnew(SphereShape3D);
 	sphere->set_radius(.1);
 	coll = memnew(CollisionShape3D);

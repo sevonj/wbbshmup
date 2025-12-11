@@ -7,14 +7,15 @@
 
 namespace godot {
 
-class ProjectilePlayerLaser : public Projectile {
-	GDCLASS(ProjectilePlayerLaser, Projectile)
+/// @brief Basic bullet for most enemy types.
+class ProjectileEnmGeneric : public Projectile {
+	GDCLASS(ProjectileEnmGeneric, Projectile)
 
 private:
-	static constexpr double LIFE_DISTANCE = 200.;
-	static constexpr double SPEED = 80.;
+	static constexpr double LIFE_DISTANCE = 100.;
+	static constexpr double SPEED = 5.;
 
-	const String MAT_PATH = "res://assets/materials/mat_fx_playerlaser.tres";
+	const String MAT_PATH = "res://assets/materials/mat_fx_enmlaser.tres";
 
 	double lifetimer;
 
@@ -28,8 +29,8 @@ protected:
 	static void _bind_methods();
 
 public:
-	ProjectilePlayerLaser();
-	~ProjectilePlayerLaser();
+	ProjectileEnmGeneric();
+	~ProjectileEnmGeneric();
 
 	void _ready() override;
 	void _physics_process(double delta) override;

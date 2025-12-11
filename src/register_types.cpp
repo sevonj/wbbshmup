@@ -12,11 +12,13 @@
 #include <entities/character.h>
 #include <entities/enemy.h>
 #include <entities/enm_boss_cocklobster.h>
+#include <entities/enm_rhino.h>
 #include <entities/enm_tank.h>
 #include <entities/item.h>
 #include <entities/item_energy.h>
 #include <entities/player.h>
 #include <entities/projectile.h>
+#include <entities/projectile_enm_generic.h>
 #include <entities/projectile_player_laser.h>
 #include <entities/stage_path_grid.h>
 #include <main_menu.h>
@@ -24,6 +26,7 @@
 #include <singleton/wbb_input.h>
 #include <stage.h>
 #include <ui/ui_debug_wbbstatus.h>
+#include <ui/ui_hud_rhino_alert.h>
 #include <ui/ui_menu_wbb_connect_prompt.h>
 #include <ui/ui_stage_begin_screen.h>
 #include <ui/ui_startup_wbb_disclaimer.h>
@@ -41,17 +44,20 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(Character);
 	GDREGISTER_CLASS(Enemy);
 	GDREGISTER_CLASS(EnmBossCocklobster);
+	GDREGISTER_CLASS(EnmRhino);
 	GDREGISTER_CLASS(EnmTank);
 	GDREGISTER_CLASS(Item);
 	GDREGISTER_CLASS(ItemEnergy);
 	GDREGISTER_CLASS(Player);
 	GDREGISTER_CLASS(Projectile);
+	GDREGISTER_CLASS(ProjectileEnmGeneric);
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
 	GDREGISTER_CLASS(StagePathGrid);
 
 	GDREGISTER_CLASS(MainMenu);
 	GDREGISTER_CLASS(UiDebugWbbstatus);
 	GDREGISTER_CLASS(UiMenuWbbConnectPrompt);
+	GDREGISTER_CLASS(UiHudRhinoAlert);
 	GDREGISTER_CLASS(UiStageBeginScreen);
 	GDREGISTER_CLASS(UiStartupWbbDisclaimer);
 

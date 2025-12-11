@@ -47,13 +47,6 @@ void Player::_bind_methods() {
 }
 
 Player::Player() {
-	mdl = nullptr;
-	coll = nullptr;
-
-	fire_timer = 0;
-	enabled = true;
-	noclip = false;
-
 	Game::set_player(this);
 }
 
@@ -88,8 +81,9 @@ void Player::_process(double delta) {
 	mdl->set_rotation(Vector3(Vector3(input_axis.y, 0, -input_axis.x) * MDL_LEAN_SCALE));
 
 	Vector3 pos = get_position();
+	Vector3 old_pos = pos;
 
-	pos += input_dir * delta * 8;
+	pos += input_dir * delta * 12.;
 	if (pos.x > MAX_X) {
 		pos.x = MAX_X;
 	} else if (pos.x < -MAX_X) {
@@ -101,6 +95,9 @@ void Player::_process(double delta) {
 		pos.z = -MAX_Z;
 	}
 	set_position(pos);
+
+	// We don't actually use velocity here, but some enemies do to predict player movement.
+	set_velocity(pos - old_pos);
 }
 
 void Player::_physics_process(double delta) {
@@ -118,6 +115,10 @@ void Player::_physics_process(double delta) {
 		fire();
 		fire_timer = 1;
 	}
+}
+
+void Player::set_rail_vel(Vector3 value) {
+	rail_vel = value;
 }
 
 bool Player::get_enabled() {

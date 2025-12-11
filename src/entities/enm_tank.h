@@ -7,21 +7,28 @@
 
 namespace godot {
 
+/// @brief A stationary "walking" tank that shoots at player.
 class EnmTank : public Enemy {
 	GDCLASS(EnmTank, Enemy)
 
 private:
-	static constexpr float SPEED = 0.5;
-	static constexpr float COLL_R = 1.;
-	static constexpr int32_t MAX_HP = 30;
+	static constexpr double COLL_R = 1.0;
+	static constexpr int32_t MAX_HP = 20;
+	static constexpr double AI_ALERT_RADIUS = 100.;
+	static constexpr double AI_FIRE_RATE = 0.3;
 
-	const String MDL_PATH = "res://assets/characters/enm_tank/mdl_tank.blend";
+	const String MDL_PATH = "res://assets/entities/enm_tank/mdl_enm_tank.blend";
 
 	Node3D *mdl;
+	Node3D *mdl_snoot;
 	CollisionShape3D *coll;
+
+	double t_since_fired;
 
 	void setup_model();
 	void setup_collider();
+
+	void fire();
 
 protected:
 	static void _bind_methods();
@@ -32,6 +39,8 @@ public:
 
 	void _ready() override;
 	void _process(double delta) override;
+
+	void die() override;
 
 	String get_display_name() override;
 	String get_editor_model_path() override;
