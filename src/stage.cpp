@@ -65,6 +65,7 @@ void Stage::_process(double delta) {
 
 	if (rail_follow) {
 		Transform3D sampled_xform = rail_path->get_curve()->sample_baked_with_rotation(rail_offset);
+		sampled_xform.origin += rail_path->get_global_position();
 		rail_follow->set_transform(sampled_xform);
 	}
 }
