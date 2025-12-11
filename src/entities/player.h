@@ -18,7 +18,7 @@ private:
 	static constexpr float COLL_R = 0.3;
 	const double FIRE_RATE = 3.0;
 
-	const String MDL_PATH = "res://assets/entities/player/mdl_player_ship.blend";
+	const String MDL_PATH = "res://assets/entities/player/mdl_player_butterfly.blend";
 
 	/// @brief How much does the model rotate towards the movement direction
 	static constexpr float MDL_LEAN_SCALE = 0.4;
