@@ -15,7 +15,7 @@ class Stage : public Node3D {
 	GDCLASS(Stage, Node3D)
 
 private:
-	static constexpr double INTRO_WAIT_DURATION = 10.;
+	static constexpr double INTRO_WAIT_DURATION = 5.;
 
 	AABB stage_bounds;
 	Node *local_env;

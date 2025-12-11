@@ -16,9 +16,9 @@ class UiStageBeginScreen : public MarginContainer {
 	GDCLASS(UiStageBeginScreen, MarginContainer)
 
 private:
-	static constexpr double FADEIN_DURATION = 1.;
-	static constexpr double DISPLAY_DURATION = 8.;
-	static constexpr double FADEOUT_DURATION = 1.;
+	static constexpr double FADEIN_DURATION = .6;
+	static constexpr double DISPLAY_DURATION = 3.;
+	static constexpr double FADEOUT_DURATION = .6;
 
 	static constexpr double T_START_DISPLAY = FADEIN_DURATION;
 	static constexpr double T_START_FADEOUT = T_START_DISPLAY + DISPLAY_DURATION;
