@@ -20,7 +20,7 @@ private:
 	const float CAMERA_DIST = 4.0;
 	const Vector3 CAMERA_OFFSET = Vector3(0.0, 0.5, 0.0);
 
-	Node3D *pivot;
+	Node3D *pivot = nullptr;
 
 	void _process_controller_input(double delta);
 	void _process_camera_arm(double delta);

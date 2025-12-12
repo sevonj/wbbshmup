@@ -13,7 +13,6 @@ void ProjectileEnmGeneric::_bind_methods() {
 }
 
 ProjectileEnmGeneric::ProjectileEnmGeneric() {
-	lifetimer = LIFE_DISTANCE;
 }
 
 ProjectileEnmGeneric::~ProjectileEnmGeneric() {}

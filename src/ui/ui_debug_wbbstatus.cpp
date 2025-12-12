@@ -8,8 +8,6 @@ void UiDebugWbbstatus::_bind_methods() {
 }
 
 UiDebugWbbstatus::UiDebugWbbstatus() {
-	label = nullptr;
-	axis_box = nullptr;
 }
 
 UiDebugWbbstatus::~UiDebugWbbstatus() {

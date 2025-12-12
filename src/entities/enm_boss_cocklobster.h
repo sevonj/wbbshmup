@@ -18,8 +18,8 @@ private:
 
 	const String MDL_PATH = "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.blend";
 
-	Node3D *mdl;
-	CollisionShape3D *coll;
+	Node3D *mdl = nullptr;
+	CollisionShape3D *coll = nullptr;
 
 	void setup_model();
 	void setup_collider();

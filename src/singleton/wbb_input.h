@@ -17,10 +17,10 @@ private:
 	static wiimote **wiimotes;
 	static bool initialized;
 
-	float tl;
-	float tr;
-	float bl;
-	float br;
+	float tl = 0.0;
+	float tr = 0.0;
+	float bl = 0.0;
+	float br = 0.0;
 
 	WbbInput();
 	~WbbInput();

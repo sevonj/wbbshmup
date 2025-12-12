@@ -19,11 +19,11 @@ private:
 
 	const String MDL_PATH = "res://assets/entities/enm_tank/mdl_enm_tank.blend";
 
-	Node3D *mdl;
-	Node3D *mdl_snoot;
-	CollisionShape3D *coll;
+	Node3D *mdl = nullptr;
+	Node3D *mdl_snoot = nullptr;
+	CollisionShape3D *coll = nullptr;
 
-	double t_since_fired;
+	double t_since_fired = INFINITY;
 
 	void setup_model();
 	void setup_collider();

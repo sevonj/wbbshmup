@@ -11,11 +11,11 @@ class Item : public CharacterBody3D {
 	GDCLASS(Item, CharacterBody3D)
 
 private:
-protected:
 	const double LIFETIME = 10.;
 	const double SPEED = 6.;
 
-	double lifetimer;
+protected:
+	double lifetimer = LIFETIME;
 
 	CollisionShape3D *coll;
 

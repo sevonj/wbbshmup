@@ -15,7 +15,6 @@ namespace godot {
 void CameraRigTp::_bind_methods() {}
 
 CameraRigTp::CameraRigTp() {
-	pivot = nullptr;
 }
 
 CameraRigTp::~CameraRigTp() {

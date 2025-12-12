@@ -12,11 +12,11 @@ class UiStartupWbbDisclaimer : public MarginContainer {
 	GDCLASS(UiStartupWbbDisclaimer, MarginContainer)
 
 private:
-	WbbInput *wbb_input;
+	WbbInput *wbb_input = nullptr;
 
-	ColorRect *bgfill;
-	TextureRect *bgtex;
-	RichTextLabel *label;
+	ColorRect *bgfill = nullptr;
+	TextureRect *bgtex = nullptr;
+	RichTextLabel *label = nullptr;
 
 	void setup_layout();
 

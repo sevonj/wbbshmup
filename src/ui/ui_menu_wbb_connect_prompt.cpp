@@ -11,22 +11,6 @@ void UiMenuWbbConnectPrompt::_bind_methods() {
 }
 
 UiMenuWbbConnectPrompt::UiMenuWbbConnectPrompt() {
-	wbb_input = nullptr;
-	st = WbbPromptState::Init;
-
-	content_margin = nullptr;
-	content_vbox = nullptr;
-	bgfill = nullptr;
-	fgfill = nullptr;
-	t_fgfill = 0.;
-	infographic_hbox = nullptr;
-	infographic_a = nullptr;
-	infographic_b = nullptr;
-	info_label = nullptr;
-	status_label = nullptr;
-	button_center = nullptr;
-	connect_button = nullptr;
-	exit_button = nullptr;
 }
 
 UiMenuWbbConnectPrompt::~UiMenuWbbConnectPrompt() {

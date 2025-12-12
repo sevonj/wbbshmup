@@ -14,9 +14,9 @@ private:
 	const double MIN_DIST = 3.0;
 	const double MAX_DIST = 30.0;
 
-	Node3D *pivot;
+	Node3D *pivot = nullptr;
 
-	double distance;
+	double distance = 0.;
 
 	void _process_controller_input(double delta);
 	void _process_camera_arm(double delta);

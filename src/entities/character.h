@@ -15,13 +15,12 @@ private:
 protected:
 	static constexpr double HITFLASH_DURATION = 0.1;
 
-	int32_t max_health;
-	int32_t health;
-	/// @brief Ignore damage. Use for iframe or godmode.
-	bool invincible;
-	bool hitflash_enabled;
+	int32_t max_health = 100;
+	int32_t health = 100;
+	bool invincible = false;
+	bool hitflash_enabled = true;
 
-	Ref<Material> mat_hitflash;
+	Ref<Material> mat_hitflash = nullptr;
 
 	static void _bind_methods();
 

@@ -16,12 +16,6 @@ namespace godot {
 void EnmTank::_bind_methods() {}
 
 EnmTank::EnmTank() {
-	mdl = nullptr;
-	mdl_snoot = nullptr;
-	coll = nullptr;
-
-	t_since_fired = INFINITY;
-
 	set_max_health(MAX_HP);
 }
 

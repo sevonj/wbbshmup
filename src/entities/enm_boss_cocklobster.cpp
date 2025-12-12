@@ -11,8 +11,6 @@ namespace godot {
 void EnmBossCocklobster::_bind_methods() {}
 
 EnmBossCocklobster::EnmBossCocklobster() {
-	mdl = nullptr;
-	coll = nullptr;
 }
 
 EnmBossCocklobster::~EnmBossCocklobster() {}

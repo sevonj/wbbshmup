@@ -12,7 +12,6 @@ void Item::_bind_methods() {
 }
 
 Item::Item() {
-	lifetimer = LIFETIME;
 }
 
 Item::~Item() {}

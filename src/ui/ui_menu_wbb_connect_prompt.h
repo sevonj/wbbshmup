@@ -25,22 +25,22 @@ private:
 	const String TEX_INFOGRAPHIC_A_PATH = "res://assets/ui/tex_infographic_wbb_battery_cover.svg";
 	const String TEX_INFOGRAPHIC_B_PATH = "res://assets/ui/tex_infographic_wbb_sync_button.svg";
 
-	WbbInput *wbb_input;
-	WbbPromptState st;
+	WbbInput *wbb_input = nullptr;
+	WbbPromptState st = WbbPromptState::Init;
 
-	MarginContainer *content_margin;
-	VBoxContainer *content_vbox;
-	ColorRect *bgfill;
-	ColorRect *fgfill;
-	double t_fgfill;
-	HBoxContainer *infographic_hbox;
-	TextureRect *infographic_a;
-	TextureRect *infographic_b;
-	RichTextLabel *info_label;
-	RichTextLabel *status_label;
-	CenterContainer *button_center;
-	Button *connect_button;
-	Button *exit_button;
+	MarginContainer *content_margin = nullptr;
+	VBoxContainer *content_vbox = nullptr;
+	ColorRect *bgfill = nullptr;
+	ColorRect *fgfill = nullptr;
+	double t_fgfill = 0.;
+	HBoxContainer *infographic_hbox = nullptr;
+	TextureRect *infographic_a = nullptr;
+	TextureRect *infographic_b = nullptr;
+	RichTextLabel *info_label = nullptr;
+	RichTextLabel *status_label = nullptr;
+	CenterContainer *button_center = nullptr;
+	Button *connect_button = nullptr;
+	Button *exit_button = nullptr;
 
 	void setup_layout();
 	void complete();

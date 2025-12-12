@@ -15,7 +15,6 @@ namespace godot {
 void CameraRigFollow::_bind_methods() {}
 
 CameraRigFollow::CameraRigFollow() {
-	target = nullptr;
 }
 
 CameraRigFollow::~CameraRigFollow() {

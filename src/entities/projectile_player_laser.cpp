@@ -13,7 +13,6 @@ void ProjectilePlayerLaser::_bind_methods() {
 }
 
 ProjectilePlayerLaser::ProjectilePlayerLaser() {
-	lifetimer = LIFE_DISTANCE;
 }
 
 ProjectilePlayerLaser::~ProjectilePlayerLaser() {}

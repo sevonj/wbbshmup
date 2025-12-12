@@ -13,9 +13,9 @@ class UiDebugWbbstatus : public PanelContainer {
 private:
 	static constexpr double AXIS_BOX_SIZE = 128.;
 
-	Label *label;
-	WbbInput *wbb_input;
-	ColorRect *axis_box;
+	Label *label = nullptr;
+	WbbInput *wbb_input = nullptr;
+	ColorRect *axis_box = nullptr;
 
 	void setup_layout();
 	void debug_draw_axis();

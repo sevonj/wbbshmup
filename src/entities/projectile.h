@@ -15,7 +15,7 @@ private:
 	const double LIFETIME = 10.;
 	const double SPEED = 6.;
 
-	double lifetimer;
+	double lifetimer = LIFETIME;
 
 	Node3D *mdl;
 	CollisionShape3D *coll;

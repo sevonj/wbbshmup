@@ -13,7 +13,6 @@ void Projectile::_bind_methods() {
 }
 
 Projectile::Projectile() {
-	lifetimer = LIFETIME;
 }
 
 Projectile::~Projectile() {}

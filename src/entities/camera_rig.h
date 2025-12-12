@@ -11,13 +11,13 @@ class CameraRig : public Node3D {
 
 private:
 protected:
-	Camera3D *camera;
+	Camera3D *camera = nullptr;
 
 	static void _bind_methods();
 	virtual void setup_rig();
 
 public:
-	bool enabled;
+	bool enabled = true;
 
 	CameraRig();
 	~CameraRig();

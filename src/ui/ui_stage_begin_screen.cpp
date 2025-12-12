@@ -11,16 +11,6 @@ void UiStageBeginScreen::_bind_methods() {
 }
 
 UiStageBeginScreen::UiStageBeginScreen() {
-	bgfill = nullptr;
-	top_panel = nullptr;
-	bottom_panel = nullptr;
-	lab_stage_name = nullptr;
-	lab_stage_no = nullptr;
-	lab_stage_desc = nullptr;
-	tex_stage_icon = nullptr;
-	tex_stage_icon_path = "res://assets/ui/stage_icons/tex_icon_stage_saturn.png";
-
-	lifetimer = 0.;
 }
 
 UiStageBeginScreen::~UiStageBeginScreen() {

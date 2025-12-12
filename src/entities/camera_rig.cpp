@@ -14,7 +14,6 @@ void CameraRig::_bind_methods() {
 }
 
 CameraRig::CameraRig() {
-	camera = nullptr;
 }
 
 CameraRig::~CameraRig() {
@@ -31,7 +30,6 @@ void CameraRig::_ready() {
 	setup_rig();
 
 	Game::get_singleton()->set_current_camera(this);
-	enabled = true;
 }
 
 void CameraRig::_process(double delta) {

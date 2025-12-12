@@ -12,7 +12,6 @@ void ItemEnergy::_bind_methods() {
 }
 
 ItemEnergy::ItemEnergy() {
-	lifetimer = LIFETIME;
 }
 
 ItemEnergy::~ItemEnergy() {}

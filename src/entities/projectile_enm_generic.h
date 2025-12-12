@@ -17,7 +17,7 @@ private:
 
 	const String MAT_PATH = "res://assets/materials/mat_fx_enmlaser.tres";
 
-	double lifetimer;
+	double lifetimer = LIFE_DISTANCE;
 
 	Node3D *mdl;
 	CollisionShape3D *coll;

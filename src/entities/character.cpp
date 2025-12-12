@@ -52,10 +52,9 @@ void Character::set_hitflash(bool enable) {
 }
 
 Character::Character() {
-	health = 100;
-	max_health = 100;
-	invincible = false;
-	hitflash_enabled = true;
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
 
 	mat_hitflash = ResourceLoader::get_singleton()->load("res://assets/materials/mat_fx_hitflash.tres", "Material");
 }

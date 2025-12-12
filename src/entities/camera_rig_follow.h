@@ -13,7 +13,7 @@ class CameraRigFollow : public CameraRig {
 private:
 	const Vector3 CAMERA_OFFSET = Vector3(0., 8., 13.25);
 
-	Node3D *target;
+	Node3D *target = nullptr;
 
 	void _process_camera_arm(double delta);
 

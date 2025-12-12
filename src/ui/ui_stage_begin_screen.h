@@ -24,16 +24,16 @@ private:
 	static constexpr double T_START_FADEOUT = T_START_DISPLAY + DISPLAY_DURATION;
 	static constexpr double T_DIE = T_START_FADEOUT + FADEOUT_DURATION;
 
-	ColorRect *bgfill;
-	Panel *top_panel;
-	Panel *bottom_panel;
-	Label *lab_stage_name;
-	Label *lab_stage_no;
-	Label *lab_stage_desc;
-	TextureRect *tex_stage_icon;
-	String tex_stage_icon_path;
+	ColorRect *bgfill = nullptr;
+	Panel *top_panel = nullptr;
+	Panel *bottom_panel = nullptr;
+	Label *lab_stage_name = nullptr;
+	Label *lab_stage_no = nullptr;
+	Label *lab_stage_desc = nullptr;
+	TextureRect *tex_stage_icon = nullptr;
+	String tex_stage_icon_path = "res://assets/ui/stage_icons/tex_icon_stage_saturn.png";
 
-	double lifetimer;
+	double lifetimer = 0.;
 
 	void setup_layout();
 
