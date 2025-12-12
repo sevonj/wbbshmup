@@ -15,6 +15,8 @@ namespace godot {
 
 void Stage::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_tool_rebuild_grid"), &Stage::tool_rebuild_grid);
+	ClassDB::bind_method(D_METHOD("get_stage_start"), &Stage::get_stage_start);
+	ClassDB::bind_method(D_METHOD("get_stage_end"), &Stage::get_stage_end);
 }
 
 Stage::Stage() {
@@ -85,6 +87,24 @@ void Stage::add_ui(Control *ui) {
 	}
 
 	local_ui->add_child(ui);
+}
+
+/// @return Stage start position & orientation sampled from rail path
+Transform3D Stage::get_stage_start() {
+	tool_ensure_rail_path();
+	double start_off = DEFAULT_RAIL_SPEED * INTRO_WAIT_DURATION;
+	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(start_off);
+	xform.origin += rail_path->get_global_position();
+	return xform;
+}
+
+/// @return Stage end position & orientation sampled from rail path
+Transform3D Stage::get_stage_end() {
+	tool_ensure_rail_path();
+	double end_off = rail_path->get_curve()->get_baked_length();
+	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(end_off);
+	xform.origin += rail_path->get_global_position();
+	return xform;
 }
 
 // void Stage::find_player_starts() {

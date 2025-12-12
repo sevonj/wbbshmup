@@ -18,16 +18,20 @@ extends EditorPlugin
 #var weapon_boxpunch = preload("res://addons/sticky_tools/classes/entities/weapon_boxpunch/weapon_boxpunch_gizmo.gd").new()
 #var info_player_start_inspector = preload("res://addons/worldeditor/classes/we_curve/we_curve_inspector.gd").new()
 #var world_inspector = preload("res://addons/sticky_tools/classes/world/world_inspector.gd").new()
+
+var stage_gizmo = preload("res://addons/sticky_tools/classes/stage_gizmo.gd").new()
 var stage_inspector = preload("res://addons/sticky_tools/classes/tool/stage_inspector.gd").new()
 
 
 func _enter_tree():
 
 	# Tool
+	add_node_3d_gizmo_plugin(stage_gizmo)
 	add_inspector_plugin(stage_inspector)
 
 
 func _exit_tree():
 
 	# Tool
+	remove_node_3d_gizmo_plugin(stage_gizmo)
 	remove_inspector_plugin(stage_inspector)

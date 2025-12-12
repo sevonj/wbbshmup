@@ -16,7 +16,8 @@ class Stage : public Node3D {
 	GDCLASS(Stage, Node3D)
 
 private:
-	static constexpr double INTRO_WAIT_DURATION = 5.;
+	static constexpr double INTRO_WAIT_DURATION = 5.0;
+	static constexpr double DEFAULT_RAIL_SPEED = 10.0;
 
 	AABB stage_bounds = DEFAULT_STAGE_BOUNDS;
 	Node *local_env = nullptr;
@@ -30,7 +31,7 @@ private:
 	Marker3D *rail_follow = nullptr;
 	/// @brief Offset of rail follower
 	double rail_offset = 0.;
-	double rail_speed = 10.;
+	double rail_speed = DEFAULT_RAIL_SPEED;
 	StagePathGrid *rail_grid = nullptr;
 
 	double intro_wait_timer = INTRO_WAIT_DURATION;
@@ -59,6 +60,9 @@ public:
 
 	void add_entity(Node3D *ent);
 	void add_ui(Control *ui);
+
+	Transform3D get_stage_start();
+	Transform3D get_stage_end();
 };
 
 } //namespace godot
