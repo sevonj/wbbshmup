@@ -97,7 +97,7 @@ void Player::_process(double delta) {
 	set_position(pos);
 
 	// We don't actually use velocity here, but some enemies do to predict player movement.
-	set_velocity(pos - old_pos);
+	set_velocity(pos - old_pos + rail_vel);
 }
 
 void Player::_physics_process(double delta) {
