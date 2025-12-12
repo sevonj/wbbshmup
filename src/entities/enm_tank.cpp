@@ -1,9 +1,12 @@
 #include "enm_tank.h"
 
 #include <assets.h>
+#include <config.h>
+#include <consts.h>
 #include <entities/player.h>
 #include <entities/projectile_enm_generic.h>
 #include <game.h>
+#include <singleton/debug_draw.h>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
@@ -38,10 +41,10 @@ void EnmTank::setup_model() {
 }
 
 void EnmTank::setup_collider() {
-	SphereShape3D *sphere = memnew(SphereShape3D);
-	sphere->set_radius(COLL_R);
+	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
+	coll_sphere->set_radius(COLL_R);
 	coll = memnew(CollisionShape3D);
-	coll->set_shape(sphere);
+	coll->set_shape(coll_sphere);
 	coll->set_name("coll");
 	add_child(coll);
 }
@@ -69,6 +72,10 @@ void EnmTank::_ready() {
 void EnmTank::_process(double delta) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
+	}
+
+	if (config::debug_draw_colliders) {
+		DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);
 	}
 
 	t_since_fired += delta;

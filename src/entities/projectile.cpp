@@ -1,8 +1,12 @@
 #include "projectile.h"
 
+#include <config.h>
+#include <consts.h>
 #include <entities/character.h>
 #include <game.h>
+#include <singleton/debug_draw.h>
 #include <godot_cpp/classes/csg_sphere3d.hpp>
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/sphere_shape3d.hpp>
@@ -25,16 +29,34 @@ void Projectile::_ready() {
 	setup_collider();
 }
 
+void Projectile::_process(double delta) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	if (config::debug_draw_colliders) {
+		if (coll_sphere == nullptr) {
+			DebugDraw::draw_sphere3d(get_global_position(), COLL_R, COLOR_DEBUG_ERROR);
+		} else {
+			DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);
+		}
+	}
+}
+
 void Projectile::_physics_process(double delta) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
 	lifetimer -= delta;
 
-	if (Game::is_out_of_bounds(this) || lifetimer <= 0) {
+	if (lifetimer <= 0) {
 		queue_free();
 		return;
 	}
 
 	Vector3 direction = -get_global_basis().get_column(2).normalized();
-	set_velocity(direction * SPEED);
+	set_velocity(direction * speed);
 
 	Vector3 velocity = get_velocity();
 	Ref<KinematicCollision3D> collision = move_and_collide(velocity * delta);
@@ -57,17 +79,17 @@ void Projectile::_physics_process(double delta) {
 
 void Projectile::setup_model() {
 	CSGSphere3D *sphere = memnew(CSGSphere3D);
-	sphere->set_radius(.1);
+	sphere->set_radius(COLL_R);
 	mdl = sphere;
 	mdl->set_name("mdl");
 	add_child(mdl);
 }
 
 void Projectile::setup_collider() {
-	SphereShape3D *sphere = memnew(SphereShape3D);
-	sphere->set_radius(.1);
+	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
+	coll_sphere->set_radius(COLL_R);
 	coll = memnew(CollisionShape3D);
-	coll->set_shape(sphere);
+	coll->set_shape(coll_sphere);
 	coll->set_name("coll");
 	add_child(coll);
 }

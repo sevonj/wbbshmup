@@ -1,9 +1,12 @@
 #include "enm_rhino.h"
 
 #include <assets.h>
+#include <config.h>
+#include <consts.h>
 #include <entities/player.h>
 #include <entities/projectile_enm_generic.h>
 #include <game.h>
+#include <singleton/debug_draw.h>
 #include <ui/ui_hud_rhino_alert.h>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
@@ -34,10 +37,10 @@ void EnmRhino::setup_model() {
 }
 
 void EnmRhino::setup_collider() {
-	SphereShape3D *sphere = memnew(SphereShape3D);
-	sphere->set_radius(COLL_R);
+	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
+	coll_sphere->set_radius(COLL_R);
 	coll = memnew(CollisionShape3D);
-	coll->set_shape(sphere);
+	coll->set_shape(coll_sphere);
 	coll->set_name("coll");
 	add_child(coll);
 }
@@ -52,6 +55,10 @@ void EnmRhino::_ready() {
 void EnmRhino::_process(double delta) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
+	}
+
+	if (config::debug_draw_colliders) {
+		DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);
 	}
 
 	if (launched) {

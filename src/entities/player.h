@@ -5,6 +5,7 @@
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/sphere_shape3d.hpp>
 #include <godot_cpp/classes/wrapped.hpp>
 #include <godot_cpp/variant/variant.hpp>
 
@@ -14,9 +15,8 @@ class Player : public Character {
 	GDCLASS(Player, Character)
 
 private:
-	static constexpr float COLL_H = 1.7;
-	static constexpr float COLL_R = 0.3;
-	const double FIRE_RATE = 3.0;
+	static constexpr double COLL_R = 1.5;
+	static constexpr double FIRE_RATE = 3.0;
 
 	const String MDL_PATH = "res://assets/entities/player/mdl_player_butterfly.blend";
 
@@ -29,12 +29,13 @@ private:
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;
+	Ref<SphereShape3D> coll_sphere = nullptr;
 
 	double fire_timer = 0.;
 	/// @brief On-rail velocity. Not used by this class, but added to velocity so enemies can track player velocity.
 	Vector3 rail_vel = Vector3();
 
-	bool enabled = true;
+	bool enabled = false;
 	bool noclip = false;
 
 	void setup_model();

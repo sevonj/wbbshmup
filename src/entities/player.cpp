@@ -1,14 +1,15 @@
 #include "player.h"
 
 #include <assets.h>
+#include <config.h>
 #include <entities/projectile_player_laser.h>
 #include <game.h>
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
-#include <godot_cpp/classes/capsule_shape3d.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/sphere_shape3d.hpp>
 #include <godot_cpp/variant/variant.hpp>
 
 void Player::setup_model() {
@@ -26,14 +27,12 @@ void Player::setup_collider() {
 	set_collision_layer(COL_LAYER_PLAYER);
 	set_collision_mask(COL_MASK_PLAYER);
 
-	CapsuleShape3D *capsule = memnew(CapsuleShape3D);
-	capsule->set_height(COLL_H);
-	capsule->set_radius(COLL_R);
+	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
+	coll_sphere->set_radius(COLL_R);
 	coll = memnew(CollisionShape3D);
-	coll->set_shape(capsule);
+	coll->set_shape(coll_sphere);
 	coll->set_name("coll");
 	add_child(coll);
-	coll->set_position(Vector3(0, COLL_H / 2.0, 0));
 }
 
 void Player::fire() {
@@ -63,6 +62,10 @@ void Player::_process(double delta) {
 		return;
 	}
 
+	if (config::debug_draw_colliders) {
+		DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);
+	}
+
 	WbbInput *input = WbbInput::get_singleton();
 	Vector2 input_axis = input->get_axis();
 
@@ -70,9 +73,11 @@ void Player::_process(double delta) {
 	Vector3 up = Vector3(0, 1, 0);
 	Vector3 orientation = (up + input_dir).normalized();
 
-	Transform3D xform = get_global_transform();
-	DebugDraw::draw_line_3d(xform.origin, xform.xform(up), Color(1, 0, 0));
-	DebugDraw::draw_line_3d(xform.origin, xform.xform(orientation), Color(0, 0, 1));
+	if (config::debug_draw_player_input) {
+		Transform3D xform = get_global_transform();
+		DebugDraw::draw_line_3d(xform.origin, xform.xform(up), Color(1, 0, 0));
+		DebugDraw::draw_line_3d(xform.origin, xform.xform(orientation), Color(0, 0, 1));
+	}
 
 	if (!enabled) {
 		return;

@@ -25,8 +25,15 @@ private:
 		Color color;
 	};
 
+	struct QueueCircle {
+		Vector2 position;
+		float r;
+		Color color;
+	};
+
 	Vector<QueuePoint> point_queue;
 	Vector<QueueLine> line_queue;
+	Vector<QueueCircle> circle_queue;
 
 	DebugDraw();
 	~DebugDraw();
@@ -42,8 +49,10 @@ public:
 
 	static void draw_line_3d(Vector3 a, Vector3 b, Color color);
 	static void draw_line_2d(Vector2 a, Vector2 b, Color color);
-	static void draw_point_3d(Vector3 a, Color color);
-	static void draw_point_2d(Vector2 a, Color color);
+	static void draw_point_3d(Vector3 origin, Color color);
+	static void draw_point_2d(Vector2 position, Color color);
+	static void draw_sphere3d(Vector3 origin, float r, Color color);
+	static void draw_circle2d(Vector2 position, float r, Color color);
 
 	void _ready() override;
 	void _process(double delta) override;

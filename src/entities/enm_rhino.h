@@ -4,6 +4,7 @@
 #include <godot_cpp/classes/character_body3d.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/node3d.hpp>
+#include <godot_cpp/classes/sphere_shape3d.hpp>
 
 namespace godot {
 
@@ -25,6 +26,7 @@ private:
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;
+	Ref<SphereShape3D> coll_sphere = nullptr;
 
 	bool launched = false;
 	bool gave_up = false;

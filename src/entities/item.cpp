@@ -1,6 +1,10 @@
 #include "item.h"
 
+#include <config.h>
+#include <consts.h>
 #include <game.h>
+#include <singleton/debug_draw.h>
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/sphere_shape3d.hpp>
@@ -24,6 +28,13 @@ void Item::_ready() {
 }
 
 void Item::_process(double delta) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	if (config::debug_draw_colliders) {
+		DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);
+	}
 }
 
 void Item::_physics_process(double delta) {
@@ -49,10 +60,10 @@ void Item::_physics_process(double delta) {
 }
 
 void Item::setup_collider() {
-	SphereShape3D *sphere = memnew(SphereShape3D);
-	sphere->set_radius(.1);
+	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
+	coll_sphere->set_radius(COLL_R);
 	coll = memnew(CollisionShape3D);
-	coll->set_shape(sphere);
+	coll->set_shape(coll_sphere);
 	coll->set_name("coll");
 	add_child(coll);
 }

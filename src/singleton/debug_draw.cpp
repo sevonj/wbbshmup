@@ -52,13 +52,17 @@ void DebugDraw::_draw() {
 		return;
 	}
 
-	for (auto l : line_queue) {
+	for (QueueLine l : line_queue) {
 		draw_line(l.a, l.b, l.color);
 	}
 
-	for (auto p : point_queue) {
-		auto rect = Rect2(Vector2(p.position.x - 4, p.position.y - 4), Vector2(8, 8));
+	for (QueuePoint p : point_queue) {
+		Rect2 rect = Rect2(Vector2(p.position.x - 4, p.position.y - 4), Vector2(8, 8));
 		draw_rect(rect, p.color, false);
+	}
+
+	for (QueueCircle c : circle_queue) {
+		draw_circle(c.position, c.r, c.color, false);
 	}
 
 	clear_queues();
@@ -67,12 +71,12 @@ void DebugDraw::_draw() {
 void DebugDraw::clear_queues() {
 	point_queue.clear();
 	line_queue.clear();
+	circle_queue.clear();
 }
 
 /// @brief Draw a line in 3D world space
-/// @param a Start point
-/// @param b End point
-/// @param color Color
+/// @param a Start point world coord
+/// @param b End point world coord
 void DebugDraw::draw_line_3d(Vector3 a, Vector3 b, Color color) {
 	CameraRig *camera_rig = Game::get_current_camera();
 	if (!camera_rig) {
@@ -87,36 +91,60 @@ void DebugDraw::draw_line_3d(Vector3 a, Vector3 b, Color color) {
 }
 
 /// @brief Draw a line in 2D screen space
-/// @param a Start point
-/// @param b End point
-/// @param color Color
+/// @param a Start point screen space
+/// @param b End point screen space
 void DebugDraw::draw_line_2d(Vector2 a, Vector2 b, Color color) {
 	DebugDraw *ddraw = get_singleton();
 	ddraw->line_queue.push_back(QueueLine{ a, b, color });
 }
 
 /// @brief Draw a point in 3D world space
-/// @param a Origin
-/// @param color Color
-void DebugDraw::draw_point_3d(Vector3 a, Color color) {
+/// @param origin Global position
+void DebugDraw::draw_point_3d(Vector3 origin, Color color) {
 	CameraRig *camera_rig = Game::get_current_camera();
 	if (!camera_rig) {
 		return;
 	}
 	Camera3D *camera = camera_rig->get_camera();
-	if (camera->is_position_behind(a)) {
+	if (camera->is_position_behind(origin)) {
 		return;
 	}
 	DebugDraw *ddraw = get_singleton();
-	ddraw->point_queue.push_back(QueuePoint{ camera->unproject_position(a), color });
+	ddraw->point_queue.push_back(QueuePoint{ camera->unproject_position(origin), color });
 }
 
 /// @brief Draw a point in 2D screen space
-/// @param a Screen-space position
-/// @param color
-void DebugDraw::draw_point_2d(Vector2 a, Color color) {
+/// @param position Screen-space position
+void DebugDraw::draw_point_2d(Vector2 position, Color color) {
 	DebugDraw *ddraw = get_singleton();
-	ddraw->point_queue.push_back(QueuePoint{ a, color });
+	ddraw->point_queue.push_back(QueuePoint{ position, color });
+}
+
+/// @brief Draw a sphere in 3D screen space
+/// @param origin world coord
+void DebugDraw::draw_sphere3d(Vector3 origin, float r, Color color) {
+	CameraRig *camera_rig = Game::get_current_camera();
+	if (!camera_rig) {
+		return;
+	}
+	Camera3D *camera = camera_rig->get_camera();
+	if (camera->is_position_behind(origin)) {
+		return;
+	}
+	Vector2 position = camera->unproject_position(origin);
+
+	Vector2 r_position = camera->unproject_position(origin + camera->get_basis().get_column(0) * r);
+	r = position.distance_to(r_position);
+
+	DebugDraw *ddraw = get_singleton();
+	ddraw->circle_queue.push_back(QueueCircle{ position, r, color });
+}
+
+/// @brief Draw a circle in 2D screen space
+/// @param position Screen-space position
+void DebugDraw::draw_circle2d(Vector2 position, float r, Color color) {
+	DebugDraw *ddraw = get_singleton();
+	ddraw->circle_queue.push_back(QueueCircle{ position, r, color });
 }
 
 void DebugDraw::draw_text(String text) {

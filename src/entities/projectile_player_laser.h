@@ -16,14 +16,6 @@ private:
 
 	const String MAT_PATH = "res://assets/materials/mat_fx_playerlaser.tres";
 
-	double lifetimer = LIFE_DISTANCE;
-
-	Node3D *mdl;
-	CollisionShape3D *coll;
-
-	void setup_model();
-	void setup_collider();
-
 protected:
 	static void _bind_methods();
 
@@ -32,7 +24,7 @@ public:
 	~ProjectilePlayerLaser();
 
 	void _ready() override;
-	void _physics_process(double delta) override;
+	void setup_model() override;
 };
 
 } //namespace godot

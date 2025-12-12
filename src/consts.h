@@ -1,6 +1,7 @@
 #pragma once
 
 #include <godot_cpp/variant/aabb.hpp>
+#include <godot_cpp/variant/color.hpp>
 
 namespace godot {
 
@@ -32,5 +33,8 @@ typedef enum {
 const AABB DEFAULT_STAGE_BOUNDS = AABB(
 		Vector3(-512, -64, -512),
 		Vector3(1024, 512, 1024));
+
+const Color COLOR_DEBUG_COLL = Color(0., 1., 0.);
+const Color COLOR_DEBUG_ERROR = Color(1., 0., 1.);
 
 } //namespace godot

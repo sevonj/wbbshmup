@@ -13,46 +13,18 @@ void ProjectileEnmGeneric::_bind_methods() {
 }
 
 ProjectileEnmGeneric::ProjectileEnmGeneric() {
+	lifetimer = LIFE_DISTANCE / SPEED;
+	speed = SPEED;
 }
 
 ProjectileEnmGeneric::~ProjectileEnmGeneric() {}
 
 void ProjectileEnmGeneric::_ready() {
-	Projectile::_ready();
-	set_collision_mask(COL_MASK_ENEMY_PROJECTILE);
+	set_collision_layer(0);
+	set_collision_mask(COL_MASK_ENEMIES);
 
 	setup_model();
 	setup_collider();
-}
-
-void ProjectileEnmGeneric::_physics_process(double delta) {
-	lifetimer -= delta * SPEED;
-
-	if (lifetimer <= 0) {
-		queue_free();
-		return;
-	}
-
-	Vector3 direction = -get_global_basis().get_column(2).normalized();
-	set_velocity(direction * SPEED);
-
-	Vector3 velocity = get_velocity();
-	Ref<KinematicCollision3D> collision = move_and_collide(velocity * delta);
-	if (collision.is_valid()) {
-		DamageInfo dmg = DamageInfo(10, collision->get_normal() * 2.);
-
-		Node3D *body = cast_to<Node3D>(collision->get_collider());
-		if (body) {
-			Vector3 knockback = (body->get_global_position() - get_global_position()).normalized();
-
-			Character *basechar = cast_to<Character>(body);
-			if (basechar) {
-				basechar->take_damage(dmg);
-			}
-
-			queue_free();
-		}
-	}
 }
 
 void ProjectileEnmGeneric::setup_model() {
@@ -67,15 +39,6 @@ void ProjectileEnmGeneric::setup_model() {
 	}
 
 	add_child(mdl);
-}
-
-void ProjectileEnmGeneric::setup_collider() {
-	SphereShape3D *sphere = memnew(SphereShape3D);
-	sphere->set_radius(.1);
-	coll = memnew(CollisionShape3D);
-	coll->set_shape(sphere);
-	coll->set_name("coll");
-	add_child(coll);
 }
 
 } //namespace godot
