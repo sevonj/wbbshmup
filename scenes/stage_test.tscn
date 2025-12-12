@@ -209,8 +209,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131.13246, 6.5180693, 154.35
 collision_layer = 8
 collision_mask = 3
 
+[node name="EnmRhino6" type="EnmRhino" parent="entities/enemysetup_1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.75055, 62.31665, 154.3587)
+collision_layer = 8
+collision_mask = 3
+
 [node name="EnmRhino4" type="EnmRhino" parent="entities/enemysetup_1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.910416, 6.5180693, 156.29865)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.369003, 6.5180693, 103.9924)
+collision_layer = 8
+collision_mask = 3
+
+[node name="EnmRhino5" type="EnmRhino" parent="entities/enemysetup_1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.662056, 6.51807, 179.56244)
 collision_layer = 8
 collision_mask = 3
 

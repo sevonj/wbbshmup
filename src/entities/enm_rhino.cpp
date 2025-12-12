@@ -58,7 +58,7 @@ void EnmRhino::_process(double delta) {
 		t_since_launch += delta;
 	}
 	if (t_since_launch > LIFETIME) {
-		//queue_free();
+		queue_free();
 	}
 
 	Player *player = Game::get_player();
@@ -68,6 +68,7 @@ void EnmRhino::_process(double delta) {
 		if (origin.distance_to(player_pos) > AI_ALERT_RADIUS) {
 			return;
 		}
+		bool just_launched = !launched;
 		if (!launched) {
 			launched = true;
 			UiHudRhinoAlert *ui = memnew(UiHudRhinoAlert);
@@ -76,37 +77,44 @@ void EnmRhino::_process(double delta) {
 			print_line("Rhino alerted");
 		}
 
-		// This is the reanimated corpse of an originally decent-ish proportional navigation script from the mech game.
-		// It was nerfed because it was too good, left broken, and now ported to C++ with minimal effort.
-
 		Basis basis = get_global_basis();
-		Vector3 vel = get_velocity();
 		Vector3 player_vel = player->get_velocity();
 
-		double nav_time = (player_pos - origin).length() / (vel - player_vel).length();
-		Vector3 los = (player_pos + player_vel.normalized() * nav_time) - origin;
-
-		double angle = vel.angle_to(los);
-		Vector3 adjustment = angle * los.normalized();
+		Vector3 los = player_pos - origin;
+		double nav_time = los.length() / SPEED;
+		Vector3 player_rel_intercept_pos = los + (player_vel * nav_time);
+		Vector3 desired_dir = player_rel_intercept_pos.normalized() * AI_NAVGAIN;
+		Basis desired_basis = Basis::looking_at((player_pos + player_rel_intercept_pos + desired_dir) - origin);
 
 		Quaternion rot = Quaternion(basis);
-		Quaternion desired_rot = Quaternion(adjustment.normalized(), -90);
+		Quaternion desired_rot = Quaternion(desired_basis);
+
+		if (just_launched) {
+			// Snap face player
+			set_global_transform(Transform3D(desired_rot, origin));
+			return;
+		}
+
 		double rot_angle = rot.angle_to(desired_rot);
+
+		// Fixes a bug where transform goes bad once every dozen runs or so.
+		// Quaternion::angle_to() likes to return NaN every now and then.
+		if (Math::is_nan(rot_angle)) {
+			rot_angle = 0.0;
+		}
+
+		//print_line("until giveup: ", rot_angle / AI_GIVEUP_ANGLE);
 		if (rot_angle >= AI_GIVEUP_ANGLE) {
 			gave_up = true;
 			print_line("Rhino gave up");
 		}
-		Quaternion final_rot = rot.slerp(desired_rot, Math::clamp(rot_angle, 0., AI_TURN_RATE * delta));
 
+		Quaternion final_rot = rot.slerp(desired_rot, Math::clamp(rot_angle, 0., AI_TURN_RATE * delta));
 		set_global_transform(Transform3D(final_rot, origin));
-		vel = basis.get_column(2) * SPEED;
-		set_velocity(vel);
+		set_velocity(-get_basis().get_column(2) * SPEED);
 	}
 
 	move_and_slide();
-
-	//set_velocity());
-	//move_and_collide(get_basis().get_column(2) * delta * 4.);
 }
 
 void EnmRhino::die() {

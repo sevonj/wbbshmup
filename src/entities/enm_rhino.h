@@ -16,9 +16,10 @@ private:
 	static constexpr double COLL_R = 1.0;
 	static constexpr int32_t MAX_HP = 100;
 	static constexpr double AI_ALERT_RADIUS = 200.;
-	static constexpr double AI_TURN_RATE = M_PI * SPEED * 0.1;
-	static constexpr double AI_GIVEUP_ANGLE = M_PI;
-	static constexpr double LIFETIME = 10.;
+	static constexpr double AI_NAVGAIN = 3.9;
+	static constexpr double AI_TURN_RATE = M_PI * SPEED * 0.01;
+	static constexpr double AI_GIVEUP_ANGLE = M_PI * 0.5;
+	static constexpr double LIFETIME = 10.0;
 
 	const String MDL_PATH = "res://assets/entities/enm_rhino/mdl_enm_rhino.blend";
 
