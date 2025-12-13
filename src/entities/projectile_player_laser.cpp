@@ -20,7 +20,6 @@ ProjectilePlayerLaser::ProjectilePlayerLaser() {
 ProjectilePlayerLaser::~ProjectilePlayerLaser() {}
 
 void ProjectilePlayerLaser::_ready() {
-	print_line("createdd");
 	set_collision_mask(COL_MASK_PLAYER_PROJECTILE);
 
 	setup_model();
