@@ -20,7 +20,7 @@ var shot2_played := false
 func _init() -> void:
 	duration = SHOT1_DUR
 
-func _ready() -> void:
+func _ready () -> void:
 	_play_shot1()
 
 #func _process(_delta: float) -> void:

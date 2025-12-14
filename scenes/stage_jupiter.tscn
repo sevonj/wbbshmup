@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=4 uid="uid://cl5kcl302cuxg"]
+[gd_scene load_steps=25 format=4 uid="uid://cl5kcl302cuxg"]
 
 [ext_resource type="Script" uid="uid://8u6amb7sn2tn" path="res://scenes/stage_jupiter.gd" id="1_fao2i"]
-[ext_resource type="Environment" uid="uid://dqx2pp8dxtr4r" path="res://assets/env/env_uranus.tres" id="1_w6485"]
+[ext_resource type="PackedScene" uid="uid://dcfi7se8tn1yb" path="res://assets/models/stage/mdl_jupiter_stage1a.blend" id="2_3ngdq"]
+[ext_resource type="Environment" uid="uid://doj3uiqhavty3" path="res://assets/env/env_jupiter.tres" id="2_e3f26"]
 [ext_resource type="Material" uid="uid://ddhidi2turswa" path="res://assets/env/bg_objects/mat_jupiter.tres" id="2_smoyr"]
 [ext_resource type="Script" uid="uid://crj4uc0q2bksr" path="res://scenes/stage_jupiter_intro_cutscene.gd" id="3_e3f26"]
 [ext_resource type="PackedScene" uid="uid://bgnovvjlt2lhe" path="res://assets/models/mdl_station.blend" id="3_fao2i"]
@@ -93,22 +94,130 @@ script = ExtResource("1_fao2i")
 
 [node name="static" type="Node" parent="."]
 
+[node name="stage_models" type="Node3D" parent="static"]
+
+[node name="seg1" type="Node3D" parent="static/stage_models"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 608)
+
+[node name="mdl_stage_jupiter_pieces" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 158.09601)
+
+[node name="mdl_stage_jupiter_pieces2" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 134.09601)
+
+[node name="mdl_stage_jupiter_pieces3" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 110.09601)
+
+[node name="mdl_stage_jupiter_pieces4" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 86.09601)
+
+[node name="mdl_stage_jupiter_pieces5" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 62.09601)
+
+[node name="mdl_stage_jupiter_pieces6" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 38.09601)
+
+[node name="mdl_stage_jupiter_pieces7" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 14.096008)
+
+[node name="mdl_stage_jupiter_pieces8" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -9.903992)
+
+[node name="mdl_stage_jupiter_pieces9" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -33.90399)
+
+[node name="mdl_stage_jupiter_pieces10" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -57.90399)
+
+[node name="mdl_stage_jupiter_pieces11" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -81.90399)
+
+[node name="mdl_stage_jupiter_pieces12" parent="static/stage_models/seg1" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -105.90399)
+
+[node name="seg2" type="Node3D" parent="static/stage_models"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.579544, 7.6293945e-06, 272.14377)
+
+[node name="mdl_stage_jupiter_pieces" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 158.09601)
+
+[node name="mdl_stage_jupiter_pieces2" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 134.09601)
+
+[node name="mdl_stage_jupiter_pieces3" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 110.09601)
+
+[node name="mdl_stage_jupiter_pieces4" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 86.09601)
+
+[node name="mdl_stage_jupiter_pieces5" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 62.09601)
+
+[node name="mdl_stage_jupiter_pieces6" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 38.09601)
+
+[node name="mdl_stage_jupiter_pieces7" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 14.096008)
+
+[node name="mdl_stage_jupiter_pieces8" parent="static/stage_models/seg2" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -9.903992)
+
+[node name="seg3" type="Node3D" parent="static/stage_models"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1082, 0, 37.872597)
+
+[node name="mdl_stage_jupiter_pieces" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 158.09601)
+
+[node name="mdl_stage_jupiter_pieces2" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 134.09601)
+
+[node name="mdl_stage_jupiter_pieces3" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 110.09601)
+
+[node name="mdl_stage_jupiter_pieces4" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 86.09601)
+
+[node name="mdl_stage_jupiter_pieces5" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 62.09601)
+
+[node name="mdl_stage_jupiter_pieces6" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 38.09601)
+
+[node name="mdl_stage_jupiter_pieces7" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, 14.096008)
+
+[node name="mdl_stage_jupiter_pieces8" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -9.903992)
+
+[node name="mdl_stage_jupiter_pieces9" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -33.90399)
+
+[node name="mdl_stage_jupiter_pieces10" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -57.90399)
+
+[node name="mdl_stage_jupiter_pieces11" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -81.90399)
+
+[node name="mdl_stage_jupiter_pieces12" parent="static/stage_models/seg3" instance=ExtResource("2_3ngdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0268269, 0, -105.90399)
+
 [node name="env" type="Node" parent="."]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="env"]
-transform = Transform3D(0.13887368, -0.7520756, -0.64428, 0.9798585, 0.01008219, 0.19943817, -0.14349684, -0.65899986, 0.73832774, 0, 3.8448553, 0)
+[node name="sun" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(-0.19966607, 0.065814495, 0.97765124, 0.97985864, 0.010082171, 0.19943821, 0.003269136, 0.9977811, -0.066501856, 0, 3.8448553, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="env"]
-environment = ExtResource("1_w6485")
+environment = ExtResource("2_e3f26")
 
 [node name="entities" type="Node" parent="."]
 
 [node name="intro_cutscene" type="Cutscene" parent="entities"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -870.09924, 0, 539.5986)
+visible = false
 script = ExtResource("3_e3f26")
 
 [node name="planet" type="MeshInstance3D" parent="entities/intro_cutscene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16460.6, 0, -23123.355)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 885.66174, 0, -30656.877)
 mesh = SubResource("QuadMesh_i6vto")
 skeleton = NodePath("../../../env")
 

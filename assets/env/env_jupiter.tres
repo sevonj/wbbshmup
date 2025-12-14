@@ -1,0 +1,10 @@
+[gd_resource type="Environment" load_steps=2 format=3 uid="uid://doj3uiqhavty3"]
+
+[ext_resource type="Sky" uid="uid://be1lo7rc1trwe" path="res://assets/env/sky_jupiter.tres" id="1_7vgde"]
+
+[resource]
+background_mode = 2
+sky = ExtResource("1_7vgde")
+ambient_light_source = 2
+ambient_light_color = Color(0.6, 0.47200003, 0.36, 1)
+ambient_light_energy = 0.21
