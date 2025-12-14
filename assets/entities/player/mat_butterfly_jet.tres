@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b6xg7uekehkm8"]
 
-[ext_resource type="Texture2D" uid="uid://8pxwkyis1pnc" path="res://assets/textures/tex_jet.png" id="1_13kyg"]
+[ext_resource type="Texture2D" uid="uid://8pxwkyis1pnc" path="res://assets/materials/tex_jet.png" id="1_13kyg"]
 
 [resource]
 transparency = 1

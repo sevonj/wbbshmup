@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://woknxxwqs0oh"
-path.s3tc="res://.godot/imported/tex_tool_stage_end.png-5ccb7a32b1b37db7f5d3b6cade692890.s3tc.ctex"
+path.s3tc="res://.godot/imported/tex_tool_stage_end.png-d301bc1f71146b7c0a7067c04da384fd.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/tex_tool_stage_end.png"
-dest_files=["res://.godot/imported/tex_tool_stage_end.png-5ccb7a32b1b37db7f5d3b6cade692890.s3tc.ctex"]
+source_file="res://assets/materials/tex_tool_stage_end.png"
+dest_files=["res://.godot/imported/tex_tool_stage_end.png-d301bc1f71146b7c0a7067c04da384fd.s3tc.ctex"]
 
 [params]
 

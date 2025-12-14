@@ -2,20 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://lfxqc7cuqaxv"
-path="res://.godot/imported/Jupiter_(transparent).png-a5fcf128f745bbd7ab5cb43d78cc1f90.ctex"
+uid="uid://c7q0t1ukig1ij"
+path.s3tc="res://.godot/imported/tex_mod_metal1.png-3685e628249cb3ecbc454e518c67e348.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://assets/ref/Jupiter_(transparent).png"
-dest_files=["res://.godot/imported/Jupiter_(transparent).png-a5fcf128f745bbd7ab5cb43d78cc1f90.ctex"]
+source_file="res://assets/materials/tex_mod_metal1.png"
+dest_files=["res://.godot/imported/tex_mod_metal1.png-3685e628249cb3ecbc454e518c67e348.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -23,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -37,4 +38,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

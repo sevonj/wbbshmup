@@ -41,7 +41,7 @@ void MainMenu::setup_layout() {
 
 void MainMenu::start_game() {
 	SceneTree *scene_tree = (SceneTree *)Engine::get_singleton()->get_main_loop();
-	scene_tree->change_scene_to_file("res://scenes/stage_test.tscn");
+	scene_tree->change_scene_to_file("res://scenes/stage_jupiter.tscn");
 }
 
 void MainMenu::on_wbb_connect_complete() {

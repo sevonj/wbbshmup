@@ -39,6 +39,7 @@ private:
 	void tool_ensure_rail_path();
 	void tool_ensure_rail_grid();
 	void tool_rebuild_grid();
+	void ensure_nodes();
 
 	//Vector<InfoPlayerStart *> player_starts;
 
@@ -50,6 +51,7 @@ private:
 
 protected:
 	static void _bind_methods();
+	void _notification(int what);
 
 public:
 	Stage();

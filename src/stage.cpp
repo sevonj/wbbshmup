@@ -17,6 +17,24 @@ void Stage::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_tool_rebuild_grid"), &Stage::tool_rebuild_grid);
 	ClassDB::bind_method(D_METHOD("get_stage_start"), &Stage::get_stage_start);
 	ClassDB::bind_method(D_METHOD("get_stage_end"), &Stage::get_stage_end);
+	ClassDB::bind_method(D_METHOD("spawn_player"), &Stage::spawn_player);
+	ClassDB::bind_method(D_METHOD("add_entity"), &Stage::add_entity);
+	ClassDB::bind_method(D_METHOD("add_ui"), &Stage::add_ui);
+}
+
+void Stage::_notification(int what) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	switch (what) {
+		case NOTIFICATION_READY:
+			ensure_nodes();
+			break;
+
+		default:
+			break;
+	}
 }
 
 Stage::Stage() {
@@ -31,13 +49,6 @@ void Stage::_ready() {
 		tool_ensure_rail_grid();
 		return;
 	}
-
-	local_env = get_node<Node>("env");
-	local_entities = get_node<Node>("entities");
-	local_static = get_node<Node>("static");
-	local_ui = get_node<Node>("ui");
-
-	rail_path = get_node<Path3D>("rail_path");
 
 	//find_player_starts();
 
@@ -77,6 +88,7 @@ void Stage::add_entity(Node3D *ent) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+	ensure_nodes();
 
 	local_entities->add_child(ent);
 }
@@ -85,6 +97,7 @@ void Stage::add_ui(Control *ui) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+	ensure_nodes();
 
 	local_ui->add_child(ui);
 }
@@ -171,10 +184,21 @@ void Stage::tool_rebuild_grid() {
 	rail_grid->set_transform(rail_path->get_transform());
 }
 
+/// @brief Makes sure that all required child nodes are initialized.
+void Stage::ensure_nodes() {
+	local_env = get_node<Node>("env");
+	local_entities = get_node<Node>("entities");
+	local_static = get_node<Node>("static");
+	local_ui = get_node<Node>("ui");
+
+	rail_path = get_node<Path3D>("rail_path");
+}
+
 void Stage::spawn_player() {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+	ensure_nodes();
 
 	clear_player();
 
@@ -193,6 +217,7 @@ void Stage::spawn_player() {
 
 	camera->set_target(rail_follow);
 	add_entity(camera);
+	camera->get_camera()->make_current();
 }
 
 void Stage::clear_player() {

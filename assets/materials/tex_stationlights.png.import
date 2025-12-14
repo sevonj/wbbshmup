@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7q0t1ukig1ij"
-path.s3tc="res://.godot/imported/tex_mod_metal1.png-109791ef902f62f24a4cb944e3556e8b.s3tc.ctex"
+uid="uid://bhc5wjyobn2i0"
+path.s3tc="res://.godot/imported/tex_stationlights.png-28d2f11df7748f1b40280fdc5d20cae4.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/tex_mod_metal1.png"
-dest_files=["res://.godot/imported/tex_mod_metal1.png-109791ef902f62f24a4cb944e3556e8b.s3tc.ctex"]
+source_file="res://assets/materials/tex_stationlights.png"
+dest_files=["res://.godot/imported/tex_stationlights.png-28d2f11df7748f1b40280fdc5d20cae4.s3tc.ctex"]
 
 [params]
 

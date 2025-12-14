@@ -5,6 +5,8 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
+#include <cutscene.h>
+#include <entities/anim_path_follow.h>
 #include <entities/camera_rig.h>
 #include <entities/camera_rig_follow.h>
 #include <entities/camera_rig_orbit.h>
@@ -37,6 +39,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	GDREGISTER_CLASS(AnimPathFollow);
 	GDREGISTER_CLASS(CameraRig);
 	GDREGISTER_CLASS(CameraRigFollow);
 	GDREGISTER_CLASS(CameraRigOrbit);
@@ -54,6 +57,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
 	GDREGISTER_CLASS(StagePathGrid);
 
+	GDREGISTER_CLASS(Cutscene);
 	GDREGISTER_CLASS(MainMenu);
 	GDREGISTER_CLASS(UiDebugWbbstatus);
 	GDREGISTER_CLASS(UiMenuWbbConnectPrompt);

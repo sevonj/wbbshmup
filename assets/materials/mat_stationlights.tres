@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://4poy53sj2msx"]
+
+[ext_resource type="Shader" uid="uid://3mm6uck2jgjq" path="res://assets/materials/shad_stationlights.gdshader" id="1_vdidm"]
+[ext_resource type="Texture2D" uid="uid://bhc5wjyobn2i0" path="res://assets/materials/tex_stationlights.png" id="2_5vrqi"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_vdidm")
+shader_parameter/texture_albedo = ExtResource("2_5vrqi")

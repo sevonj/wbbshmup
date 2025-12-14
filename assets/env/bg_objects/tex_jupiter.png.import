@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqejto2onek7o"
-path.s3tc="res://.godot/imported/tex_grid.png-c23ed73e7b75c025e83ea2b485e27ddf.s3tc.ctex"
+uid="uid://lfxqc7cuqaxv"
+path.s3tc="res://.godot/imported/tex_jupiter.png-cc322b2d2d54abf5f11b69ca726d4a44.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/tex_grid.png"
-dest_files=["res://.godot/imported/tex_grid.png-c23ed73e7b75c025e83ea2b485e27ddf.s3tc.ctex"]
+source_file="res://assets/env/bg_objects/tex_jupiter.png"
+dest_files=["res://.godot/imported/tex_jupiter.png-cc322b2d2d54abf5f11b69ca726d4a44.s3tc.ctex"]
 
 [params]
 
