@@ -6,7 +6,7 @@
 
 namespace godot {
 
-/// @brief
+/// @brief Simple animation tool. Makes a node move along a path. Parent must be a Path3D.
 class AnimPathFollow : public Node3D {
 	GDCLASS(AnimPathFollow, Node3D)
 

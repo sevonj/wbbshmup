@@ -64,8 +64,23 @@ void AnimPathFollow::_ready() {
 void AnimPathFollow::_process(double delta) {
 	Ref<Curve3D> curve = get_curve();
 	if (curve == nullptr) {
+		set_position(Vector3());
 		if (running) {
 			print_error(get_class_static(), ": Failed to get curve!");
+			running = false;
+		}
+		return;
+	} else if (curve->get_point_count() == 0) {
+		set_position(Vector3());
+		if (running) {
+			print_error(get_class_static(), ": Curve has no points!");
+			running = false;
+		}
+		return;
+	} else if (curve->get_point_count() == 1) {
+		set_position(curve->get_point_position(0));
+		if (running) {
+			print_error(get_class_static(), ": Curve only has 1 point!");
 			running = false;
 		}
 		return;
