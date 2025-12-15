@@ -2,7 +2,8 @@
 
 Wii Balance Board Gaming
 
-- Godot version: 4.5.1
+- Godot 4.5.1
+- Blender 5.0
 
 Uses CMake instead of SCons. See build.sh.
 
