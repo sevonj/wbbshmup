@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://drdpmtesmugtg"
-path="res://.godot/imported/mdl_jupiter_roof1a.blend-54196a39acc91e57a4758945f837749c.scn"
+uid="uid://dy3558r774qir"
+path="res://.godot/imported/pdm_ducting.blend-e0559406a1703fff1f12c8ca62ff4ab2.scn"
 
 [deps]
 
-source_file="res://assets/models/stage/mdl_jupiter_roof1a.blend"
-dest_files=["res://.godot/imported/mdl_jupiter_roof1a.blend-54196a39acc91e57a4758945f837749c.scn"]
+source_file="res://assets/models/stage/pdm_ducting.blend"
+dest_files=["res://.godot/imported/pdm_ducting.blend-e0559406a1703fff1f12c8ca62ff4ab2.scn"]
 
 [params]
 
@@ -37,22 +37,14 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={
-"materials": {
-"mat_mod_vcolor": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/mat_mod_metal1.tres",
-"use_external/path": "uid://cikb8slqvrgxd"
-}
-}
-}
+_subresources={}
 blender/nodes/visible=0
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true
 blender/nodes/cameras=true
 blender/nodes/custom_properties=true
 blender/nodes/modifiers=1
-blender/meshes/colors=true
+blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false

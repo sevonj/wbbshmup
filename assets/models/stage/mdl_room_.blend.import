@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dcfi7se8tn1yb"
-path="res://.godot/imported/mdl_jupiter_stage1a.blend-086dcc4ce3e6ee9698a2eda98d26841a.scn"
+uid="uid://oexnx3eaiw5g"
+path="res://.godot/imported/mdl_room_.blend-9e1f2bea4f3a726cd4bcf6fc35ab13c5.scn"
 
 [deps]
 
-source_file="res://assets/models/stage/mdl_jupiter_stage1a.blend"
-dest_files=["res://.godot/imported/mdl_jupiter_stage1a.blend-086dcc4ce3e6ee9698a2eda98d26841a.scn"]
+source_file="res://assets/models/stage/mdl_room_.blend"
+dest_files=["res://.godot/imported/mdl_room_.blend-9e1f2bea4f3a726cd4bcf6fc35ab13c5.scn"]
 
 [params]
 
@@ -37,22 +37,14 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={
-"materials": {
-"mat_mod_vcolor": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/mat_mod_metal1.tres",
-"use_external/path": "uid://cikb8slqvrgxd"
-}
-}
-}
+_subresources={}
 blender/nodes/visible=0
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true
 blender/nodes/cameras=true
 blender/nodes/custom_properties=true
 blender/nodes/modifiers=1
-blender/meshes/colors=true
+blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false

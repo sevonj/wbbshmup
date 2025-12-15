@@ -3,20 +3,68 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/material.hpp>
 
+using namespace mesh_gen;
+
 namespace godot {
 
 void ToolPathDeformMesh::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_pdm_asset"), &ToolPathDeformMesh::set_pdm_asset);
 	ClassDB::bind_method(D_METHOD("get_pdm_asset"), &ToolPathDeformMesh::get_pdm_asset);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "pdm_asset"), "set_pdm_asset", "get_pdm_asset");
+	ClassDB::bind_method(D_METHOD("set_enable_auto_rebuild"), &ToolPathDeformMesh::set_enable_auto_rebuild);
+	ClassDB::bind_method(D_METHOD("get_enable_auto_rebuild"), &ToolPathDeformMesh::get_enable_auto_rebuild);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enable_auto_rebuild"), "set_enable_auto_rebuild", "get_enable_auto_rebuild");
+	ClassDB::bind_method(D_METHOD("set_enable_cap_start"), &ToolPathDeformMesh::set_enable_cap_start);
+	ClassDB::bind_method(D_METHOD("get_enable_cap_start"), &ToolPathDeformMesh::get_enable_cap_start);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enable_cap_start"), "set_enable_cap_start", "get_enable_cap_start");
+	ClassDB::bind_method(D_METHOD("set_enable_cap_end"), &ToolPathDeformMesh::set_enable_cap_end);
+	ClassDB::bind_method(D_METHOD("get_enable_cap_end"), &ToolPathDeformMesh::get_enable_cap_end);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enable_cap_end"), "set_enable_cap_end", "get_enable_cap_end");
+	ClassDB::bind_method(D_METHOD("get_cadence_str"), &ToolPathDeformMesh::get_cadence_str);
+	ClassDB::bind_method(D_METHOD("set_cadence_str"), &ToolPathDeformMesh::set_cadence_str);
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "cadence"), "set_cadence_str", "get_cadence_str");
+
+	ClassDB::bind_method(D_METHOD("has_start_cap"), &ToolPathDeformMesh::has_start_cap);
+	ClassDB::bind_method(D_METHOD("has_end_cap"), &ToolPathDeformMesh::has_end_cap);
+	ClassDB::bind_method(D_METHOD("get_num_pieces"), &ToolPathDeformMesh::get_num_pieces);
 
 	ClassDB::bind_method(D_METHOD("rebuild_mesh"), &ToolPathDeformMesh::rebuild_mesh);
+	ClassDB::bind_method(D_METHOD("on_curve_changed"), &ToolPathDeformMesh::on_curve_changed);
 }
 
-void ToolPathDeformMesh::_ready() {
-	if (Engine::get_singleton()->is_editor_hint()) {
+ToolPathDeformMesh::ToolPathDeformMesh() {
+	if (!Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+	if (!pdm_asset.is_valid()) {
+		pdm_asset = unpack_asset();
+	}
+}
+
+void ToolPathDeformMesh::_enter_tree() {
+	if (!Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	Path3D *parent = cast_to<Path3D>(get_parent());
+	if (parent) {
+		parent->connect("curve_changed", Callable(this, "on_curve_changed"));
+	}
+}
+
+void ToolPathDeformMesh::_exit_tree() {
+	if (!Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+	Node *parent = get_parent();
+	if (parent->is_connected("curve_changed", Callable(this, "on_curve_changed"))) {
+		parent->disconnect("curve_changed", (this, Callable(this, "on_curve_changed")));
+	}
+}
+
+void ToolPathDeformMesh::set_pdm_asset(Ref<PackedScene> v) {
+	pdm_asset_packed = v;
+	pdm_asset = unpack_asset();
 }
 
 Ref<Curve3D> ToolPathDeformMesh::get_curve() {
@@ -27,14 +75,34 @@ Ref<Curve3D> ToolPathDeformMesh::get_curve() {
 	return Ref<Curve3D>();
 }
 
-TypedArray<ArrayMesh> ToolPathDeformMesh::get_meshes() {
-	TypedArray<ArrayMesh> meshes = TypedArray<ArrayMesh>();
-	if (!pdm_asset.is_valid()) {
+Vector<int32_t> ToolPathDeformMesh::get_cadence() {
+	if (cadence_str.is_empty()) {
+		print_error("Cadence was empty. Using default.");
+		return { 0 };
+	}
+	Vector<int32_t> cadence = {};
+	int len = cadence_str.length();
+	for (int i = 0; i < len; i++) {
+		char32_t c = cadence_str[i];
+		if ('a' <= c && c < 'z') {
+			cadence.push_back(c - 'a');
+		} else if ('A' <= c && c < 'Z') {
+			cadence.push_back(c - 'A');
+		} else {
+			print_error("Cadence has bad character: '", c, "' Use A-Z (case insensitive)");
+			cadence.push_back(INT32_MAX);
+		}
+	}
+	return cadence;
+}
+
+Ref<PdmAsset> ToolPathDeformMesh::unpack_asset() {
+	if (!pdm_asset_packed.is_valid()) {
 		print_error(get_class_static(), ": Invalid PDM set!");
-		return meshes;
+		return Ref<PdmAsset>();
 	}
 
-	Node *set_instance = pdm_asset->instantiate();
+	Node *set_instance = pdm_asset_packed->instantiate();
 
 	TypedArray<MeshInstance3D> pdm_meshinsts = TypedArray<MeshInstance3D>();
 	TypedArray<Node> nodes = TypedArray<Node>();
@@ -51,56 +119,69 @@ TypedArray<ArrayMesh> ToolPathDeformMesh::get_meshes() {
 
 	if (pdm_meshinsts.is_empty()) {
 		print_error(get_class_static(), ": Found no models in PDM set!");
-		return meshes;
+		return Ref<PdmAsset>();
 	}
 	int64_t set_size = pdm_meshinsts.size();
-	print_line(get_class_static(), ": Found '", set_size, "' models in PDM set.");
+
+	Ref<PdmAsset> asset = memnew(PdmAsset);
 
 	for (int i = 0; i < set_size; i++) {
 		MeshInstance3D *inst = cast_to<MeshInstance3D>(pdm_meshinsts.pop_front());
-		StringName mesh_name = inst->get_name();
+		StringName name = inst->get_name();
 		Ref<ArrayMesh> mesh = inst->get_mesh();
 		if (!mesh.is_valid()) {
 			continue;
 		}
-		meshes.append(mesh);
-	}
 
+		Ref<PdmMesh> pdm_mesh = memnew(PdmMesh);
+		pdm_mesh->mesh = mesh;
+		pdm_mesh->aabb = calculate_arraymesh_aabb(mesh);
+
+		if (name == (StringName) "cap_start") {
+			asset->cap_start = pdm_mesh;
+		} else if (name == (StringName) "cap_end") {
+			asset->cap_end = pdm_mesh;
+		} else {
+			asset->pieces.push_back(pdm_mesh);
+		}
+	}
 	memdelete(set_instance);
-	return meshes;
+
+	if (asset->pieces.is_empty()) {
+		return Ref<PdmAsset>();
+	}
+	return asset;
 }
 
-/// @return Distance from minimum z to maximum z.
-float ToolPathDeformMesh::get_mesh_length(Ref<ArrayMesh> mesh) {
+AABB ToolPathDeformMesh::calculate_arraymesh_aabb(Ref<ArrayMesh> mesh) {
 	int32_t num_surfaces = mesh->get_surface_count();
-	print_line("num_surfaces: ", num_surfaces);
 
-	float min = INFINITY;
-	float max = -INFINITY;
+	Vector3 min = Vector3(INFINITY, INFINITY, INFINITY);
+	Vector3 max = Vector3(-INFINITY, -INFINITY, -INFINITY);
 
 	for (int surf = 0; surf < num_surfaces; surf++) {
 		Array arrays = mesh->surface_get_arrays(surf);
 		Array vertices = arrays[Mesh::ARRAY_VERTEX];
-
 		if (vertices.is_empty()) {
-			return 0.0;
+			return AABB();
 		}
-
 		int32_t num_v = vertices.size();
-
 		for (int v = 0; v < num_v; v++) {
 			Vector3 vertex = vertices[v];
-			min = Math::min(min, vertex.z);
-			max = Math::max(max, vertex.z);
+			min.x = Math::min(min.x, vertex.x);
+			min.y = Math::min(min.y, vertex.y);
+			min.z = Math::min(min.z, vertex.z);
+			max.x = Math::max(max.x, vertex.x);
+			max.y = Math::max(max.y, vertex.y);
+			max.z = Math::max(max.z, vertex.z);
 		}
 	}
-	return max - min;
+	return AABB(min, max - min);
 }
 
 /// @brief Bake a deformed mesh to surface tool
 /// @param st
 /// @param src_mesh
-/// @param src_mesh_len Source mesh size in Z axis
 /// @param z_scale Multiplier for vertex Z coord. Used for stretchin the mesh a lil bit to fit the path length exactly.
 /// @param deform_path
 /// @param path_offset Mesh's origin point will be at this position in the curve
@@ -108,28 +189,26 @@ float ToolPathDeformMesh::get_mesh_length(Ref<ArrayMesh> mesh) {
 /// @return Number of vertices added to the mesh
 int32_t ToolPathDeformMesh::add_mesh(
 		Ref<SurfaceTool> st,
-		Ref<ArrayMesh> src_mesh,
-		float src_mesh_len,
-		float z_scale,
+		Ref<PdmMesh> src_mesh,
+		float stretch,
 		Ref<Curve3D> deform_path,
 		double path_offset,
 		int32_t indices_start) {
-	int32_t num_surfaces = src_mesh->get_surface_count();
-	print_line("num_surfaces: ", num_surfaces);
+	int32_t num_surfaces = src_mesh->mesh->get_surface_count();
 
 	int32_t num_v_added = 0;
 
 	for (int surf = 0; surf < num_surfaces; surf++) {
-		Mesh::PrimitiveType p_type = src_mesh->surface_get_primitive_type(surf);
+		Mesh::PrimitiveType p_type = src_mesh->mesh->surface_get_primitive_type(surf);
 		if (p_type != Mesh::PRIMITIVE_TRIANGLES) {
 			print_error("Surf '", surf, "' has unhandled primitive type '", p_type, "'. Expected PRIMITIVE_TRIANGLES");
 			continue;
 		}
 
-		Ref<Material> mat = src_mesh->surface_get_material(surf);
+		Ref<Material> mat = src_mesh->mesh->surface_get_material(surf);
 		st->set_material(mat);
 
-		Array arrays = src_mesh->surface_get_arrays(surf);
+		Array arrays = src_mesh->mesh->surface_get_arrays(surf);
 		Array vertices = arrays[Mesh::ARRAY_VERTEX];
 		Array normals = arrays[Mesh::ARRAY_NORMAL];
 		Array tangents = arrays[Mesh::ARRAY_TANGENT];
@@ -170,7 +249,7 @@ int32_t ToolPathDeformMesh::add_mesh(
 				st->set_uv2(uv2s[v]);
 			}
 			Vector3 vertex = vertices[v];
-			float vert_z = (src_mesh_len - vertex.z) * z_scale;
+			float vert_z = (src_mesh->aabb.size.z + src_mesh->aabb.position.z - vertex.z) * stretch;
 			Transform3D xform = deform_path->sample_baked_with_rotation(path_offset + vert_z);
 			vertex.z = 0.0;
 			st->add_vertex(xform.xform(vertex));
@@ -187,9 +266,35 @@ int32_t ToolPathDeformMesh::add_mesh(
 	return num_v_added;
 }
 
-void ToolPathDeformMesh::rebuild_mesh() {
-	print_error(get_class_static(), ": Building..");
+/// @brief Auto-rebuild callback for curve_changed signal
+void ToolPathDeformMesh::on_curve_changed() {
+	if (enable_auto_rebuild) {
+		rebuild_mesh();
+	}
+}
 
+bool ToolPathDeformMesh::has_start_cap() {
+	if (!pdm_asset.is_valid()) {
+		return false;
+	}
+	return pdm_asset->cap_start.is_valid();
+}
+
+bool ToolPathDeformMesh::has_end_cap() {
+	if (!pdm_asset.is_valid()) {
+		return false;
+	}
+	return pdm_asset->cap_end.is_valid();
+}
+
+int32_t ToolPathDeformMesh::get_num_pieces() {
+	if (!pdm_asset.is_valid()) {
+		return 0;
+	}
+	return pdm_asset->pieces.size();
+}
+
+void ToolPathDeformMesh::rebuild_mesh() {
 	Ref<Curve3D> curve = get_curve();
 	if (curve == nullptr) {
 		set_position(Vector3());
@@ -205,26 +310,89 @@ void ToolPathDeformMesh::rebuild_mesh() {
 		return;
 	}
 
-	TypedArray<ArrayMesh> meshes = get_meshes();
-	if (meshes.is_empty()) {
+	if (!pdm_asset.is_valid()) {
+		print_error(get_class_static(), ": !pdm_asset.is_valid()");
 		return;
 	}
 
+	float total_len = curve->get_baked_length();
+
+	Ref<PdmMesh> cap_start = pdm_asset->cap_start;
+	Ref<PdmMesh> cap_end = pdm_asset->cap_end;
+	bool use_cap_start = pdm_asset->cap_start.is_valid() && enable_cap_start;
+	bool use_cap_end = pdm_asset->cap_end.is_valid() && enable_cap_end;
+	double cap_len = 0.0;
+	double cap_stretch_ratio = 1.0;
+	if (use_cap_start) {
+		cap_len += cap_start->aabb.size.z;
+	}
+	if (use_cap_end) {
+		cap_len += cap_end->aabb.size.z;
+	}
+	if (cap_len > total_len) {
+		cap_stretch_ratio = total_len / cap_len;
+	}
+	cap_len *= cap_stretch_ratio;
+
+	double fill_length = total_len - cap_len;
+	double fill_start = 0.0;
+	double fill_end = fill_start + fill_length;
+	if (use_cap_start) {
+		fill_start = cap_start->aabb.size.z * cap_stretch_ratio;
+	}
+	if (use_cap_end) {
+		fill_end -= cap_end->aabb.size.z * cap_stretch_ratio;
+	}
+
+	Vector<int32_t> fill_pattern = Vector<int32_t>();
+	Vector<double> fill_offsets = Vector<double>();
+
+	Vector<int32_t> cadence = get_cadence();
+	int32_t cadence_iter = 0;
+	double fill_offset_unscaled = 0.0;
+	while (fill_offset_unscaled < fill_end - fill_start) {
+		static constexpr float INVALID_SKIP_LEN = 1.0;
+		int32_t mesh_idx = cadence[cadence_iter];
+		if (mesh_idx >= pdm_asset->pieces.size()) {
+			fill_offset_unscaled += INVALID_SKIP_LEN;
+			continue;
+		}
+		Ref<PdmMesh> piece = cast_to<PdmMesh>(pdm_asset->pieces[mesh_idx]);
+		double piece_len = piece->aabb.size.z;
+		if (Math::is_zero_approx(piece_len)) {
+			fill_offset_unscaled += INVALID_SKIP_LEN;
+			continue;
+		}
+		fill_pattern.push_back(mesh_idx);
+		fill_offsets.push_back(fill_offset_unscaled);
+		fill_offset_unscaled += piece_len;
+		cadence_iter++;
+		cadence_iter %= cadence.size();
+	}
+	double fill_stretch = fill_length / fill_offset_unscaled;
+
 	Ref<SurfaceTool> st = memnew(SurfaceTool);
 	st->begin(Mesh::PRIMITIVE_TRIANGLES);
-
-	Ref<ArrayMesh> src_mesh = meshes[0];
 	Ref<ArrayMesh> gen_mesh = memnew(ArrayMesh);
-	float path_len = curve->get_baked_length();
-	float segment_len = get_mesh_length(src_mesh);
-	int32_t num_segments = path_len / segment_len;
-	float z_scale = (path_len / num_segments) / segment_len;
-
 	int32_t num_v = 0;
-	for (int i = 0; i < num_segments; i++) {
-		double path_offset = segment_len * i * z_scale;
-		num_v += add_mesh(st, src_mesh, segment_len, z_scale, curve, path_offset, num_v);
+
+	if (use_cap_start) {
+		double path_offset = 0.0;
+		num_v += add_mesh(st, cap_start, cap_stretch_ratio, curve, path_offset, num_v);
 	}
+
+	if (use_cap_end) {
+		double path_offset = total_len - cap_end->aabb.size.z;
+		num_v += add_mesh(st, cap_end, cap_stretch_ratio, curve, path_offset, num_v);
+	}
+
+	for (int32_t i = 0; i < fill_pattern.size(); i++) {
+		int32_t mesh_idx = fill_pattern[i];
+		double path_offset = fill_start + fill_offsets[i] * fill_stretch;
+		Ref<PdmMesh> src_mesh = pdm_asset->pieces[mesh_idx];
+		num_v += add_mesh(st, src_mesh, fill_stretch, curve, path_offset, num_v);
+	}
+
 	st->optimize_indices_for_cache();
 	set_mesh(st->commit());
 }
