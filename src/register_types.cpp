@@ -5,7 +5,6 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include <cutscene.h>
 #include <entities/anim_path_follow.h>
 #include <entities/camera_rig.h>
 #include <entities/camera_rig_follow.h>
@@ -24,16 +23,17 @@
 #include <entities/projectile_player_laser.h>
 #include <entities/stage_path_grid.h>
 #include <entities/tool_path_deform_mesh.h>
-#include <main_menu.h>
-#include <singleton/debug_draw.h>
-#include <singleton/wbb_input.h>
-#include <stage.h>
 #include <ui/ui_debug_wbbstatus.h>
 #include <ui/ui_hud_rhino_alert.h>
 #include <ui/ui_menu_wbb_connect_prompt.h>
 #include <ui/ui_stage_begin_screen.h>
 #include <ui/ui_startup_wbb_disclaimer.h>
 
+#include <cutscene.h>
+#include <debug_draw.h>
+#include <main_menu.h>
+#include <stage.h>
+#include <wbb_input.h>
 using namespace godot;
 
 void initialize_gdextension_types(ModuleInitializationLevel p_level) {
@@ -59,18 +59,17 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(StagePathGrid);
 	GDREGISTER_CLASS(ToolPathDeformMesh);
 
-	GDREGISTER_CLASS(Cutscene);
-	GDREGISTER_CLASS(MainMenu);
 	GDREGISTER_CLASS(UiDebugWbbstatus);
 	GDREGISTER_CLASS(UiMenuWbbConnectPrompt);
 	GDREGISTER_CLASS(UiHudRhinoAlert);
 	GDREGISTER_CLASS(UiStageBeginScreen);
 	GDREGISTER_CLASS(UiStartupWbbDisclaimer);
 
+	GDREGISTER_CLASS(Cutscene);
 	GDREGISTER_CLASS(DebugDraw);
-	GDREGISTER_CLASS(WbbInput);
-
+	GDREGISTER_CLASS(MainMenu);
 	GDREGISTER_CLASS(Stage);
+	GDREGISTER_CLASS(WbbInput);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {

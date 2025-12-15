@@ -2,8 +2,8 @@
 
 #include <config.h>
 #include <consts.h>
+#include <debug_draw.h>
 #include <game.h>
-#include <singleton/debug_draw.h>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>

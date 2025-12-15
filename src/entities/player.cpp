@@ -2,10 +2,10 @@
 
 #include <assets.h>
 #include <config.h>
+#include <debug_draw.h>
 #include <entities/projectile_player_laser.h>
 #include <game.h>
-#include <singleton/debug_draw.h>
-#include <singleton/wbb_input.h>
+#include <wbb_input.h>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>

@@ -3,10 +3,10 @@
 #include <assets.h>
 #include <config.h>
 #include <consts.h>
+#include <debug_draw.h>
 #include <entities/player.h>
 #include <entities/projectile_enm_generic.h>
 #include <game.h>
-#include <singleton/debug_draw.h>
 #include <ui/ui_hud_rhino_alert.h>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>

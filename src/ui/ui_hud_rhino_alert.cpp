@@ -1,8 +1,8 @@
 #include "ui_hud_rhino_alert.h"
 
+#include <debug_draw.h>
 #include <entities/camera_rig.h>
 #include <game.h>
-#include <singleton/debug_draw.h>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/texture2d.hpp>

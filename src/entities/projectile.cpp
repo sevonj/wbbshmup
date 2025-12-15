@@ -2,9 +2,9 @@
 
 #include <config.h>
 #include <consts.h>
+#include <debug_draw.h>
 #include <entities/character.h>
 #include <game.h>
-#include <singleton/debug_draw.h>
 #include <godot_cpp/classes/csg_sphere3d.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <singleton/wbb_input.h>
+#include <wbb_input.h>
 #include <godot_cpp/classes/color_rect.hpp>
 #include <godot_cpp/classes/label.hpp>
 #include <godot_cpp/classes/panel_container.hpp>

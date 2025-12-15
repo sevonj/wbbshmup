@@ -1,6 +1,6 @@
 #include "ui_debug_wbbstatus.h"
 
-#include <singleton/debug_draw.h>
+#include <debug_draw.h>
 
 namespace godot {
 
