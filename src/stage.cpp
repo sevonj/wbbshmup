@@ -67,8 +67,10 @@ void Stage::_process(double delta) {
 		return;
 	}
 
-	intro_wait_timer -= delta;
-	bool intro_wait = intro_wait_timer > 0.;
+	if (is_playing) {
+		intro_screen_timer -= delta;
+	}
+	bool intro_wait = intro_screen_timer > 0.;
 
 	rail_offset += delta * rail_speed;
 	Player *player = Game::get_player();
@@ -105,7 +107,7 @@ void Stage::add_ui(Control *ui) {
 /// @return Stage start position & orientation sampled from rail path
 Transform3D Stage::get_stage_start() {
 	tool_ensure_rail_path();
-	double start_off = DEFAULT_RAIL_SPEED * INTRO_WAIT_DURATION;
+	double start_off = DEFAULT_RAIL_SPEED * INTRO_SCREEN_DURATION;
 	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(start_off);
 	xform.origin += rail_path->get_global_position();
 	return xform;
@@ -218,6 +220,7 @@ void Stage::spawn_player() {
 	camera->set_target(rail_follow);
 	add_entity(camera);
 	camera->get_camera()->make_current();
+	is_playing = true;
 }
 
 void Stage::clear_player() {

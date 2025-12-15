@@ -16,7 +16,7 @@ class Stage : public Node3D {
 	GDCLASS(Stage, Node3D)
 
 private:
-	static constexpr double INTRO_WAIT_DURATION = 5.0;
+	static constexpr double INTRO_SCREEN_DURATION = 5.0;
 	static constexpr double DEFAULT_RAIL_SPEED = 10.0;
 
 	AABB stage_bounds = DEFAULT_STAGE_BOUNDS;
@@ -33,8 +33,9 @@ private:
 	double rail_offset = 0.;
 	double rail_speed = DEFAULT_RAIL_SPEED;
 	StagePathGrid *rail_grid = nullptr;
+	bool is_playing = false;
 
-	double intro_wait_timer = INTRO_WAIT_DURATION;
+	double intro_screen_timer = INTRO_SCREEN_DURATION;
 
 	void tool_ensure_rail_path();
 	void tool_ensure_rail_grid();
