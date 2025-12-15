@@ -23,6 +23,7 @@
 #include <entities/projectile_enm_generic.h>
 #include <entities/projectile_player_laser.h>
 #include <entities/stage_path_grid.h>
+#include <entities/tool_path_deform_mesh.h>
 #include <main_menu.h>
 #include <singleton/debug_draw.h>
 #include <singleton/wbb_input.h>
@@ -56,6 +57,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(ProjectileEnmGeneric);
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
 	GDREGISTER_CLASS(StagePathGrid);
+	GDREGISTER_CLASS(ToolPathDeformMesh);
 
 	GDREGISTER_CLASS(Cutscene);
 	GDREGISTER_CLASS(MainMenu);

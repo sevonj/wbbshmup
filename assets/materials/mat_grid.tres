@@ -4,6 +4,7 @@
 
 [resource]
 transparency = 1
+shading_mode = 0
 albedo_color = Color(1, 1, 1, 0.11764706)
 albedo_texture = ExtResource("2_xx4vm")
 uv1_scale = Vector3(4, 4, 4)

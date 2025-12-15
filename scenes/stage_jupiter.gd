@@ -6,7 +6,9 @@ func _ready() -> void:
 	
 	intro_cutscn.fin.connect(_start_game)
 	intro_cutscn.play()
+	
 
 func _start_game() -> void:
 	spawn_player()
 	add_ui(UiStageBeginScreen.new())
+	add_ui(UiDebugWbbstatus.new())
