@@ -12,7 +12,7 @@ class ToolPathDeformMesh : public MeshInstance3D {
 	GDCLASS(ToolPathDeformMesh, MeshInstance3D)
 
 private:
-	Ref<PackedScene> pdm_set = Ref<PackedScene>();
+	Ref<PackedScene> pdm_asset = Ref<PackedScene>();
 
 	Ref<Curve3D> get_curve();
 	TypedArray<ArrayMesh> get_meshes();
@@ -35,8 +35,8 @@ public:
 
 	virtual void _ready() override;
 
-	void set_pdm_set(Ref<PackedScene> v) { pdm_set = v; };
-	Ref<PackedScene> get_pdm_set() { return pdm_set; };
+	void set_pdm_asset(Ref<PackedScene> v) { pdm_asset = v; };
+	Ref<PackedScene> get_pdm_asset() { return pdm_asset; };
 
 	void rebuild_mesh();
 };

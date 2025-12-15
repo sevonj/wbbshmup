@@ -168,14 +168,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 608)
 curve = SubResource("Curve3D_3ngdq")
 
 [node name="ToolPathDeformMesh" type="ToolPathDeformMesh" parent="static/stage_models/seg1/Path3D"]
-pdm_set = ExtResource("2_6hrpm")
+pdm_asset = ExtResource("2_6hrpm")
 mesh = SubResource("ArrayMesh_kr1wd")
 
 [node name="sidebridgesection" type="Path3D" parent="static/stage_models/seg1"]
 curve = SubResource("Curve3D_6hrpm")
 
 [node name="ToolPathDeformMesh" type="ToolPathDeformMesh" parent="static/stage_models/seg1/sidebridgesection"]
-pdm_set = ExtResource("3_27epm")
+pdm_asset = ExtResource("3_27epm")
 mesh = SubResource("ArrayMesh_au1sw")
 
 [node name="Path3D2" type="Path3D" parent="static/stage_models/seg1"]
@@ -183,7 +183,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 126.54468)
 curve = SubResource("Curve3D_au1sw")
 
 [node name="ToolPathDeformMesh" type="ToolPathDeformMesh" parent="static/stage_models/seg1/Path3D2"]
-pdm_set = ExtResource("3_27epm")
+pdm_asset = ExtResource("3_27epm")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205.30579)
 mesh = SubResource("ArrayMesh_ajsbk")
 

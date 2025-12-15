@@ -6,9 +6,9 @@
 namespace godot {
 
 void ToolPathDeformMesh::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("set_pdm_set"), &ToolPathDeformMesh::set_pdm_set);
-	ClassDB::bind_method(D_METHOD("get_pdm_set"), &ToolPathDeformMesh::get_pdm_set);
-	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "pdm_set"), "set_pdm_set", "get_pdm_set");
+	ClassDB::bind_method(D_METHOD("set_pdm_asset"), &ToolPathDeformMesh::set_pdm_asset);
+	ClassDB::bind_method(D_METHOD("get_pdm_asset"), &ToolPathDeformMesh::get_pdm_asset);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "pdm_asset"), "set_pdm_asset", "get_pdm_asset");
 
 	ClassDB::bind_method(D_METHOD("rebuild_mesh"), &ToolPathDeformMesh::rebuild_mesh);
 }
@@ -29,12 +29,12 @@ Ref<Curve3D> ToolPathDeformMesh::get_curve() {
 
 TypedArray<ArrayMesh> ToolPathDeformMesh::get_meshes() {
 	TypedArray<ArrayMesh> meshes = TypedArray<ArrayMesh>();
-	if (!pdm_set.is_valid()) {
+	if (!pdm_asset.is_valid()) {
 		print_error(get_class_static(), ": Invalid PDM set!");
 		return meshes;
 	}
 
-	Node *set_instance = pdm_set->instantiate();
+	Node *set_instance = pdm_asset->instantiate();
 
 	TypedArray<MeshInstance3D> pdm_meshinsts = TypedArray<MeshInstance3D>();
 	TypedArray<Node> nodes = TypedArray<Node>();
