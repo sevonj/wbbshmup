@@ -49,7 +49,7 @@ ToolPathDeformMesh::ToolPathDeformMesh() {
 		return;
 	}
 	if (!pdm_asset.is_valid()) {
-		pdm_asset = unpack_asset();
+		pdm_asset = unpack_asset(pdm_asset_packed);
 	}
 }
 
@@ -85,10 +85,116 @@ void ToolPathDeformMesh::_exit_tree() {
 	}
 }
 
-void ToolPathDeformMesh::set_pdm_asset(Ref<PackedScene> v) {
-	pdm_asset_packed = v;
-	pdm_asset = unpack_asset();
-	auto_rebuild();
+void ToolPathDeformMesh::rebuild_mesh() {
+	if (!Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+	Ref<Curve3D> curve = get_curve();
+	if (!curve.is_valid()) {
+		set_position(Vector3());
+		print_error(get_class_static(), ": Failed to get curve!");
+		return;
+	} else if (curve->get_point_count() == 0) {
+		set_position(Vector3());
+		print_error(get_class_static(), ": Curve has no points!");
+		return;
+	} else if (curve->get_point_count() == 1) {
+		set_position(curve->get_point_position(0));
+		print_error(get_class_static(), ": Curve only has 1 point!");
+		return;
+	}
+
+	if (!pdm_asset.is_valid()) {
+		print_error(get_class_static(), ": !pdm_asset.is_valid()");
+		return;
+	}
+
+	float total_len = curve->get_baked_length() - start_offset - end_offset;
+
+	Ref<PdmMesh> cap_start = pdm_asset->cap_start;
+	Ref<PdmMesh> cap_end = pdm_asset->cap_end;
+	bool use_cap_start = pdm_asset->cap_start.is_valid() && enable_cap_start;
+	bool use_cap_end = pdm_asset->cap_end.is_valid() && enable_cap_end;
+	double cap_len = 0.0;
+	double cap_stretch_ratio = 1.0;
+	if (use_cap_start) {
+		cap_len += cap_start->aabb.size.z;
+	}
+	if (use_cap_end) {
+		cap_len += cap_end->aabb.size.z;
+	}
+	if (cap_len > total_len) {
+		cap_stretch_ratio = total_len / cap_len;
+	}
+	cap_len *= cap_stretch_ratio;
+
+	double fill_length = total_len - cap_len;
+	double fill_start = start_offset;
+	double fill_end = fill_start + fill_length;
+	if (use_cap_start) {
+		fill_start += cap_start->aabb.size.z * cap_stretch_ratio;
+	}
+	if (use_cap_end) {
+		fill_end -= cap_end->aabb.size.z * cap_stretch_ratio;
+	}
+
+	Vector<int32_t> fill_pattern;
+	Vector<double> fill_offsets;
+
+	Vector<int32_t> cadence = get_cadence();
+	int32_t cadence_iter = 0;
+	double fill_offset_unscaled = 0.0;
+	while (fill_offset_unscaled < fill_end - fill_start) {
+		int32_t mesh_idx = cadence[cadence_iter];
+		if (mesh_idx >= pdm_asset->pieces.size()) {
+			fill_offset_unscaled += INVALID_MESH_SKIP_LEN;
+			continue;
+		}
+		Ref<PdmMesh> piece = cast_to<PdmMesh>(pdm_asset->pieces[mesh_idx]);
+		double piece_len = piece->aabb.size.z;
+		if (Math::is_zero_approx(piece_len)) {
+			fill_offset_unscaled += INVALID_MESH_SKIP_LEN;
+			continue;
+		}
+		fill_pattern.push_back(mesh_idx);
+		fill_offsets.push_back(fill_offset_unscaled);
+		fill_offset_unscaled += piece_len;
+		cadence_iter++;
+		cadence_iter %= cadence.size();
+	}
+	double fill_stretch = fill_length / fill_offset_unscaled;
+
+	Ref<SurfaceTool> st = memnew(SurfaceTool);
+	st->begin(Mesh::PRIMITIVE_TRIANGLES);
+	Ref<ArrayMesh> gen_mesh = get_mesh();
+	if (gen_mesh.is_valid()) {
+		gen_mesh->clear_surfaces();
+	} else {
+		gen_mesh = (Ref<ArrayMesh>)memnew(ArrayMesh);
+		set_mesh(gen_mesh);
+	}
+
+	int32_t num_v = 0;
+
+	if (use_cap_start) {
+		double path_offset = start_offset;
+		num_v += bake_mesh(st, cap_start, cap_stretch_ratio, curve, path_offset, num_v);
+	}
+
+	if (use_cap_end) {
+		double path_offset = start_offset + total_len - cap_end->aabb.size.z;
+		num_v += bake_mesh(st, cap_end, cap_stretch_ratio, curve, path_offset, num_v);
+	}
+
+	for (int32_t i = 0; i < fill_pattern.size(); i++) {
+		int32_t mesh_idx = fill_pattern[i];
+		double path_offset = fill_start + fill_offsets[i] * fill_stretch;
+		Ref<PdmMesh> src_mesh = pdm_asset->pieces[mesh_idx];
+		num_v += bake_mesh(st, src_mesh, fill_stretch, curve, path_offset, num_v);
+	}
+
+	st->optimize_indices_for_cache();
+	st->commit(gen_mesh);
 }
 
 Ref<Curve3D> ToolPathDeformMesh::get_curve() {
@@ -120,16 +226,16 @@ Vector<int32_t> ToolPathDeformMesh::get_cadence() {
 	return cadence;
 }
 
-Ref<PdmAsset> ToolPathDeformMesh::unpack_asset() {
-	if (!pdm_asset_packed.is_valid()) {
+Ref<PdmAsset> ToolPathDeformMesh::unpack_asset(Ref<PackedScene> packed) {
+	if (!packed.is_valid()) {
 		print_error(get_class_static(), ": Invalid PDM set!");
 		return Ref<PdmAsset>();
 	}
 
-	Node *set_instance = pdm_asset_packed->instantiate();
+	Node *set_instance = packed->instantiate();
 
-	TypedArray<MeshInstance3D> pdm_meshinsts = TypedArray<MeshInstance3D>();
-	TypedArray<Node> nodes = TypedArray<Node>();
+	TypedArray<MeshInstance3D> pdm_meshinsts;
+	TypedArray<Node> nodes;
 	nodes.append(set_instance);
 
 	while (!nodes.is_empty()) {
@@ -203,15 +309,7 @@ AABB ToolPathDeformMesh::calculate_arraymesh_aabb(Ref<ArrayMesh> mesh) {
 	return AABB(min, max - min);
 }
 
-/// @brief Bake a deformed mesh to surface tool
-/// @param st
-/// @param src_mesh
-/// @param z_scale Multiplier for vertex Z coord. Used for stretchin the mesh a lil bit to fit the path length exactly.
-/// @param deform_path
-/// @param path_offset Mesh's origin point will be at this position in the curve
-/// @param indices_start Number of vertices already present in this mesh
-/// @return Number of vertices added to the mesh
-int32_t ToolPathDeformMesh::add_mesh(
+int32_t ToolPathDeformMesh::bake_mesh(
 		Ref<SurfaceTool> st,
 		Ref<PdmMesh> src_mesh,
 		float stretch,
@@ -290,188 +388,4 @@ int32_t ToolPathDeformMesh::add_mesh(
 	return num_v_added;
 }
 
-/// @brief Used by setters and curve_changed signal callback
-void ToolPathDeformMesh::auto_rebuild() {
-	if (enable_auto_rebuild) {
-		rebuild_mesh();
-	}
-}
-
-/// @brief Same as set_start_offset(), but adjusted to path length.
-/// @param value 0.0 and 1.0 map to path end and start.
-void ToolPathDeformMesh::set_start_offset_ratio(double value) {
-	Ref<Curve3D> curve = get_curve();
-	if (!curve.is_valid()) {
-		print_error(get_class_static(), ": Failed to get curve!");
-		return;
-	}
-	start_offset = value * curve->get_baked_length();
-	auto_rebuild();
-}
-
-/// @brief Same as get_start_offset(), but adjusted to path length.
-/// @return between 0.0 and 1.0. zero if no curve.
-double ToolPathDeformMesh::get_start_offset_ratio() {
-	Ref<Curve3D> curve = get_curve();
-	if (!curve.is_valid()) {
-		print_error(get_class_static(), ": Failed to get curve!");
-		return 0.;
-	}
-	return start_offset / curve->get_baked_length();
-}
-
-/// @brief Same as set_end_offset(), but adjusted to path length.
-/// @param value 0.0 and 1.0 map to path start and end.
-void ToolPathDeformMesh::set_end_offset_ratio(double value) {
-	Ref<Curve3D> curve = get_curve();
-	if (!curve.is_valid()) {
-		print_error(get_class_static(), ": Failed to get curve!");
-		return;
-	}
-	end_offset = value * curve->get_baked_length();
-	auto_rebuild();
-}
-
-/// @brief Same as get_end_offset(), but adjusted to path length.
-/// @return between 0.0 and 1.0. zero if no curve.
-double ToolPathDeformMesh::get_end_offset_ratio() {
-	Ref<Curve3D> curve = get_curve();
-	if (!curve.is_valid()) {
-		print_error(get_class_static(), ": Failed to get curve!");
-		return 0.;
-	}
-	return end_offset / curve->get_baked_length();
-}
-
-bool ToolPathDeformMesh::has_start_cap() {
-	if (!pdm_asset.is_valid()) {
-		return false;
-	}
-	return pdm_asset->cap_start.is_valid();
-}
-
-bool ToolPathDeformMesh::has_end_cap() {
-	if (!pdm_asset.is_valid()) {
-		return false;
-	}
-	return pdm_asset->cap_end.is_valid();
-}
-
-int32_t ToolPathDeformMesh::get_num_pieces() {
-	if (!pdm_asset.is_valid()) {
-		return 0;
-	}
-	return pdm_asset->pieces.size();
-}
-
-void ToolPathDeformMesh::rebuild_mesh() {
-	Ref<Curve3D> curve = get_curve();
-	if (!curve.is_valid()) {
-		set_position(Vector3());
-		print_error(get_class_static(), ": Failed to get curve!");
-		return;
-	} else if (curve->get_point_count() == 0) {
-		set_position(Vector3());
-		print_error(get_class_static(), ": Curve has no points!");
-		return;
-	} else if (curve->get_point_count() == 1) {
-		set_position(curve->get_point_position(0));
-		print_error(get_class_static(), ": Curve only has 1 point!");
-		return;
-	}
-
-	if (!pdm_asset.is_valid()) {
-		print_error(get_class_static(), ": !pdm_asset.is_valid()");
-		return;
-	}
-
-	float total_len = curve->get_baked_length() - start_offset - end_offset;
-
-	Ref<PdmMesh> cap_start = pdm_asset->cap_start;
-	Ref<PdmMesh> cap_end = pdm_asset->cap_end;
-	bool use_cap_start = pdm_asset->cap_start.is_valid() && enable_cap_start;
-	bool use_cap_end = pdm_asset->cap_end.is_valid() && enable_cap_end;
-	double cap_len = 0.0;
-	double cap_stretch_ratio = 1.0;
-	if (use_cap_start) {
-		cap_len += cap_start->aabb.size.z;
-	}
-	if (use_cap_end) {
-		cap_len += cap_end->aabb.size.z;
-	}
-	if (cap_len > total_len) {
-		cap_stretch_ratio = total_len / cap_len;
-	}
-	cap_len *= cap_stretch_ratio;
-
-	double fill_length = total_len - cap_len;
-	double fill_start = start_offset;
-	double fill_end = fill_start + fill_length;
-	if (use_cap_start) {
-		fill_start += cap_start->aabb.size.z * cap_stretch_ratio;
-	}
-	if (use_cap_end) {
-		fill_end -= cap_end->aabb.size.z * cap_stretch_ratio;
-	}
-
-	Vector<int32_t> fill_pattern = Vector<int32_t>();
-	Vector<double> fill_offsets = Vector<double>();
-
-	Vector<int32_t> cadence = get_cadence();
-	int32_t cadence_iter = 0;
-	double fill_offset_unscaled = 0.0;
-	while (fill_offset_unscaled < fill_end - fill_start) {
-		static constexpr float INVALID_SKIP_LEN = 1.0;
-		int32_t mesh_idx = cadence[cadence_iter];
-		if (mesh_idx >= pdm_asset->pieces.size()) {
-			fill_offset_unscaled += INVALID_SKIP_LEN;
-			continue;
-		}
-		Ref<PdmMesh> piece = cast_to<PdmMesh>(pdm_asset->pieces[mesh_idx]);
-		double piece_len = piece->aabb.size.z;
-		if (Math::is_zero_approx(piece_len)) {
-			fill_offset_unscaled += INVALID_SKIP_LEN;
-			continue;
-		}
-		fill_pattern.push_back(mesh_idx);
-		fill_offsets.push_back(fill_offset_unscaled);
-		fill_offset_unscaled += piece_len;
-		cadence_iter++;
-		cadence_iter %= cadence.size();
-	}
-	double fill_stretch = fill_length / fill_offset_unscaled;
-
-	Ref<SurfaceTool> st = memnew(SurfaceTool);
-	st->begin(Mesh::PRIMITIVE_TRIANGLES);
-	Ref<ArrayMesh> gen_mesh = get_mesh();
-	if (gen_mesh.is_valid()) {
-		gen_mesh->clear_surfaces();
-	} else {
-		gen_mesh = (Ref<ArrayMesh>)memnew(ArrayMesh);
-		set_mesh(gen_mesh);
-	}
-
-	int32_t num_v = 0;
-
-	if (use_cap_start) {
-		double path_offset = start_offset;
-		num_v += add_mesh(st, cap_start, cap_stretch_ratio, curve, path_offset, num_v);
-	}
-
-	if (use_cap_end) {
-		double path_offset = start_offset + total_len - cap_end->aabb.size.z;
-		num_v += add_mesh(st, cap_end, cap_stretch_ratio, curve, path_offset, num_v);
-	}
-
-	for (int32_t i = 0; i < fill_pattern.size(); i++) {
-		int32_t mesh_idx = fill_pattern[i];
-		double path_offset = fill_start + fill_offsets[i] * fill_stretch;
-		Ref<PdmMesh> src_mesh = pdm_asset->pieces[mesh_idx];
-		num_v += add_mesh(st, src_mesh, fill_stretch, curve, path_offset, num_v);
-	}
-
-	st->optimize_indices_for_cache();
-	st->commit(gen_mesh);
-}
-
-} //namespace godot
+} // namespace godot
