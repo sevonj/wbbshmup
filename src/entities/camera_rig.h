@@ -9,27 +9,26 @@ namespace godot {
 class CameraRig : public Node3D {
 	GDCLASS(CameraRig, Node3D)
 
-private:
 protected:
-	Camera3D *camera = nullptr;
-
 	static void _bind_methods();
-	virtual void setup_rig();
 
 public:
-	bool enabled = true;
+	CameraRig() = default;
+	~CameraRig() override;
 
-	CameraRig();
-	~CameraRig();
+	bool get_enabled() const { return enabled; }
+	void set_enabled(bool v) { enabled = v; }
+	Camera3D *get_camera() const { return camera; }
+	Basis get_look_basis() const { return get_camera()->get_global_basis(); }
 
 	void _ready() override;
-	void _process(double delta) override;
 
-	Camera3D *get_camera();
-	Basis get_look_basis();
+protected:
+	bool enabled = true;
 
-	bool get_enabled();
-	void set_enabled(bool value);
+	Camera3D *camera = nullptr;
+
+	virtual void setup_rig();
 };
 
 } //namespace godot

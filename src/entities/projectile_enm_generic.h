@@ -11,20 +11,20 @@ namespace godot {
 class ProjectileEnmGeneric : public Projectile {
 	GDCLASS(ProjectileEnmGeneric, Projectile)
 
-private:
-	static constexpr double LIFE_DISTANCE = 100.;
-	static constexpr double SPEED = 5.;
-
 	static constexpr const char *MAT_PATH = "res://assets/materials/mat_fx_enmlaser.tres";
+
+	static constexpr double LIFE_DISTANCE = 100.0;
+	static constexpr double SPEED = 5.0;
 
 protected:
 	static void _bind_methods();
 
 public:
 	ProjectileEnmGeneric();
-	~ProjectileEnmGeneric();
+	~ProjectileEnmGeneric() override = default;
 
 	void _ready() override;
+
 	void setup_model() override;
 };
 

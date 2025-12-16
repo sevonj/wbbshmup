@@ -11,11 +11,6 @@ void ItemEnergy::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("pickup"), &ItemEnergy::pickup);
 }
 
-ItemEnergy::ItemEnergy() {
-}
-
-ItemEnergy::~ItemEnergy() {}
-
 void ItemEnergy::_ready() {
 	Item::_ready();
 }

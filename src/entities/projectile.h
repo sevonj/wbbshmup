@@ -12,24 +12,17 @@ namespace godot {
 class Projectile : public CharacterBody3D {
 	GDCLASS(Projectile, CharacterBody3D)
 
-private:
 	static constexpr double COLL_R = 0.1;
-	static constexpr double LIFETIME = 10.;
-	static constexpr double SPEED = 6.;
+
+	static constexpr double DEFAULT_LIFETIME = 10.0;
+	static constexpr double DEFAULT_SPEED = 6.0;
 
 protected:
-	double lifetimer = LIFETIME;
-	double speed = SPEED;
-
-	Node3D *mdl;
-	CollisionShape3D *coll;
-	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
-
 	static void _bind_methods();
 
 public:
-	Projectile();
-	~Projectile();
+	Projectile() = default;
+	~Projectile() override = default;
 
 	virtual void _ready() override;
 	virtual void _process(double delta) override;
@@ -37,6 +30,14 @@ public:
 
 	virtual void setup_model();
 	virtual void setup_collider();
+
+protected:
+	double lifetimer = DEFAULT_LIFETIME;
+	double speed = DEFAULT_SPEED;
+
+	Node3D *mdl;
+	CollisionShape3D *coll;
+	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
 };
 
 } //namespace godot

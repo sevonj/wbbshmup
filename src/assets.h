@@ -6,8 +6,6 @@ namespace godot {
 
 /// @brief Asset helper class
 class Assets {
-private:
-protected:
 public:
 	//static constexpr const char * MAT_HITFLASH_PATH = ;
 

@@ -17,8 +17,6 @@ ProjectilePlayerLaser::ProjectilePlayerLaser() {
 	speed = SPEED;
 }
 
-ProjectilePlayerLaser::~ProjectilePlayerLaser() {}
-
 void ProjectilePlayerLaser::_ready() {
 	set_collision_mask(COL_MASK_PLAYER_PROJECTILE);
 

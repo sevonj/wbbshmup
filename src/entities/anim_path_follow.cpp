@@ -37,16 +37,12 @@ void AnimPathFollow::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_progress_ratio"), &AnimPathFollow::get_progress_ratio);
 	ClassDB::bind_method(D_METHOD("set_progress_ratio"), &AnimPathFollow::set_progress_ratio);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "progress_ratio", PROPERTY_HINT_RANGE, "0,1,0.01"), "set_progress_ratio", "get_progress_ratio");
+
 	ClassDB::bind_method(D_METHOD("play"), &AnimPathFollow::play);
 	ClassDB::bind_method(D_METHOD("stop"), &AnimPathFollow::stop);
 	ClassDB::bind_method(D_METHOD("pause"), &AnimPathFollow::pause);
 	ClassDB::bind_method(D_METHOD("restart"), &AnimPathFollow::restart);
 }
-
-AnimPathFollow::AnimPathFollow() {
-}
-
-AnimPathFollow::~AnimPathFollow() {}
 
 void AnimPathFollow::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
@@ -66,21 +62,18 @@ void AnimPathFollow::_process(double delta) {
 	if (!curve.is_valid()) {
 		set_position(Vector3());
 		if (running) {
-			print_error(get_class_static(), ": Failed to get curve!");
 			running = false;
 		}
 		return;
 	} else if (curve->get_point_count() == 0) {
 		set_position(Vector3());
 		if (running) {
-			print_error(get_class_static(), ": Curve has no points!");
 			running = false;
 		}
 		return;
 	} else if (curve->get_point_count() == 1) {
 		set_position(curve->get_point_position(0));
 		if (running) {
-			print_error(get_class_static(), ": Curve only has 1 point!");
 			running = false;
 		}
 		return;
@@ -108,28 +101,6 @@ void AnimPathFollow::_process(double delta) {
 	if (running) {
 		progress += delta * speed;
 	}
-}
-
-/// @brief Same as get_progress, but adjusted to path length.
-/// @return between 0.0 and 1.0. zero if no curve.
-double AnimPathFollow::get_progress_ratio() {
-	Ref<Curve3D> curve = get_curve();
-	if (!curve.is_valid()) {
-		print_error(get_class_static(), ": Failed to get curve!");
-		return 0.;
-	}
-	return progress / curve->get_baked_length();
-}
-
-/// @brief Same as get_progress, but adjusted to path length.
-/// @param value 0.0 and 1.0 map to path start and end.
-void AnimPathFollow::set_progress_ratio(double value) {
-	Ref<Curve3D> curve = get_curve();
-	if (!curve.is_valid()) {
-		print_error(get_class_static(), ": Failed to get curve!");
-		return;
-	}
-	progress = value * curve->get_baked_length();
 }
 
 void AnimPathFollow::play() {

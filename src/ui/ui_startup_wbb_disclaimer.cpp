@@ -4,12 +4,7 @@
 
 namespace godot {
 
-void UiStartupWbbDisclaimer::_bind_methods() {
-}
-
-UiStartupWbbDisclaimer::UiStartupWbbDisclaimer() {}
-
-UiStartupWbbDisclaimer::~UiStartupWbbDisclaimer() {}
+void UiStartupWbbDisclaimer::_bind_methods() {}
 
 void UiStartupWbbDisclaimer::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {

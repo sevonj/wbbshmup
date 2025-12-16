@@ -28,7 +28,11 @@ protected:
 
 public:
 	Character();
-	~Character() override;
+	~Character() override = default;
+
+	virtual Vector3 get_visual_focus_point() const { return get_global_position(); }
+	virtual String get_display_name() const { return get_class(); }
+	virtual String get_editor_model_path() const { return "res://assets/models/mdl_debug_error.obj"; }
 
 	void set_max_hp(int32_t value) {
 		max_hp = value;
@@ -47,13 +51,9 @@ public:
 	virtual void add_hp(int32_t value);
 	virtual void take_damage(DamageInfo damage);
 	virtual void die();
-
-	virtual Vector3 get_visual_focus_point() const { return get_global_position(); }
-	virtual String get_display_name() const { return get_class(); }
-	virtual String get_editor_model_path() const { return "res://assets/models/mdl_debug_error.obj"; }
+	void trigger_hitflash();
 
 protected:
-	void trigger_hitflash();
 	void set_hitflash(bool enabled);
 };
 

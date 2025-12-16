@@ -10,25 +10,25 @@ namespace godot {
 class UiDebugWbbstatus : public PanelContainer {
 	GDCLASS(UiDebugWbbstatus, PanelContainer)
 
-private:
 	static constexpr double AXIS_BOX_SIZE = 128.;
 
 	Label *label = nullptr;
 	WbbInput *wbb_input = nullptr;
 	ColorRect *axis_box = nullptr;
 
-	void setup_layout();
-	void debug_draw_axis();
-
 protected:
 	static void _bind_methods();
 
 public:
-	UiDebugWbbstatus();
-	~UiDebugWbbstatus();
+	UiDebugWbbstatus() = default;
+	~UiDebugWbbstatus() override = default;
 
 	void _ready() override;
 	void _process(double delta) override;
+
+private:
+	void setup_layout();
+	void debug_draw_axis();
 };
 
 } //namespace godot

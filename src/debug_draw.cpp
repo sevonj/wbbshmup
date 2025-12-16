@@ -27,53 +27,6 @@ DebugDraw *DebugDraw::get_singleton() {
 	return singleton;
 }
 
-DebugDraw::DebugDraw() {
-	CRASH_COND(singleton);
-	singleton = this;
-}
-
-DebugDraw::~DebugDraw() {
-	CRASH_COND(!singleton);
-	singleton = nullptr;
-}
-
-void DebugDraw::_ready() {
-	font = ResourceLoader::get_singleton()->load(FONT_PATH, "Font");
-}
-
-void DebugDraw::_process(double delta) {
-	queue_redraw();
-}
-
-void DebugDraw::_draw() {
-	if (!Game::get_singleton()->get_current_camera()) {
-		draw_text("DebugDraw: No Camera!");
-		clear_queues();
-		return;
-	}
-
-	for (QueueLine l : line_queue) {
-		draw_line(l.a, l.b, l.color);
-	}
-
-	for (QueuePoint p : point_queue) {
-		Rect2 rect = Rect2(Vector2(p.position.x - 4, p.position.y - 4), Vector2(8, 8));
-		draw_rect(rect, p.color, false);
-	}
-
-	for (QueueCircle c : circle_queue) {
-		draw_circle(c.position, c.r, c.color, false);
-	}
-
-	clear_queues();
-}
-
-void DebugDraw::clear_queues() {
-	point_queue.clear();
-	line_queue.clear();
-	circle_queue.clear();
-}
-
 /// @brief Draw a line in 3D world space
 /// @param a Start point world coord
 /// @param b End point world coord
@@ -147,6 +100,47 @@ void DebugDraw::draw_circle2d(Vector2 position, float r, Color color) {
 	ddraw->circle_queue.push_back(QueueCircle{ position, r, color });
 }
 
+void DebugDraw::_ready() {
+	font = ResourceLoader::get_singleton()->load(FONT_PATH, "Font");
+}
+
+void DebugDraw::_process(double delta) {
+	queue_redraw();
+}
+
+void DebugDraw::_draw() {
+	if (!Game::get_singleton()->get_current_camera()) {
+		draw_text("DebugDraw: No Camera!");
+		clear_queues();
+		return;
+	}
+
+	for (QueueLine l : line_queue) {
+		draw_line(l.a, l.b, l.color);
+	}
+
+	for (QueuePoint p : point_queue) {
+		Rect2 rect = Rect2(Vector2(p.position.x - 4, p.position.y - 4), Vector2(8, 8));
+		draw_rect(rect, p.color, false);
+	}
+
+	for (QueueCircle c : circle_queue) {
+		draw_circle(c.position, c.r, c.color, false);
+	}
+
+	clear_queues();
+}
+
+DebugDraw::DebugDraw() {
+	CRASH_COND(singleton);
+	singleton = this;
+}
+
+DebugDraw::~DebugDraw() {
+	CRASH_COND(!singleton);
+	singleton = nullptr;
+}
+
 void DebugDraw::draw_text(String text) {
 	float x = 2.0;
 	char cc[2] = { 0, 0 };
@@ -155,6 +149,12 @@ void DebugDraw::draw_text(String text) {
 		draw_char(font, Vector2(x, 200), cc);
 		x += 16.0;
 	}
+}
+
+void DebugDraw::clear_queues() {
+	point_queue.clear();
+	line_queue.clear();
+	circle_queue.clear();
 }
 
 } //namespace godot

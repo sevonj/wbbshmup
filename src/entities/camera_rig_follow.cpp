@@ -14,20 +14,6 @@ namespace godot {
 
 void CameraRigFollow::_bind_methods() {}
 
-CameraRigFollow::CameraRigFollow() {
-}
-
-CameraRigFollow::~CameraRigFollow() {
-}
-
-Node3D *CameraRigFollow::get_target() {
-	return target;
-}
-
-void CameraRigFollow::set_target(Node3D *node) {
-	target = node;
-}
-
 void CameraRigFollow::_ready() {
 	CameraRig::_ready();
 

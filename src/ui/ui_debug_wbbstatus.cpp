@@ -4,14 +4,7 @@
 
 namespace godot {
 
-void UiDebugWbbstatus::_bind_methods() {
-}
-
-UiDebugWbbstatus::UiDebugWbbstatus() {
-}
-
-UiDebugWbbstatus::~UiDebugWbbstatus() {
-}
+void UiDebugWbbstatus::_bind_methods() {}
 
 void UiDebugWbbstatus::_ready() {
 	wbb_input = WbbInput::get_singleton();

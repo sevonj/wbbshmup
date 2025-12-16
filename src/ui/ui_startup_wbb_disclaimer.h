@@ -11,24 +11,24 @@ namespace godot {
 class UiStartupWbbDisclaimer : public MarginContainer {
 	GDCLASS(UiStartupWbbDisclaimer, MarginContainer)
 
-private:
 	WbbInput *wbb_input = nullptr;
 
 	ColorRect *bgfill = nullptr;
 	TextureRect *bgtex = nullptr;
 	RichTextLabel *label = nullptr;
 
-	void setup_layout();
-
 protected:
 	static void _bind_methods();
 
 public:
-	UiStartupWbbDisclaimer();
-	~UiStartupWbbDisclaimer();
+	UiStartupWbbDisclaimer() = default;
+	~UiStartupWbbDisclaimer() override = default;
 
 	void _ready() override;
 	void _process(double delta) override;
+
+private:
+	void setup_layout();
 };
 
 } //namespace godot

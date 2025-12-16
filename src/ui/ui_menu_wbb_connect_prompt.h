@@ -15,7 +15,6 @@ namespace godot {
 class UiMenuWbbConnectPrompt : public MarginContainer {
 	GDCLASS(UiMenuWbbConnectPrompt, MarginContainer)
 
-private:
 	enum WbbPromptState {
 		Init,
 		Failed,
@@ -42,20 +41,21 @@ private:
 	Button *connect_button = nullptr;
 	Button *exit_button = nullptr;
 
-	void setup_layout();
-	void complete();
-
 protected:
 	static void _bind_methods();
 
 public:
-	UiMenuWbbConnectPrompt();
-	~UiMenuWbbConnectPrompt();
+	UiMenuWbbConnectPrompt() = default;
+	~UiMenuWbbConnectPrompt() override = default;
 
 	void _ready() override;
 	void _process(double delta) override;
 
 	void connect_wbb();
+
+private:
+	void setup_layout();
+	void complete();
 };
 
 } //namespace godot

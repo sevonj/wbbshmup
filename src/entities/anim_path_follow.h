@@ -10,7 +10,6 @@ namespace godot {
 class AnimPathFollow : public Node3D {
 	GDCLASS(AnimPathFollow, Node3D)
 
-private:
 	bool autostart = false;
 	bool oneshot = true;
 	bool use_rotation = true;
@@ -25,11 +24,8 @@ protected:
 	static void _bind_methods();
 
 public:
-	AnimPathFollow();
-	~AnimPathFollow();
-
-	virtual void _ready() override;
-	virtual void _process(double delta) override;
+	AnimPathFollow() = default;
+	~AnimPathFollow() override = default;
 
 	bool get_autostart() { return autostart; };
 	void set_autostart(bool v) { autostart = v; };
@@ -45,9 +41,23 @@ public:
 	void set_speed(float v) { speed = v; };
 	double get_progress() { return progress; };
 	void set_progress(double v) { progress = v; };
+	double get_progress_ratio() {
+		Ref<Curve3D> curve = get_curve();
+		if (!curve.is_valid()) {
+			return 0.;
+		}
+		return progress / curve->get_baked_length();
+	}
+	void set_progress_ratio(double value) {
+		Ref<Curve3D> curve = get_curve();
+		if (!curve.is_valid()) {
+			return;
+		}
+		progress = value * curve->get_baked_length();
+	}
 
-	double get_progress_ratio();
-	void set_progress_ratio(double value);
+	virtual void _ready() override;
+	virtual void _process(double delta) override;
 
 	void play();
 	void stop();

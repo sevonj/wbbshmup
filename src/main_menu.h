@@ -9,24 +9,24 @@ namespace godot {
 class MainMenu : public Node {
 	GDCLASS(MainMenu, Node)
 
-private:
 	UiMenuWbbConnectPrompt *wbb_connect_prompt = nullptr;
 	Button *start_game_button = nullptr;
-
-	void setup_layout();
-
-	void start_game();
-	void on_wbb_connect_complete();
 
 protected:
 	static void _bind_methods();
 
 public:
-	MainMenu();
-	~MainMenu();
+	MainMenu() = default;
+	~MainMenu() override = default;
 
 	void _ready() override;
 	void _process(double delta) override;
+
+private:
+	void setup_layout();
+
+	void start_game();
+	void on_wbb_connect_complete();
 };
 
 } //namespace godot

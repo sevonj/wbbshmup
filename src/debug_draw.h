@@ -8,12 +8,6 @@ namespace godot {
 class DebugDraw : public Node2D {
 	GDCLASS(DebugDraw, Node2D)
 
-private:
-	static constexpr const char *FONT_PATH = "res://assets/font/font_debug.tres";
-
-	static DebugDraw *singleton;
-	Ref<Font> font = Ref<Font>();
-
 	struct QueuePoint {
 		Vector2 position;
 		Color color;
@@ -31,15 +25,14 @@ private:
 		Color color;
 	};
 
+	static constexpr const char *FONT_PATH = "res://assets/font/font_debug.tres";
+
+	static DebugDraw *singleton;
+	Ref<Font> font = Ref<Font>();
+
 	Vector<QueuePoint> point_queue;
 	Vector<QueueLine> line_queue;
 	Vector<QueueCircle> circle_queue;
-
-	DebugDraw();
-	~DebugDraw();
-
-	void clear_queues();
-	void draw_text(String text);
 
 protected:
 	static void _bind_methods();
@@ -57,6 +50,13 @@ public:
 	void _ready() override;
 	void _process(double delta) override;
 	void _draw() override;
+
+private:
+	DebugDraw();
+	~DebugDraw() override;
+
+	void draw_text(String text);
+	void clear_queues();
 };
 
 } //namespace godot

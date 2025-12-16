@@ -14,12 +14,6 @@ namespace godot {
 
 void CameraRigTp::_bind_methods() {}
 
-CameraRigTp::CameraRigTp() {
-}
-
-CameraRigTp::~CameraRigTp() {
-}
-
 void CameraRigTp::_ready() {
 	pivot = memnew(Node3D);
 

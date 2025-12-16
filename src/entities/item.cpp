@@ -15,11 +15,6 @@ void Item::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("pickup"), &Item::pickup);
 }
 
-Item::Item() {
-}
-
-Item::~Item() {}
-
 void Item::_ready() {
 	set_collision_layer(0);
 	set_collision_mask(COL_MASK_ITEMS);

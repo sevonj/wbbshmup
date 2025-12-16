@@ -15,8 +15,8 @@ protected:
 	static void _bind_methods();
 
 public:
-	Enemy();
-	~Enemy() override;
+	Enemy() = default;
+	~Enemy() override = default;
 
 	virtual void _ready() override;
 };

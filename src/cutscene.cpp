@@ -22,6 +22,16 @@ void Cutscene::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("fin"));
 }
 
+void Cutscene::play() {
+	time = 0.0;
+	playing = true;
+}
+
+void Cutscene::stop() {
+	playing = false;
+	emit_signal("fin");
+}
+
 void Cutscene::_notification(int what) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
@@ -43,16 +53,6 @@ void Cutscene::_notification(int what) {
 		default:
 			break;
 	}
-}
-
-void Cutscene::play() {
-	time = 0.0;
-	playing = true;
-}
-
-void Cutscene::stop() {
-	playing = false;
-	emit_signal("fin");
 }
 
 } //namespace godot

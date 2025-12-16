@@ -11,13 +11,12 @@ namespace godot {
 class ItemEnergy : public Item {
 	GDCLASS(ItemEnergy, Item)
 
-private:
 protected:
 	static void _bind_methods();
 
 public:
-	ItemEnergy();
-	~ItemEnergy();
+	ItemEnergy() = default;
+	~ItemEnergy() override = default;
 
 	void _ready() override;
 	void _process(double delta) override;

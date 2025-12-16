@@ -10,14 +10,7 @@
 
 namespace godot {
 
-void UiHudRhinoAlert::_bind_methods() {
-}
-
-UiHudRhinoAlert::UiHudRhinoAlert() {
-}
-
-UiHudRhinoAlert::~UiHudRhinoAlert() {
-}
+void UiHudRhinoAlert::_bind_methods() {}
 
 void UiHudRhinoAlert::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {

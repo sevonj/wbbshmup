@@ -15,7 +15,6 @@ namespace godot {
 class UiStageBeginScreen : public MarginContainer {
 	GDCLASS(UiStageBeginScreen, MarginContainer)
 
-private:
 	static constexpr double FADEIN_DURATION = .6;
 	static constexpr double DISPLAY_DURATION = 3.;
 	static constexpr double FADEOUT_DURATION = .6;
@@ -33,19 +32,20 @@ private:
 	TextureRect *tex_stage_icon = nullptr;
 	String tex_stage_icon_path = "res://assets/ui/stage_icons/tex_icon_stage_saturn.png";
 
-	double lifetimer = 0.;
-
-	void setup_layout();
+	double lifetimer = 0.0;
 
 protected:
 	static void _bind_methods();
 
 public:
-	UiStageBeginScreen();
-	~UiStageBeginScreen();
+	UiStageBeginScreen() = default;
+	~UiStageBeginScreen() override = default;
 
 	void _ready() override;
 	void _process(double delta) override;
+
+private:
+	void setup_layout();
 };
 
 } //namespace godot

@@ -23,8 +23,6 @@ EnmRhino::EnmRhino() {
 	set_max_hp(MAX_HP);
 }
 
-EnmRhino::~EnmRhino() {}
-
 void EnmRhino::_ready() {
 	Enemy::_ready();
 

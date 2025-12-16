@@ -10,20 +10,20 @@ namespace godot {
 class ProjectilePlayerLaser : public Projectile {
 	GDCLASS(ProjectilePlayerLaser, Projectile)
 
-private:
+	static constexpr const char *MAT_PATH = "res://assets/materials/mat_fx_playerlaser.tres";
+
 	static constexpr double LIFE_DISTANCE = 100.;
 	static constexpr double SPEED = 80.;
-
-	static constexpr const char *MAT_PATH = "res://assets/materials/mat_fx_playerlaser.tres";
 
 protected:
 	static void _bind_methods();
 
 public:
 	ProjectilePlayerLaser();
-	~ProjectilePlayerLaser();
+	~ProjectilePlayerLaser() override = default;
 
 	void _ready() override;
+
 	void setup_model() override;
 };
 

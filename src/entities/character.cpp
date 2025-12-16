@@ -30,8 +30,6 @@ Character::Character() {
 	}
 }
 
-Character::~Character() {}
-
 void Character::add_hp(int32_t value) {
 	hp = Math::clamp(hp + value, 0, max_hp);
 }

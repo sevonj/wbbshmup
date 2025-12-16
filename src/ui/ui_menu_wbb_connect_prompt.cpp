@@ -10,12 +10,6 @@ void UiMenuWbbConnectPrompt::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("completed"));
 }
 
-UiMenuWbbConnectPrompt::UiMenuWbbConnectPrompt() {
-}
-
-UiMenuWbbConnectPrompt::~UiMenuWbbConnectPrompt() {
-}
-
 void UiMenuWbbConnectPrompt::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;

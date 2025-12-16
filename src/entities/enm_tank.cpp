@@ -22,8 +22,6 @@ EnmTank::EnmTank() {
 	set_max_hp(MAX_HP);
 }
 
-EnmTank::~EnmTank() {}
-
 void EnmTank::_ready() {
 	Enemy::_ready();
 

@@ -388,4 +388,4 @@ int32_t ToolPathDeformMesh::bake_mesh(
 	return num_v_added;
 }
 
-} // namespace godot
+} //namespace godot

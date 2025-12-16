@@ -11,8 +11,8 @@ namespace godot {
 class Item : public CharacterBody3D {
 	GDCLASS(Item, CharacterBody3D)
 
-private:
 	static constexpr double COLL_R = 0.1;
+
 	static constexpr double LIFETIME = 10.;
 	static constexpr double SPEED = 6.;
 
@@ -25,14 +25,17 @@ protected:
 	static void _bind_methods();
 
 public:
-	Item();
-	~Item();
+	Item() = default;
+	~Item() override = default;
 
 	virtual void _ready() override;
 	virtual void _process(double delta) override;
 	virtual void _physics_process(double delta) override;
-	virtual void setup_collider();
+
 	virtual void pickup();
+
+private:
+	virtual void setup_collider();
 };
 
 } //namespace godot

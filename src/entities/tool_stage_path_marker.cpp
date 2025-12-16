@@ -18,7 +18,7 @@ void ToolStagePathMarker::_process(double delta) {
 	if (!stage) {
 		return;
 	}
-	set_transform(stage->get_stage_xform_at(time));
+	set_transform(stage->sample_rail_at_time(time));
 }
 
 } //namespace godot

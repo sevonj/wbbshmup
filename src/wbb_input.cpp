@@ -9,12 +9,13 @@
 
 #define MAX_WIIMOTES 1
 
+namespace godot {
+
 WbbInput *WbbInput::singleton = nullptr;
 wiimote **WbbInput::wiimotes = wiiuse_init(MAX_WIIMOTES);
 bool WbbInput::initialized = false;
 
-void WbbInput::_bind_methods() {
-}
+void WbbInput::_bind_methods() {}
 
 WbbInput *WbbInput::get_singleton() {
 	if (Engine::get_singleton()->is_editor_hint()) {
@@ -28,52 +29,15 @@ WbbInput *WbbInput::get_singleton() {
 	return singleton;
 }
 
-WbbInput::WbbInput() {
-	CRASH_COND(singleton);
-	singleton = this;
-}
-
-WbbInput::~WbbInput() {
-	CRASH_COND(!singleton);
-	singleton = nullptr;
-}
-
-void WbbInput::poll() {
-	if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
-		/*
-		 *	This happens if something happened on any wiimote.
-		 *	So go through each one and check if anything happened.
-		 */
-		int i = 0;
-		for (; i < MAX_WIIMOTES; ++i) {
-			wiimote *wm = wiimotes[i];
-			switch (wm->event) {
-				case WIIUSE_EVENT: {
-					if (wm->exp.type != EXP_WII_BOARD) {
-						// If you aren't a balance board, then I don't care what you have to say.
-						break;
-					}
-					wii_board_t *wb = (wii_board_t *)&wm->exp.wb;
-
-					tl = wb->tl;
-					tr = wb->tr;
-					bl = wb->bl;
-					br = wb->br;
-
-					break;
-				}
-
-				default:
-					break;
-			}
-		}
-	}
-}
-
-void WbbInput::_ready() {
+void WbbInput::_physics_process(double delta) {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
+
+	// Polling is done twice on purpose. Otherwise there's like a whole second of input lag.
+	// I assume physics ticks are too slow, causing events piling up?
+	poll();
+	poll();
 }
 
 void WbbInput::_process(double delta) {
@@ -85,17 +49,6 @@ void WbbInput::_process(double delta) {
 	if (input->is_key_pressed(KEY_P)) {
 		try_connect();
 	}
-}
-
-void WbbInput::_physics_process(double delta) {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-
-	// Polling is done twice on purpose. Otherwise there's like a whole second of input lag.
-	// I assume physics ticks are too slow, causing events piling up?
-	poll();
-	poll();
 }
 
 void WbbInput::try_connect() {
@@ -174,3 +127,47 @@ Vector2 WbbInput::get_axis() {
 		return axis;
 	}
 }
+
+WbbInput::WbbInput() {
+	CRASH_COND(singleton);
+	singleton = this;
+}
+
+WbbInput::~WbbInput() {
+	CRASH_COND(!singleton);
+	singleton = nullptr;
+}
+
+void WbbInput::poll() {
+	if (wiiuse_poll(wiimotes, MAX_WIIMOTES)) {
+		/*
+		 *	This happens if something happened on any wiimote.
+		 *	So go through each one and check if anything happened.
+		 */
+		int i = 0;
+		for (; i < MAX_WIIMOTES; ++i) {
+			wiimote *wm = wiimotes[i];
+			switch (wm->event) {
+				case WIIUSE_EVENT: {
+					if (wm->exp.type != EXP_WII_BOARD) {
+						// If you aren't a balance board, then I don't care what you have to say.
+						break;
+					}
+					wii_board_t *wb = (wii_board_t *)&wm->exp.wb;
+
+					tl = wb->tl;
+					tr = wb->tr;
+					bl = wb->bl;
+					br = wb->br;
+
+					break;
+				}
+
+				default:
+					break;
+			}
+		}
+	}
+}
+
+} //namespace godot

@@ -10,25 +10,25 @@ namespace godot {
 class CameraRigFollow : public CameraRig {
 	GDCLASS(CameraRigFollow, CameraRig)
 
-private:
-	const Vector3 CAMERA_OFFSET = Vector3(0., 8., 13.25);
+	const Vector3 CAMERA_OFFSET = Vector3(0.0, 8.0, 13.25);
 
 	Node3D *target = nullptr;
-
-	void _process_camera_arm(double delta);
 
 protected:
 	static void _bind_methods();
 
 public:
-	CameraRigFollow();
-	~CameraRigFollow();
+	CameraRigFollow() = default;
+	~CameraRigFollow() override = default;
 
-	Node3D *get_target();
-	void set_target(Node3D *node);
+	void set_target(Node3D *v) { target = v; }
+	Node3D *get_target() const { return target; }
 
 	void _ready() override;
 	void _process(double delta) override;
+
+private:
+	void _process_camera_arm(double delta);
 };
 
 } //namespace godot

@@ -14,12 +14,6 @@ namespace godot {
 
 void CameraRigOrbit::_bind_methods() {}
 
-CameraRigOrbit::CameraRigOrbit() {
-}
-
-CameraRigOrbit::~CameraRigOrbit() {
-}
-
 void CameraRigOrbit::_ready() {
 	pivot = memnew(Node3D);
 	distance = 0.;

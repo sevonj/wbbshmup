@@ -7,14 +7,7 @@
 
 namespace godot {
 
-void UiStageBeginScreen::_bind_methods() {
-}
-
-UiStageBeginScreen::UiStageBeginScreen() {
-}
-
-UiStageBeginScreen::~UiStageBeginScreen() {
-}
+void UiStageBeginScreen::_bind_methods() {}
 
 void UiStageBeginScreen::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {

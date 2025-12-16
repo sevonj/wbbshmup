@@ -37,15 +37,15 @@ protected:
 
 public:
 	EnmRhino();
-	~EnmRhino() override;
+	~EnmRhino() override = default;
+
+	String get_display_name() const override { return "Rhino Missile"; }
+	String get_editor_model_path() const override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
 
 	void _ready() override;
 	void _process(double delta) override;
 
 	void die() override;
-
-	String get_display_name() const override { return "Rhino Missile"; }
-	String get_editor_model_path() const override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
 
 private:
 	void setup_model();

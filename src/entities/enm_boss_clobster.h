@@ -24,16 +24,16 @@ protected:
 	static void _bind_methods();
 
 public:
-	EnmBossClobster();
-	~EnmBossClobster() override;
+	EnmBossClobster() = default;
+	~EnmBossClobster() override = default;
+
+	String get_display_name() const override { return "Cock Lobster"; }
+	String get_editor_model_path() const override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
 
 	void _ready() override;
 	void _process(double delta) override;
 
 	void create_bossbar();
-
-	String get_display_name() const override { return "Cock Lobster"; }
-	String get_editor_model_path() const override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
 
 private:
 	void setup_model();

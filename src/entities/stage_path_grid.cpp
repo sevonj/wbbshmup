@@ -11,11 +11,6 @@ namespace godot {
 
 void StagePathGrid::_bind_methods() {}
 
-StagePathGrid::StagePathGrid() {
-}
-
-StagePathGrid::~StagePathGrid() {}
-
 void StagePathGrid::rebuild_mesh(Ref<Curve3D> curve) {
 	const Vector3 RIGHT = Vector3(1., 0., 0.);
 

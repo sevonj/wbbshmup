@@ -4,12 +4,7 @@
 
 namespace godot {
 
-void MainMenu::_bind_methods() {
-}
-
-MainMenu::MainMenu() {}
-
-MainMenu::~MainMenu() {}
+void MainMenu::_bind_methods() {}
 
 void MainMenu::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {

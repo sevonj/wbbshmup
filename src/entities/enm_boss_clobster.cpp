@@ -10,10 +10,6 @@ namespace godot {
 
 void EnmBossClobster::_bind_methods() {}
 
-EnmBossClobster::EnmBossClobster() {}
-
-EnmBossClobster::~EnmBossClobster() {}
-
 void EnmBossClobster::_ready() {
 	Enemy::_ready();
 

@@ -16,9 +16,13 @@ namespace godot {
 class Stage : public Node3D {
 	GDCLASS(Stage, Node3D)
 
-private:
 	static constexpr double INTRO_SCREEN_DURATION = 5.0;
 	static constexpr double DEFAULT_RAIL_SPEED = 10.0;
+
+	bool is_playing = false;
+	double rail_follow_offset = 0.;
+	double rail_speed = DEFAULT_RAIL_SPEED;
+	double intro_screen_timer = INTRO_SCREEN_DURATION;
 
 	AABB stage_bounds = DEFAULT_STAGE_BOUNDS;
 	Node *local_env = nullptr;
@@ -30,28 +34,7 @@ private:
 	Path3D *rail_path = nullptr;
 	/// @brief Parent of player. Is moved along the path.
 	Marker3D *rail_follow = nullptr;
-	/// @brief Offset of rail follower
-	double rail_offset = 0.;
-	double rail_speed = DEFAULT_RAIL_SPEED;
 	StagePathGrid *rail_grid = nullptr;
-	bool is_playing = false;
-
-	double intro_screen_timer = INTRO_SCREEN_DURATION;
-
-	Player *_get_player();
-
-	void tool_ensure_rail_path();
-	void tool_ensure_rail_grid();
-	void tool_rebuild_grid();
-	void ensure_nodes();
-
-	//Vector<InfoPlayerStart *> player_starts;
-
-	//void find_player_starts();
-	void spawn_player();
-	void clear_player();
-
-	void on_player_death();
 
 protected:
 	static void _bind_methods();
@@ -59,17 +42,33 @@ protected:
 
 public:
 	Stage();
-	~Stage();
+	~Stage() override;
 
 	void _ready() override;
-	void _process(double delta) override;
+	// _process() needs to exist in order to receive NOTIFICATION_PROCESS.
+	// The dummy is here in case the stage script doesn't exist or have it.
+	void _process(double delta) override {};
 
 	void add_entity(Node3D *ent);
 	void add_ui(Control *ui);
 
-	Transform3D get_stage_start();
-	Transform3D get_stage_end();
-	Transform3D get_stage_xform_at(double time);
+	Transform3D sample_rail_start();
+	Transform3D sample_rail_end();
+	Transform3D sample_rail_at_time(double time);
+
+private:
+	Player *_get_player();
+
+	void spawn_player();
+	void clear_player();
+
+	void on_player_death();
+
+	void ensure_nodes();
+	void ensure_rail_path();
+	void ensure_rail_grid();
+
+	void tool_rebuild_grid();
 };
 
 } //namespace godot

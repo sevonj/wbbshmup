@@ -15,8 +15,9 @@ namespace godot {
 void Stage::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_get_player"), &Stage::_get_player);
 	ClassDB::bind_method(D_METHOD("_tool_rebuild_grid"), &Stage::tool_rebuild_grid);
-	ClassDB::bind_method(D_METHOD("get_stage_start"), &Stage::get_stage_start);
-	ClassDB::bind_method(D_METHOD("get_stage_end"), &Stage::get_stage_end);
+	ClassDB::bind_method(D_METHOD("sample_rail_start"), &Stage::sample_rail_start);
+	ClassDB::bind_method(D_METHOD("sample_rail_end"), &Stage::sample_rail_end);
+	ClassDB::bind_method(D_METHOD("sample_rail_at_time"), &Stage::sample_rail_at_time);
 	ClassDB::bind_method(D_METHOD("spawn_player"), &Stage::spawn_player);
 	ClassDB::bind_method(D_METHOD("add_entity"), &Stage::add_entity);
 	ClassDB::bind_method(D_METHOD("add_ui"), &Stage::add_ui);
@@ -33,13 +34,18 @@ void Stage::_notification(int what) {
 			break;
 
 		case NOTIFICATION_PROCESS: {
+			if (Input::get_singleton()->is_key_pressed(KEY_F8)) {
+				get_tree()->quit();
+				return;
+			}
+
 			double delta = get_process_delta_time();
 			if (is_playing) {
 				intro_screen_timer -= delta;
 			}
 			bool intro_wait = intro_screen_timer > 0.;
 
-			rail_offset += delta * rail_speed;
+			rail_follow_offset += delta * rail_speed;
 			Player *player = Game::get_player();
 			if (player) {
 				player->set_rail_vel(-rail_follow->get_basis().get_column(2) * rail_speed);
@@ -47,7 +53,7 @@ void Stage::_notification(int what) {
 			}
 
 			if (rail_follow) {
-				Transform3D sampled_xform = rail_path->get_curve()->sample_baked_with_rotation(rail_offset);
+				Transform3D sampled_xform = rail_path->get_curve()->sample_baked_with_rotation(rail_follow_offset);
 				sampled_xform.origin += rail_path->get_global_position();
 				rail_follow->set_transform(sampled_xform);
 			}
@@ -66,8 +72,7 @@ Stage::~Stage() {}
 
 void Stage::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
-		tool_ensure_rail_path();
-		tool_ensure_rail_grid();
+		ensure_rail_grid();
 		return;
 	}
 
@@ -77,16 +82,6 @@ void Stage::_ready() {
 	// toast("real yakuza use a balance board"); TODO
 	add_ui(memnew(UiDebugWbbstatus));
 	add_ui(memnew(UiStageBeginScreen));
-}
-
-void Stage::_process(double delta) {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-	if (Input::get_singleton()->is_key_pressed(KEY_F8)) {
-		get_tree()->quit();
-		return;
-	}
 }
 
 void Stage::add_entity(Node3D *ent) {
@@ -107,55 +102,88 @@ void Stage::add_ui(Control *ui) {
 	local_ui->add_child(ui);
 }
 
-/// @return Stage start position & orientation sampled from rail path
-Transform3D Stage::get_stage_start() {
-	tool_ensure_rail_path();
+Transform3D Stage::sample_rail_start() {
+	ensure_rail_path();
 	double start_off = DEFAULT_RAIL_SPEED * INTRO_SCREEN_DURATION;
 	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(start_off);
 	xform.origin += rail_path->get_global_position();
 	return xform;
 }
 
-/// @return Stage end position & orientation sampled from rail path
-Transform3D Stage::get_stage_end() {
-	tool_ensure_rail_path();
+Transform3D Stage::sample_rail_end() {
+	ensure_rail_path();
 	double end_off = rail_path->get_curve()->get_baked_length();
 	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(end_off);
 	xform.origin += rail_path->get_global_position();
 	return xform;
 }
 
-Transform3D Stage::get_stage_xform_at(double time) {
+Transform3D Stage::sample_rail_at_time(double time) {
 	time += INTRO_SCREEN_DURATION;
-	tool_ensure_rail_path();
+	ensure_rail_path();
 	double offset = time * rail_speed;
 	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(offset);
 	xform.origin += rail_path->get_global_position();
 	return xform;
 }
 
-// void Stage::find_player_starts() {
-// 	TypedArray<Node> stack;
-// 	stack.push_back(local_entities);
-// 	while (!stack.is_empty()) {
-// 		Node *child = Object::cast_to<Node>(stack.pop_front());
-// 		InfoPlayerStart *start = cast_to<InfoPlayerStart>(child);
-// 		if (start) {
-// 			player_starts.push_back(start);
-// 		}
-// 		stack.append_array(child->get_children());
-// 	}
-// 	if (player_starts.is_empty()) {
-// 		print_error("Stage has no InfoPlayerStart! Spawning player at 0,0,0 instead.");
-// 	}
-// }
-
 Player *Stage::_get_player() {
 	return Game::get_player();
 }
 
-/// @brief Ensures that rail_path exists and is safe to use
-void Stage::tool_ensure_rail_path() {
+void Stage::spawn_player() {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+	ensure_nodes();
+
+	clear_player();
+
+	Player *player = memnew(Player);
+	CameraRigFollow *camera = memnew(CameraRigFollow);
+
+	player->connect("died", callable_mp(this, &Stage::on_player_death));
+	rail_follow_offset = 0.;
+	rail_follow = memnew(Marker3D);
+	rail_follow->add_child(player);
+	add_entity(rail_follow);
+
+	camera->set_target(rail_follow);
+	add_entity(camera);
+	camera->get_camera()->make_current();
+	is_playing = true;
+}
+
+void Stage::clear_player() {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	if (rail_follow) {
+		rail_follow->queue_free();
+		rail_follow = nullptr;
+	}
+
+	CameraRig *camera = Game::get_current_camera();
+	if (camera) {
+		camera->queue_free();
+	}
+}
+
+void Stage::on_player_death() {
+	get_tree()->create_timer(3.)->connect("timeout", callable_mp(this, &Stage::spawn_player));
+}
+
+void Stage::ensure_nodes() {
+	local_env = get_node<Node>("env");
+	local_entities = get_node<Node>("entities");
+	local_static = get_node<Node>("static");
+	local_ui = get_node<Node>("ui");
+
+	rail_path = get_node<Path3D>("rail_path");
+}
+
+void Stage::ensure_rail_path() {
 	Node *child = get_node_or_null("rail_path");
 	rail_path = cast_to<Path3D>(child);
 	if (!rail_path) {
@@ -178,9 +206,8 @@ void Stage::tool_ensure_rail_path() {
 	}
 }
 
-/// @brief Ensures that rail_grid exists and is safe to use
-void Stage::tool_ensure_rail_grid() {
-	tool_ensure_rail_path();
+void Stage::ensure_rail_grid() {
+	ensure_rail_path();
 
 	Node *child = get_node_or_null("rail_grid");
 	rail_grid = cast_to<StagePathGrid>(child);
@@ -197,74 +224,9 @@ void Stage::tool_ensure_rail_grid() {
 }
 
 void Stage::tool_rebuild_grid() {
-	tool_ensure_rail_grid();
+	ensure_rail_grid();
 	rail_grid->rebuild_mesh(rail_path->get_curve());
 	rail_grid->set_transform(rail_path->get_transform());
-}
-
-/// @brief Makes sure that all required child nodes are initialized.
-void Stage::ensure_nodes() {
-	local_env = get_node<Node>("env");
-	local_entities = get_node<Node>("entities");
-	local_static = get_node<Node>("static");
-	local_ui = get_node<Node>("ui");
-
-	rail_path = get_node<Path3D>("rail_path");
-}
-
-void Stage::spawn_player() {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-	ensure_nodes();
-
-	clear_player();
-
-	Player *player = memnew(Player);
-	CameraRigFollow *camera = memnew(CameraRigFollow);
-
-	player->connect("died", callable_mp(this, &Stage::on_player_death));
-	rail_offset = 0.;
-	rail_follow = memnew(Marker3D);
-	rail_follow->add_child(player);
-	add_entity(rail_follow);
-
-	//if (!player_starts.is_empty()) {
-	//	player->set_global_transform(player_starts[0]->get_global_transform());
-	//}
-
-	camera->set_target(rail_follow);
-	add_entity(camera);
-	camera->get_camera()->make_current();
-	is_playing = true;
-}
-
-void Stage::clear_player() {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-
-	if (rail_follow) {
-		rail_follow->queue_free();
-		rail_follow = nullptr;
-	}
-
-	//Player *player = Game::get_player();
-	CameraRig *camera = Game::get_current_camera();
-	//if (player) {
-	//	player->queue_free();
-	//}
-	if (camera) {
-		camera->queue_free();
-	}
-}
-
-void Stage::on_player_death() {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-
-	get_tree()->create_timer(3.)->connect("timeout", callable_mp(this, &Stage::spawn_player));
 }
 
 } //namespace godot
