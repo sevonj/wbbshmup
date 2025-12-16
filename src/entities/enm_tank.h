@@ -18,7 +18,7 @@ private:
 	static constexpr double AI_ALERT_RADIUS = 100.;
 	static constexpr double AI_FIRE_RATE = 0.3;
 
-	const String MDL_PATH = "res://assets/entities/enm_tank/mdl_enm_tank.blend";
+	static constexpr const char *MDL_PATH = "res://assets/entities/enm_tank/mdl_enm_tank.blend";
 
 	Node3D *mdl = nullptr;
 	Node3D *mdl_snoot = nullptr;

@@ -11,7 +11,7 @@ class StagePathGrid : public MeshInstance3D {
 private:
 	static constexpr double SEGMENT_LEN = 8.;
 	static constexpr double GRID_WIDTH = 24.;
-	const String MAT_PATH = "res://assets/materials/mat_grid.tres";
+	static constexpr const char *MAT_PATH = "res://assets/materials/mat_grid.tres";
 
 protected:
 	static void _bind_methods();

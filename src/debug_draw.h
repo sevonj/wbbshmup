@@ -9,7 +9,7 @@ class DebugDraw : public Node2D {
 	GDCLASS(DebugDraw, Node2D)
 
 private:
-	const String FONT_PATH = "res://assets/font/font_debug.tres";
+	static constexpr const char *FONT_PATH = "res://assets/font/font_debug.tres";
 
 	static DebugDraw *singleton;
 	Ref<Font> font = Ref<Font>();

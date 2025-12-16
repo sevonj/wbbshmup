@@ -16,7 +16,7 @@ private:
 	static constexpr float COLL_H = 1.7;
 	static constexpr float COLL_R = 0.3;
 
-	const String MDL_PATH = "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.blend";
+	static constexpr const char *MDL_PATH = "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.blend";
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;

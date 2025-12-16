@@ -22,8 +22,8 @@ private:
 		Success,
 	};
 
-	const String TEX_INFOGRAPHIC_A_PATH = "res://assets/ui/tex_infographic_wbb_battery_cover.svg";
-	const String TEX_INFOGRAPHIC_B_PATH = "res://assets/ui/tex_infographic_wbb_sync_button.svg";
+	static constexpr const char *TEX_INFOGRAPHIC_A_PATH = "res://assets/ui/tex_infographic_wbb_battery_cover.svg";
+	static constexpr const char *TEX_INFOGRAPHIC_B_PATH = "res://assets/ui/tex_infographic_wbb_sync_button.svg";
 
 	WbbInput *wbb_input = nullptr;
 	WbbPromptState st = WbbPromptState::Init;

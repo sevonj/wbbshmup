@@ -15,7 +15,7 @@ private:
 	static constexpr double LIFE_DISTANCE = 100.;
 	static constexpr double SPEED = 5.;
 
-	const String MAT_PATH = "res://assets/materials/mat_fx_enmlaser.tres";
+	static constexpr const char *MAT_PATH = "res://assets/materials/mat_fx_enmlaser.tres";
 
 protected:
 	static void _bind_methods();

@@ -9,7 +9,7 @@ class UiHudRhinoAlert : public TextureRect {
 	GDCLASS(UiHudRhinoAlert, TextureRect)
 
 private:
-	const String TEX_PATH = "res://assets/ui/tex_hud_rhino_alert_offscreen.png";
+	static constexpr const char *TEX_PATH = "res://assets/ui/tex_hud_rhino_alert_offscreen.png";
 
 	EnmRhino *target = nullptr;
 

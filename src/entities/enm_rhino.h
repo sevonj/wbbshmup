@@ -22,7 +22,7 @@ private:
 	static constexpr double AI_GIVEUP_ANGLE = M_PI * 0.5;
 	static constexpr double LIFETIME = 10.0;
 
-	const String MDL_PATH = "res://assets/entities/enm_rhino/mdl_enm_rhino.blend";
+	static constexpr const char *MDL_PATH = "res://assets/entities/enm_rhino/mdl_enm_rhino.blend";
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;
