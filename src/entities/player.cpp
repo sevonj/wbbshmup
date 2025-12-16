@@ -50,6 +50,7 @@ Player::Player() {
 }
 
 Player::~Player() {
+	Game::set_player(nullptr);
 }
 
 void Player::_ready() {
