@@ -29,7 +29,7 @@ void StagePathGrid::rebuild_mesh(Ref<Curve3D> curve) {
 	st->begin(Mesh::PRIMITIVE_TRIANGLES);
 
 	Ref<Material> mat = ResourceLoader::get_singleton()->load(MAT_PATH, "Material");
-	if (mat != nullptr) {
+	if (mat.is_valid()) {
 		st->set_material(mat);
 	}
 

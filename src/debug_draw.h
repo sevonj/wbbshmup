@@ -12,7 +12,7 @@ private:
 	const String FONT_PATH = "res://assets/font/font_debug.tres";
 
 	static DebugDraw *singleton;
-	Ref<Font> font;
+	Ref<Font> font = Ref<Font>();
 
 	struct QueuePoint {
 		Vector2 position;

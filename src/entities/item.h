@@ -20,7 +20,7 @@ protected:
 	double lifetimer = LIFETIME;
 
 	CollisionShape3D *coll;
-	Ref<SphereShape3D> coll_sphere = nullptr;
+	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
 
 	static void _bind_methods();
 

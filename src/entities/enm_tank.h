@@ -23,7 +23,7 @@ private:
 	Node3D *mdl = nullptr;
 	Node3D *mdl_snoot = nullptr;
 	CollisionShape3D *coll = nullptr;
-	Ref<SphereShape3D> coll_sphere = nullptr;
+	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
 
 	double t_since_fired = INFINITY;
 

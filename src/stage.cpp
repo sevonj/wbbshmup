@@ -169,7 +169,7 @@ void Stage::tool_ensure_rail_path() {
 		rail_path->set_owner(get_tree()->get_edited_scene_root());
 	}
 
-	if (rail_path->get_curve() == nullptr) {
+	if (!rail_path->get_curve().is_valid()) {
 		rail_path->set_curve(memnew(Curve3D));
 	}
 	Ref<Curve3D> curve = rail_path->get_curve();

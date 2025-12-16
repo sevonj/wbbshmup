@@ -101,7 +101,7 @@ void UiMenuWbbConnectPrompt::setup_layout() {
 	infographic_a->set_expand_mode(TextureRect::EXPAND_IGNORE_SIZE);
 	infographic_a->set_stretch_mode(TextureRect::STRETCH_KEEP_ASPECT_CENTERED);
 	Ref<Texture2D> infographic_a_tex = godot::ResourceLoader::get_singleton()->load(TEX_INFOGRAPHIC_A_PATH, "ImageTexture");
-	if (infographic_a_tex != nullptr) {
+	if (infographic_a_tex.is_valid()) {
 		infographic_a->set_texture(infographic_a_tex);
 	}
 	infographic_a->set_h_size_flags(SIZE_EXPAND_FILL);
@@ -111,7 +111,7 @@ void UiMenuWbbConnectPrompt::setup_layout() {
 	infographic_b->set_expand_mode(TextureRect::EXPAND_IGNORE_SIZE);
 	infographic_b->set_stretch_mode(TextureRect::STRETCH_KEEP_ASPECT_CENTERED);
 	Ref<Texture2D> infographic_b_tex = godot::ResourceLoader::get_singleton()->load(TEX_INFOGRAPHIC_B_PATH, "ImageTexture");
-	if (infographic_b_tex != nullptr) {
+	if (infographic_b_tex.is_valid()) {
 		infographic_b->set_texture(infographic_b_tex);
 	}
 	infographic_b->set_h_size_flags(SIZE_EXPAND_FILL);

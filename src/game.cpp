@@ -10,14 +10,14 @@ Player *Game::player = nullptr;
 Stage *Game::stage = nullptr;
 
 Game *Game::get_singleton() {
-	if (unlikely(singleton == nullptr)) {
+	if (unlikely(!singleton)) {
 		singleton = memnew(Game);
 	}
 	return singleton;
 }
 
 Game::Game() {
-	CRASH_COND(singleton != nullptr);
+	CRASH_COND(singleton);
 	singleton = this;
 }
 

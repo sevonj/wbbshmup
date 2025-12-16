@@ -26,7 +26,7 @@ EnmTank::~EnmTank() {}
 
 void EnmTank::setup_model() {
 	Ref<PackedScene> mdl_res = ResourceLoader::get_singleton()->load(MDL_PATH, "PackedScene");
-	if (mdl_res != nullptr) {
+	if (mdl_res.is_valid()) {
 		mdl = (Node3D *)mdl_res->instantiate();
 	} else {
 		mdl = Assets::instance_fallback_model();

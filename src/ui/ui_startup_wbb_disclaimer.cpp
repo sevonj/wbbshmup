@@ -7,16 +7,9 @@ namespace godot {
 void UiStartupWbbDisclaimer::_bind_methods() {
 }
 
-UiStartupWbbDisclaimer::UiStartupWbbDisclaimer() {
-	wbb_input = nullptr;
+UiStartupWbbDisclaimer::UiStartupWbbDisclaimer() {}
 
-	bgfill = nullptr;
-	bgtex = nullptr;
-	label = nullptr;
-}
-
-UiStartupWbbDisclaimer::~UiStartupWbbDisclaimer() {
-}
+UiStartupWbbDisclaimer::~UiStartupWbbDisclaimer() {}
 
 void UiStartupWbbDisclaimer::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {

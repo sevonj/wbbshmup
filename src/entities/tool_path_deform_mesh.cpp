@@ -301,7 +301,7 @@ void ToolPathDeformMesh::auto_rebuild() {
 /// @param value 0.0 and 1.0 map to path end and start.
 void ToolPathDeformMesh::set_start_offset_ratio(double value) {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		print_error(get_class_static(), ": Failed to get curve!");
 		return;
 	}
@@ -313,7 +313,7 @@ void ToolPathDeformMesh::set_start_offset_ratio(double value) {
 /// @return between 0.0 and 1.0. zero if no curve.
 double ToolPathDeformMesh::get_start_offset_ratio() {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		print_error(get_class_static(), ": Failed to get curve!");
 		return 0.;
 	}
@@ -324,7 +324,7 @@ double ToolPathDeformMesh::get_start_offset_ratio() {
 /// @param value 0.0 and 1.0 map to path start and end.
 void ToolPathDeformMesh::set_end_offset_ratio(double value) {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		print_error(get_class_static(), ": Failed to get curve!");
 		return;
 	}
@@ -336,7 +336,7 @@ void ToolPathDeformMesh::set_end_offset_ratio(double value) {
 /// @return between 0.0 and 1.0. zero if no curve.
 double ToolPathDeformMesh::get_end_offset_ratio() {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		print_error(get_class_static(), ": Failed to get curve!");
 		return 0.;
 	}
@@ -366,7 +366,7 @@ int32_t ToolPathDeformMesh::get_num_pieces() {
 
 void ToolPathDeformMesh::rebuild_mesh() {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		set_position(Vector3());
 		print_error(get_class_static(), ": Failed to get curve!");
 		return;

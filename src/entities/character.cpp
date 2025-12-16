@@ -43,7 +43,7 @@ void Character::set_hitflash(bool enable) {
 		if (!meshinst) {
 			continue;
 		}
-		if (enable && mat_hitflash != nullptr) {
+		if (enable && mat_hitflash.is_valid()) {
 			meshinst->set_material_override(mat_hitflash);
 		} else {
 			meshinst->set_material_override(Ref<Material>());

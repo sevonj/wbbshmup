@@ -19,7 +19,7 @@ void DebugDraw::_bind_methods() {
 }
 
 DebugDraw *DebugDraw::get_singleton() {
-	if (unlikely(singleton == nullptr)) {
+	if (unlikely(!singleton)) {
 		singleton = memnew(DebugDraw);
 		SceneTree *scene_tree = (SceneTree *)Engine::get_singleton()->get_main_loop();
 		scene_tree->get_current_scene()->add_child(singleton);
@@ -28,12 +28,12 @@ DebugDraw *DebugDraw::get_singleton() {
 }
 
 DebugDraw::DebugDraw() {
-	CRASH_COND(singleton != nullptr);
+	CRASH_COND(singleton);
 	singleton = this;
 }
 
 DebugDraw::~DebugDraw() {
-	CRASH_COND(singleton == nullptr);
+	CRASH_COND(!singleton);
 	singleton = nullptr;
 }
 

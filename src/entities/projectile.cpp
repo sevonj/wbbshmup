@@ -35,7 +35,7 @@ void Projectile::_process(double delta) {
 	}
 
 	if (config::debug_draw_colliders) {
-		if (coll_sphere == nullptr) {
+		if (!coll_sphere.is_valid()) {
 			DebugDraw::draw_sphere3d(get_global_position(), COLL_R, COLOR_DEBUG_ERROR);
 		} else {
 			DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);

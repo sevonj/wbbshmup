@@ -26,7 +26,7 @@ private:
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;
-	Ref<SphereShape3D> coll_sphere = nullptr;
+	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
 
 	bool launched = false;
 	bool gave_up = false;

@@ -20,7 +20,7 @@ WbbInput *WbbInput::get_singleton() {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		print_error("Something loaded WbbInput in editor!");
 	}
-	if (unlikely(singleton == nullptr)) {
+	if (unlikely(!singleton)) {
 		singleton = memnew(WbbInput);
 		SceneTree *scene_tree = (SceneTree *)Engine::get_singleton()->get_main_loop();
 		scene_tree->get_current_scene()->add_child(singleton);
@@ -29,12 +29,12 @@ WbbInput *WbbInput::get_singleton() {
 }
 
 WbbInput::WbbInput() {
-	CRASH_COND(singleton != nullptr);
+	CRASH_COND(singleton);
 	singleton = this;
 }
 
 WbbInput::~WbbInput() {
-	CRASH_COND(singleton == nullptr);
+	CRASH_COND(!singleton);
 	singleton = nullptr;
 }
 
@@ -99,8 +99,8 @@ void WbbInput::_physics_process(double delta) {
 }
 
 void WbbInput::try_connect() {
-	if (wiimotes == nullptr) {
-		print_line("try_connect(): wiimotes = nullptr");
+	if (!wiimotes) {
+		print_line("try_connect(): !wiimotes");
 		return;
 	}
 	int32_t found = wiiuse_find(wiimotes, MAX_WIIMOTES, 5);

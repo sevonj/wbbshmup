@@ -34,7 +34,7 @@ void ProjectileEnmGeneric::setup_model() {
 	mdl->set_name("mdl");
 
 	Ref<Material> mat = ResourceLoader::get_singleton()->load(MAT_PATH, "Material");
-	if (mat != nullptr) {
+	if (mat.is_valid()) {
 		sphere->set_material(mat);
 	}
 

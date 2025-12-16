@@ -63,7 +63,7 @@ void AnimPathFollow::_ready() {
 
 void AnimPathFollow::_process(double delta) {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		set_position(Vector3());
 		if (running) {
 			print_error(get_class_static(), ": Failed to get curve!");
@@ -114,7 +114,7 @@ void AnimPathFollow::_process(double delta) {
 /// @return between 0.0 and 1.0. zero if no curve.
 double AnimPathFollow::get_progress_ratio() {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		print_error(get_class_static(), ": Failed to get curve!");
 		return 0.;
 	}
@@ -125,7 +125,7 @@ double AnimPathFollow::get_progress_ratio() {
 /// @param value 0.0 and 1.0 map to path start and end.
 void AnimPathFollow::set_progress_ratio(double value) {
 	Ref<Curve3D> curve = get_curve();
-	if (curve == nullptr) {
+	if (!curve.is_valid()) {
 		print_error(get_class_static(), ": Failed to get curve!");
 		return;
 	}

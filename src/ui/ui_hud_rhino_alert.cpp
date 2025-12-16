@@ -76,7 +76,7 @@ void UiHudRhinoAlert::set_target(EnmRhino *value) {
 
 void UiHudRhinoAlert::setup_layout() {
 	Ref<Texture2D> tex = godot::ResourceLoader::get_singleton()->load(TEX_PATH, "ImageTexture");
-	if (tex != nullptr) {
+	if (tex.is_valid()) {
 		set_texture(tex);
 	}
 }

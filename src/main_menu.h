@@ -10,8 +10,8 @@ class MainMenu : public Node {
 	GDCLASS(MainMenu, Node)
 
 private:
-	UiMenuWbbConnectPrompt *wbb_connect_prompt;
-	Button *start_game_button;
+	UiMenuWbbConnectPrompt *wbb_connect_prompt = nullptr;
+	Button *start_game_button = nullptr;
 
 	void setup_layout();
 

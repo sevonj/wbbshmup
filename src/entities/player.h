@@ -29,7 +29,7 @@ private:
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;
-	Ref<SphereShape3D> coll_sphere = nullptr;
+	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
 
 	double fire_timer = 0.;
 	/// @brief On-rail velocity. Not used by this class, but added to velocity so enemies can track player velocity.

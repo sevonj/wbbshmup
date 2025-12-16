@@ -109,7 +109,7 @@ void UiStageBeginScreen::setup_layout() {
 
 	tex_stage_icon = memnew(TextureRect);
 	Ref<Texture2D> tex = godot::ResourceLoader::get_singleton()->load(tex_stage_icon_path, "ImageTexture");
-	if (tex != nullptr) {
+	if (tex.is_valid()) {
 		tex_stage_icon->set_texture(tex);
 	}
 	tex_stage_icon->set_expand_mode(TextureRect::EXPAND_IGNORE_SIZE);
