@@ -37,9 +37,11 @@ ios.release = {
 
 AiHint = "res://editor/icons/ai_hint.png"
 Character = "res://editor/icons/character.png"
+Cutscene = "res://editor/icons/cutscene.png"
 Enemy = "res://editor/icons/enemy.png"
 InfoEntSpawnPoint = "res://editor/icons/info_ent_spawn_point.png"
 InfoPlayerStart = "res://editor/icons/info_player_start.png"
 Room = "res://editor/icons/room.png"
 Stage = "res://editor/icons/stage.png"
+ToolStagePathMarker = "res://assets/materials/tex_tool_stage_marker.png"
 WpnStickyGun = "res://editor/icons/wpn_sticky_gun.png"
