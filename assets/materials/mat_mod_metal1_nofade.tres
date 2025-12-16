@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://c7q0t1ukig1ij" path="res://assets/materials/tex_mod_metal1.png" id="1_mvbmy"]
 
 [resource]
-cull_mode = 2
 shading_mode = 2
 disable_specular_occlusion = true
 vertex_color_use_as_albedo = true
