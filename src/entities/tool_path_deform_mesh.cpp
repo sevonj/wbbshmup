@@ -23,13 +23,25 @@ void ToolPathDeformMesh::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_cadence_str"), &ToolPathDeformMesh::get_cadence_str);
 	ClassDB::bind_method(D_METHOD("set_cadence_str"), &ToolPathDeformMesh::set_cadence_str);
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "cadence"), "set_cadence_str", "get_cadence_str");
+	ClassDB::bind_method(D_METHOD("get_start_offset"), &ToolPathDeformMesh::get_start_offset);
+	ClassDB::bind_method(D_METHOD("set_start_offset"), &ToolPathDeformMesh::set_start_offset);
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "start_offset"), "set_start_offset", "get_start_offset");
+	ClassDB::bind_method(D_METHOD("get_end_offset"), &ToolPathDeformMesh::get_end_offset);
+	ClassDB::bind_method(D_METHOD("set_end_offset"), &ToolPathDeformMesh::set_end_offset);
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "end_offset"), "set_end_offset", "get_end_offset");
+	ClassDB::bind_method(D_METHOD("get_start_offset_ratio"), &ToolPathDeformMesh::get_start_offset_ratio);
+	ClassDB::bind_method(D_METHOD("set_start_offset_ratio"), &ToolPathDeformMesh::set_start_offset_ratio);
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "start_offset_ratio", PROPERTY_HINT_RANGE, "0,1,0.01"), "set_start_offset_ratio", "get_start_offset_ratio");
+	ClassDB::bind_method(D_METHOD("get_end_offset_ratio"), &ToolPathDeformMesh::get_end_offset_ratio);
+	ClassDB::bind_method(D_METHOD("set_end_offset_ratio"), &ToolPathDeformMesh::set_end_offset_ratio);
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "end_offset_ratio", PROPERTY_HINT_RANGE, "0,1,0.01"), "set_end_offset_ratio", "get_end_offset_ratio");
 
 	ClassDB::bind_method(D_METHOD("has_start_cap"), &ToolPathDeformMesh::has_start_cap);
 	ClassDB::bind_method(D_METHOD("has_end_cap"), &ToolPathDeformMesh::has_end_cap);
 	ClassDB::bind_method(D_METHOD("get_num_pieces"), &ToolPathDeformMesh::get_num_pieces);
 
 	ClassDB::bind_method(D_METHOD("rebuild_mesh"), &ToolPathDeformMesh::rebuild_mesh);
-	ClassDB::bind_method(D_METHOD("on_curve_changed"), &ToolPathDeformMesh::on_curve_changed);
+	ClassDB::bind_method(D_METHOD("auto_rebuild"), &ToolPathDeformMesh::auto_rebuild);
 }
 
 ToolPathDeformMesh::ToolPathDeformMesh() {
@@ -48,7 +60,18 @@ void ToolPathDeformMesh::_enter_tree() {
 
 	Path3D *parent = cast_to<Path3D>(get_parent());
 	if (parent) {
-		parent->connect("curve_changed", Callable(this, "on_curve_changed"));
+		parent->connect("curve_changed", Callable(this, "auto_rebuild"));
+	}
+
+	/* Make mesh unique fix.
+	 * When the node is copied and pasted in the editor, the newly created instance keeps original refs.
+	 * We obviously don't want multiple PDMs fighting over the same mesh.
+	 * And also I hate having to remember to click "make unqiue" in the inspector.
+	 */
+	Ref<ArrayMesh> mesh = get_mesh();
+	if (mesh.is_valid()) {
+		mesh = mesh->duplicate();
+		set_mesh(mesh);
 	}
 }
 
@@ -57,14 +80,15 @@ void ToolPathDeformMesh::_exit_tree() {
 		return;
 	}
 	Node *parent = get_parent();
-	if (parent->is_connected("curve_changed", Callable(this, "on_curve_changed"))) {
-		parent->disconnect("curve_changed", (this, Callable(this, "on_curve_changed")));
+	if (parent->is_connected("curve_changed", Callable(this, "auto_rebuild"))) {
+		parent->disconnect("curve_changed", (this, Callable(this, "auto_rebuild")));
 	}
 }
 
 void ToolPathDeformMesh::set_pdm_asset(Ref<PackedScene> v) {
 	pdm_asset_packed = v;
 	pdm_asset = unpack_asset();
+	auto_rebuild();
 }
 
 Ref<Curve3D> ToolPathDeformMesh::get_curve() {
@@ -266,11 +290,57 @@ int32_t ToolPathDeformMesh::add_mesh(
 	return num_v_added;
 }
 
-/// @brief Auto-rebuild callback for curve_changed signal
-void ToolPathDeformMesh::on_curve_changed() {
+/// @brief Used by setters and curve_changed signal callback
+void ToolPathDeformMesh::auto_rebuild() {
 	if (enable_auto_rebuild) {
 		rebuild_mesh();
 	}
+}
+
+/// @brief Same as set_start_offset(), but adjusted to path length.
+/// @param value 0.0 and 1.0 map to path end and start.
+void ToolPathDeformMesh::set_start_offset_ratio(double value) {
+	Ref<Curve3D> curve = get_curve();
+	if (curve == nullptr) {
+		print_error(get_class_static(), ": Failed to get curve!");
+		return;
+	}
+	start_offset = value * curve->get_baked_length();
+	auto_rebuild();
+}
+
+/// @brief Same as get_start_offset(), but adjusted to path length.
+/// @return between 0.0 and 1.0. zero if no curve.
+double ToolPathDeformMesh::get_start_offset_ratio() {
+	Ref<Curve3D> curve = get_curve();
+	if (curve == nullptr) {
+		print_error(get_class_static(), ": Failed to get curve!");
+		return 0.;
+	}
+	return start_offset / curve->get_baked_length();
+}
+
+/// @brief Same as set_end_offset(), but adjusted to path length.
+/// @param value 0.0 and 1.0 map to path start and end.
+void ToolPathDeformMesh::set_end_offset_ratio(double value) {
+	Ref<Curve3D> curve = get_curve();
+	if (curve == nullptr) {
+		print_error(get_class_static(), ": Failed to get curve!");
+		return;
+	}
+	end_offset = value * curve->get_baked_length();
+	auto_rebuild();
+}
+
+/// @brief Same as get_end_offset(), but adjusted to path length.
+/// @return between 0.0 and 1.0. zero if no curve.
+double ToolPathDeformMesh::get_end_offset_ratio() {
+	Ref<Curve3D> curve = get_curve();
+	if (curve == nullptr) {
+		print_error(get_class_static(), ": Failed to get curve!");
+		return 0.;
+	}
+	return end_offset / curve->get_baked_length();
 }
 
 bool ToolPathDeformMesh::has_start_cap() {
@@ -315,7 +385,7 @@ void ToolPathDeformMesh::rebuild_mesh() {
 		return;
 	}
 
-	float total_len = curve->get_baked_length();
+	float total_len = curve->get_baked_length() - start_offset - end_offset;
 
 	Ref<PdmMesh> cap_start = pdm_asset->cap_start;
 	Ref<PdmMesh> cap_end = pdm_asset->cap_end;
@@ -335,10 +405,10 @@ void ToolPathDeformMesh::rebuild_mesh() {
 	cap_len *= cap_stretch_ratio;
 
 	double fill_length = total_len - cap_len;
-	double fill_start = 0.0;
+	double fill_start = start_offset;
 	double fill_end = fill_start + fill_length;
 	if (use_cap_start) {
-		fill_start = cap_start->aabb.size.z * cap_stretch_ratio;
+		fill_start += cap_start->aabb.size.z * cap_stretch_ratio;
 	}
 	if (use_cap_end) {
 		fill_end -= cap_end->aabb.size.z * cap_stretch_ratio;
@@ -373,16 +443,23 @@ void ToolPathDeformMesh::rebuild_mesh() {
 
 	Ref<SurfaceTool> st = memnew(SurfaceTool);
 	st->begin(Mesh::PRIMITIVE_TRIANGLES);
-	Ref<ArrayMesh> gen_mesh = memnew(ArrayMesh);
+	Ref<ArrayMesh> gen_mesh = get_mesh();
+	if (gen_mesh.is_valid()) {
+		gen_mesh->clear_surfaces();
+	} else {
+		gen_mesh = (Ref<ArrayMesh>)memnew(ArrayMesh);
+		set_mesh(gen_mesh);
+	}
+
 	int32_t num_v = 0;
 
 	if (use_cap_start) {
-		double path_offset = 0.0;
+		double path_offset = start_offset;
 		num_v += add_mesh(st, cap_start, cap_stretch_ratio, curve, path_offset, num_v);
 	}
 
 	if (use_cap_end) {
-		double path_offset = total_len - cap_end->aabb.size.z;
+		double path_offset = start_offset + total_len - cap_end->aabb.size.z;
 		num_v += add_mesh(st, cap_end, cap_stretch_ratio, curve, path_offset, num_v);
 	}
 
@@ -394,7 +471,7 @@ void ToolPathDeformMesh::rebuild_mesh() {
 	}
 
 	st->optimize_indices_for_cache();
-	set_mesh(st->commit());
+	st->commit(gen_mesh);
 }
 
 } //namespace godot
