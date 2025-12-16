@@ -32,6 +32,27 @@ void Stage::_notification(int what) {
 			ensure_nodes();
 			break;
 
+		case NOTIFICATION_PROCESS: {
+			double delta = get_process_delta_time();
+			if (is_playing) {
+				intro_screen_timer -= delta;
+			}
+			bool intro_wait = intro_screen_timer > 0.;
+
+			rail_offset += delta * rail_speed;
+			Player *player = Game::get_player();
+			if (player) {
+				player->set_rail_vel(-rail_follow->get_basis().get_column(2) * rail_speed);
+				player->set_enabled(!intro_wait);
+			}
+
+			if (rail_follow) {
+				Transform3D sampled_xform = rail_path->get_curve()->sample_baked_with_rotation(rail_offset);
+				sampled_xform.origin += rail_path->get_global_position();
+				rail_follow->set_transform(sampled_xform);
+			}
+		} break;
+
 		default:
 			break;
 	}
@@ -65,24 +86,6 @@ void Stage::_process(double delta) {
 	if (Input::get_singleton()->is_key_pressed(KEY_F8)) {
 		get_tree()->quit();
 		return;
-	}
-
-	if (is_playing) {
-		intro_screen_timer -= delta;
-	}
-	bool intro_wait = intro_screen_timer > 0.;
-
-	rail_offset += delta * rail_speed;
-	Player *player = Game::get_player();
-	if (player) {
-		player->set_rail_vel(-rail_follow->get_basis().get_column(2) * rail_speed);
-		player->set_enabled(!intro_wait);
-	}
-
-	if (rail_follow) {
-		Transform3D sampled_xform = rail_path->get_curve()->sample_baked_with_rotation(rail_offset);
-		sampled_xform.origin += rail_path->get_global_position();
-		rail_follow->set_transform(sampled_xform);
 	}
 }
 
