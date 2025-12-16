@@ -2,7 +2,6 @@
 
 //#include <entities/camera_rig_tp.h>
 #include <entities/camera_rig_follow.h>
-#include <entities/player.h>
 #include <game.h>
 #include <ui/ui_debug_wbbstatus.h>
 #include <ui/ui_stage_begin_screen.h>
@@ -14,6 +13,7 @@
 namespace godot {
 
 void Stage::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("_get_player"), &Stage::_get_player);
 	ClassDB::bind_method(D_METHOD("_tool_rebuild_grid"), &Stage::tool_rebuild_grid);
 	ClassDB::bind_method(D_METHOD("get_stage_start"), &Stage::get_stage_start);
 	ClassDB::bind_method(D_METHOD("get_stage_end"), &Stage::get_stage_end);
@@ -125,6 +125,15 @@ Transform3D Stage::get_stage_end() {
 	return xform;
 }
 
+Transform3D Stage::get_stage_xform_at(double time) {
+	time += INTRO_SCREEN_DURATION;
+	tool_ensure_rail_path();
+	double offset = time * rail_speed;
+	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(offset);
+	xform.origin += rail_path->get_global_position();
+	return xform;
+}
+
 // void Stage::find_player_starts() {
 // 	TypedArray<Node> stack;
 // 	stack.push_back(local_entities);
@@ -140,6 +149,10 @@ Transform3D Stage::get_stage_end() {
 // 		print_error("Stage has no InfoPlayerStart! Spawning player at 0,0,0 instead.");
 // 	}
 // }
+
+Player *Stage::_get_player() {
+	return Game::get_player();
+}
 
 /// @brief Ensures that rail_path exists and is safe to use
 void Stage::tool_ensure_rail_path() {

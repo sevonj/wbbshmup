@@ -11,7 +11,7 @@ class ProjectilePlayerLaser : public Projectile {
 	GDCLASS(ProjectilePlayerLaser, Projectile)
 
 private:
-	static constexpr double LIFE_DISTANCE = 200.;
+	static constexpr double LIFE_DISTANCE = 100.;
 	static constexpr double SPEED = 80.;
 
 	const String MAT_PATH = "res://assets/materials/mat_fx_playerlaser.tres";

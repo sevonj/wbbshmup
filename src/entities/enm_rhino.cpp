@@ -69,7 +69,7 @@ void EnmRhino::_process(double delta) {
 	}
 
 	Player *player = Game::get_player();
-	if (player && !gave_up) {
+	if (player && player->get_enabled() && !gave_up) {
 		Vector3 origin = get_global_position();
 		Vector3 player_pos = player->get_global_position();
 		if (origin.distance_to(player_pos) > AI_ALERT_RADIUS) {

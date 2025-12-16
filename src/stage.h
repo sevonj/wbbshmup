@@ -2,6 +2,7 @@
 
 //#include <entities/info_player_start.h>
 #include <consts.h>
+#include <entities/player.h>
 #include <entities/stage_path_grid.h>
 #include <godot_cpp/classes/control.hpp>
 #include <godot_cpp/classes/marker3d.hpp>
@@ -36,6 +37,8 @@ private:
 	bool is_playing = false;
 
 	double intro_screen_timer = INTRO_SCREEN_DURATION;
+
+	Player *_get_player();
 
 	void tool_ensure_rail_path();
 	void tool_ensure_rail_grid();
