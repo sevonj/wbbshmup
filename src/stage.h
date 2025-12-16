@@ -66,6 +66,7 @@ public:
 
 	Transform3D get_stage_start();
 	Transform3D get_stage_end();
+	Transform3D get_stage_xform_at(double time);
 };
 
 } //namespace godot
