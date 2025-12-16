@@ -66,7 +66,7 @@ void CameraRigOrbit::_process_camera_arm(double delta) {
 
 		Input *input = Input::get_singleton();
 		bool strafing = input->is_action_pressed("strafe");
-		Vector3 player_position = player->get_focus_point() + Vector3(0, 0.4, 0);
+		Vector3 player_position = player->get_visual_focus_point() + Vector3(0, 0.4, 0);
 		Vector3 camera_position = camera->get_global_position();
 		Vector3 rig_position = get_global_position();
 		Basis rig_basis = get_global_basis();

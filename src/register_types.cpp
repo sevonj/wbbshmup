@@ -12,7 +12,7 @@
 #include <entities/camera_rig_tp.h>
 #include <entities/character.h>
 #include <entities/enemy.h>
-#include <entities/enm_boss_cocklobster.h>
+#include <entities/enm_boss_clobster.h>
 #include <entities/enm_rhino.h>
 #include <entities/enm_tank.h>
 #include <entities/item.h>
@@ -48,7 +48,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(CameraRigTp);
 	GDREGISTER_CLASS(Character);
 	GDREGISTER_CLASS(Enemy);
-	GDREGISTER_CLASS(EnmBossCocklobster);
+	GDREGISTER_CLASS(EnmBossClobster);
 	GDREGISTER_CLASS(EnmRhino);
 	GDREGISTER_CLASS(EnmTank);
 	GDREGISTER_CLASS(Item);

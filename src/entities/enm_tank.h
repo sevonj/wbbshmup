@@ -12,40 +12,41 @@ namespace godot {
 class EnmTank : public Enemy {
 	GDCLASS(EnmTank, Enemy)
 
-private:
 	static constexpr double COLL_R = 1.0;
+	static constexpr const char *MDL_PATH = "res://assets/entities/enm_tank/mdl_enm_tank.blend";
+
 	static constexpr int32_t MAX_HP = 20;
-	static constexpr double AI_ALERT_RADIUS = 100.;
+
+	static constexpr double AI_ALERT_RADIUS = 100.0;
 	static constexpr double AI_FIRE_RATE = 0.3;
 
-	static constexpr const char *MDL_PATH = "res://assets/entities/enm_tank/mdl_enm_tank.blend";
+	double t_since_fired = 1.0 / AI_FIRE_RATE;
 
 	Node3D *mdl = nullptr;
 	Node3D *mdl_snoot = nullptr;
 	CollisionShape3D *coll = nullptr;
 	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
 
-	double t_since_fired = INFINITY;
-
-	void setup_model();
-	void setup_collider();
-
-	void fire();
-
 protected:
 	static void _bind_methods();
 
 public:
 	EnmTank();
-	~EnmTank();
+	~EnmTank() override;
 
 	void _ready() override;
 	void _process(double delta) override;
 
 	void die() override;
 
-	String get_display_name() override;
-	String get_editor_model_path() override;
+	String get_display_name() const override { return "Tonk"; }
+	String get_editor_model_path() const override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
+
+private:
+	void setup_model();
+	void setup_collider();
+
+	void fire();
 };
 
 } //namespace godot

@@ -11,13 +11,12 @@ namespace godot {
 class Enemy : public Character {
 	GDCLASS(Enemy, Character)
 
-private:
 protected:
 	static void _bind_methods();
 
 public:
 	Enemy();
-	~Enemy();
+	~Enemy() override;
 
 	virtual void _ready() override;
 };

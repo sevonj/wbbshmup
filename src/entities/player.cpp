@@ -12,38 +12,9 @@
 #include <godot_cpp/classes/sphere_shape3d.hpp>
 #include <godot_cpp/variant/variant.hpp>
 
-void Player::setup_model() {
-	Ref<PackedScene> mdl_res = ResourceLoader::get_singleton()->load(MDL_PATH, "PackedScene");
-	if (mdl_res.is_valid()) {
-		mdl = (Node3D *)mdl_res->instantiate();
-	} else {
-		mdl = Assets::instance_fallback_model();
-	}
-	mdl->set_name("mdl");
-	add_child(mdl);
-}
+namespace godot {
 
-void Player::setup_collider() {
-	set_collision_layer(COL_LAYER_PLAYER);
-	set_collision_mask(COL_MASK_PLAYER);
-
-	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
-	coll_sphere->set_radius(COLL_R);
-	coll = memnew(CollisionShape3D);
-	coll->set_shape(coll_sphere);
-	coll->set_name("coll");
-	add_child(coll);
-}
-
-void Player::fire() {
-	ProjectilePlayerLaser *projectile = memnew(ProjectilePlayerLaser);
-	Game::get_stage()->add_entity(projectile);
-	projectile->set_global_position(get_global_position());
-	projectile->set_global_rotation(get_global_rotation());
-}
-
-void Player::_bind_methods() {
-}
+void Player::_bind_methods() {}
 
 Player::Player() {
 	Game::set_player(this);
@@ -89,17 +60,9 @@ void Player::_process(double delta) {
 	Vector3 pos = get_position();
 	Vector3 old_pos = pos;
 
-	pos += input_dir * delta * 12.;
-	if (pos.x > MAX_X) {
-		pos.x = MAX_X;
-	} else if (pos.x < -MAX_X) {
-		pos.x = -MAX_X;
-	}
-	if (pos.z > MAX_Z) {
-		pos.z = MAX_Z;
-	} else if (pos.z < -MAX_Z) {
-		pos.z = -MAX_Z;
-	}
+	pos += input_dir * delta * LEAN_MOVE_SPEED;
+	pos.x = Math::clamp(pos.x, -MAX_X, MAX_X);
+	pos.z = Math::clamp(pos.z, -MAX_Z, MAX_Z);
 	set_position(pos);
 
 	// We don't actually use velocity here, but some enemies do to predict player movement.
@@ -111,34 +74,46 @@ void Player::_physics_process(double delta) {
 		return;
 	}
 
-	fire_timer -= delta * FIRE_RATE;
+	t_since_fired += delta;
 
 	if (!enabled) {
 		return;
 	}
 
-	if (fire_timer <= 0) {
+	if (t_since_fired >= 1.0 / FIRE_RATE) {
 		fire();
-		fire_timer = 1;
+		t_since_fired = 0.0;
 	}
 }
 
-void Player::set_rail_vel(Vector3 value) {
-	rail_vel = value;
+void Player::setup_model() {
+	Ref<PackedScene> mdl_res = ResourceLoader::get_singleton()->load(MDL_PATH, "PackedScene");
+	if (mdl_res.is_valid()) {
+		mdl = cast_to<Node3D>(mdl_res->instantiate());
+	} else {
+		mdl = Assets::instance_fallback_model();
+	}
+	mdl->set_name("mdl");
+	add_child(mdl);
 }
 
-bool Player::get_enabled() {
-	return enabled;
+void Player::setup_collider() {
+	set_collision_layer(COL_LAYER_PLAYER);
+	set_collision_mask(COL_MASK_PLAYER);
+
+	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
+	coll_sphere->set_radius(COLL_R);
+	coll = memnew(CollisionShape3D);
+	coll->set_shape(coll_sphere);
+	coll->set_name("coll");
+	add_child(coll);
 }
 
-void Player::set_enabled(bool value) {
-	enabled = value;
+void Player::fire() {
+	ProjectilePlayerLaser *projectile = memnew(ProjectilePlayerLaser);
+	Game::get_stage()->add_entity(projectile);
+	projectile->set_global_position(get_global_position());
+	projectile->set_global_rotation(get_global_rotation());
 }
 
-bool Player::get_noclip() {
-	return noclip;
-}
-
-void Player::set_noclip(bool value) {
-	noclip = value;
-}
+} //namespace godot

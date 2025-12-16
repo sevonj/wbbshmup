@@ -8,15 +8,17 @@
 
 namespace godot {
 
+/// @brief Base class that provides health and other character related functionality.
 class Character : public CharacterBody3D {
 	GDCLASS(Character, CharacterBody3D)
 
-private:
+	static constexpr int32_t DEFAULT_HP = 100;
+
 protected:
 	static constexpr double HITFLASH_DURATION = 0.1;
 
-	int32_t max_health = 100;
-	int32_t health = 100;
+	int32_t max_hp = DEFAULT_HP;
+	int32_t hp = DEFAULT_HP;
 	bool invincible = false;
 	bool hitflash_enabled = true;
 
@@ -24,27 +26,35 @@ protected:
 
 	static void _bind_methods();
 
-	void trigger_hitflash();
-	void set_hitflash(bool enabled);
-
 public:
 	Character();
-	~Character();
+	~Character() override;
 
-	virtual void _ready() override;
+	void set_max_hp(int32_t value) {
+		max_hp = value;
+		hp = Math::clamp(hp, 0, max_hp);
+	}
+	int32_t get_max_hp() const {
+		return max_hp;
+	}
+	void set_hp(int32_t value) {
+		hp = Math::clamp(value, 0, max_hp);
+	}
+	int32_t get_hp() const {
+		return hp;
+	}
 
-	virtual int32_t get_max_health() final;
-	virtual void set_max_health(int32_t value) final;
-	virtual int32_t get_health() final;
-	virtual void set_health(int32_t value) final;
-	virtual void add_health(int32_t value);
+	virtual void add_hp(int32_t value);
 	virtual void take_damage(DamageInfo damage);
 	virtual void die();
 
-	virtual Vector3 get_focus_point();
+	virtual Vector3 get_visual_focus_point() const { return get_global_position(); }
+	virtual String get_display_name() const { return get_class(); }
+	virtual String get_editor_model_path() const { return "res://assets/models/mdl_debug_error.obj"; }
 
-	virtual String get_display_name();
-	virtual String get_editor_model_path();
+protected:
+	void trigger_hitflash();
+	void set_hitflash(bool enabled);
 };
 
 } //namespace godot

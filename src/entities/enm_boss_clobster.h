@@ -8,35 +8,36 @@
 namespace godot {
 
 /// @brief Part cock. Part lobster. The future of bossfights.
-class EnmBossCocklobster : public Enemy {
-	GDCLASS(EnmBossCocklobster, Enemy)
+class EnmBossClobster : public Enemy {
+	GDCLASS(EnmBossClobster, Enemy)
 
-private:
-	const float speed = 0.5;
 	static constexpr float COLL_H = 1.7;
 	static constexpr float COLL_R = 0.3;
-
 	static constexpr const char *MDL_PATH = "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.blend";
+
+	static constexpr float SPEED = 0.5;
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;
-
-	void setup_model();
-	void setup_collider();
 
 protected:
 	static void _bind_methods();
 
 public:
-	EnmBossCocklobster();
-	~EnmBossCocklobster();
+	EnmBossClobster();
+	~EnmBossClobster() override;
 
 	void _ready() override;
-	void create_bossbar();
 	void _process(double delta) override;
 
-	String get_display_name() override;
-	String get_editor_model_path() override;
+	void create_bossbar();
+
+	String get_display_name() const override { return "Cock Lobster"; }
+	String get_editor_model_path() const override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
+
+private:
+	void setup_model();
+	void setup_collider();
 };
 
 } //namespace godot

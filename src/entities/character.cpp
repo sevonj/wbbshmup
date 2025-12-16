@@ -9,19 +9,53 @@
 namespace godot {
 
 void Character::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_max_hp"), &Character::get_max_hp);
+	ClassDB::bind_method(D_METHOD("set_max_hp"), &Character::set_max_hp);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_hp"), "set_max_hp", "get_max_hp");
+	ClassDB::bind_method(D_METHOD("get_hp"), &Character::get_hp);
+	ClassDB::bind_method(D_METHOD("set_hp"), &Character::set_hp);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "set_hp", "get_hp");
+
+	ClassDB::bind_method(D_METHOD("get_visual_focus_point"), &Character::get_visual_focus_point);
+	ClassDB::bind_method(D_METHOD("get_display_name"), &Character::get_display_name);
+	ClassDB::bind_method(D_METHOD("get_editor_model_path"), &Character::get_editor_model_path);
+
 	ADD_SIGNAL(MethodInfo("died"));
 	ADD_SIGNAL(MethodInfo("damaged"));
+}
 
-	ClassDB::bind_method(D_METHOD("get_max_health"), &Character::get_max_health);
-	ClassDB::bind_method(D_METHOD("set_max_health"), &Character::set_max_health);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_health", PROPERTY_HINT_NONE, "Max health"), "set_max_health", "get_max_health");
+Character::Character() {
+	if (!Engine::get_singleton()->is_editor_hint()) {
+		mat_hitflash = ResourceLoader::get_singleton()->load("res://assets/materials/mat_fx_hitflash.tres", "Material");
+	}
+}
 
-	ClassDB::bind_method(D_METHOD("get_health"), &Character::get_health);
-	ClassDB::bind_method(D_METHOD("set_health"), &Character::set_health);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "health", PROPERTY_HINT_NONE, "Character health"), "set_health", "get_health");
+Character::~Character() {}
 
-	godot::ClassDB::bind_method(godot::D_METHOD("get_editor_model_path"), &Character::get_editor_model_path);
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "editor_model_path"), "", "get_editor_model_path");
+void Character::add_hp(int32_t value) {
+	hp = Math::clamp(hp + value, 0, max_hp);
+}
+
+void Character::take_damage(DamageInfo damage) {
+	if (invincible) {
+		print_line(get_class(), ": iframe dmg cancel");
+		return;
+	}
+	if (hitflash_enabled) {
+		trigger_hitflash();
+	}
+	print_line(get_class(), ": took dmg: '", damage.value, "'");
+	hp = Math::clamp(hp - damage.value, 0, max_hp);
+	emit_signal("damaged");
+	if (hp == 0) {
+		die();
+	}
+}
+
+void Character::die() {
+	emit_signal("died");
+	print_line(get_class(), ": died");
+	queue_free();
 }
 
 void Character::trigger_hitflash() {
@@ -50,77 +84,4 @@ void Character::set_hitflash(bool enable) {
 		}
 	}
 }
-
-Character::Character() {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-
-	mat_hitflash = ResourceLoader::get_singleton()->load("res://assets/materials/mat_fx_hitflash.tres", "Material");
-}
-
-Character::~Character() {}
-
-void Character::_ready() {
-}
-
-int32_t Character::get_max_health() {
-	return max_health;
-}
-
-void Character::set_max_health(int32_t value) {
-	max_health = value;
-	health = Math::clamp(health, 0, max_health);
-}
-
-int32_t Character::get_health() {
-	return health;
-}
-
-/// @brief Set health. Not considered damage or healing; shouldn't trigger a reaction.
-void Character::set_health(int32_t value) {
-	health = Math::clamp(value, 0, max_health);
-}
-
-/// @brief Add or remove health. Not considered damage or healing; shouldn't trigger a reaction.
-void Character::add_health(int32_t value) {
-	health = Math::clamp(health + value, 0, max_health);
-}
-
-/// @brief Treated as damage, even if the value is negative and character gains health.
-void Character::take_damage(DamageInfo damage) {
-	if (invincible) {
-		print_line(get_class(), " invincible");
-		return;
-	}
-	if (hitflash_enabled) {
-		trigger_hitflash();
-	}
-	print_line(get_class(), " took dmg: ", damage.value);
-	health = Math::clamp(health - damage.value, 0, max_health);
-	emit_signal("damaged");
-	if (health == 0) {
-		die();
-	}
-}
-
-void Character::die() {
-	emit_signal("died");
-	print_line(get_class(), " died");
-	queue_free();
-}
-
-/// @brief Visual center point
-Vector3 Character::get_focus_point() {
-	return get_global_position();
-}
-
-String Character::get_display_name() {
-	return get_class();
-}
-
-String Character::get_editor_model_path() {
-	return "res://assets/models/mdl_debug_error.obj";
-}
-
 } //namespace godot

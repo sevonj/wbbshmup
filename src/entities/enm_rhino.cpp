@@ -20,7 +20,7 @@ namespace godot {
 void EnmRhino::_bind_methods() {}
 
 EnmRhino::EnmRhino() {
-	set_max_health(MAX_HP);
+	set_max_hp(MAX_HP);
 }
 
 EnmRhino::~EnmRhino() {}

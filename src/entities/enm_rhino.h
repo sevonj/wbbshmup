@@ -24,22 +24,6 @@ class EnmRhino : public Enemy {
 	static constexpr double AI_TURN_RATE = M_PI * SPEED * 0.01;
 	static constexpr double AI_GIVEUP_ANGLE = M_PI * 0.5;
 
-protected:
-	static void _bind_methods();
-
-public:
-	EnmRhino();
-	~EnmRhino();
-
-	void _ready() override;
-	void _process(double delta) override;
-
-	void die() override;
-
-	String get_display_name() override { return "Rhino Missile"; }
-	String get_editor_model_path() override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
-
-private:
 	bool has_launched = false;
 	bool has_lost_tgt = false;
 	double t_since_launch = 0.0;
@@ -48,6 +32,22 @@ private:
 	CollisionShape3D *coll = nullptr;
 	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
 
+protected:
+	static void _bind_methods();
+
+public:
+	EnmRhino();
+	~EnmRhino() override;
+
+	void _ready() override;
+	void _process(double delta) override;
+
+	void die() override;
+
+	String get_display_name() const override { return "Rhino Missile"; }
+	String get_editor_model_path() const override { return "res://assets/characters/enm_boss_powerpark/mdl_powerpark_dummy.obj"; }
+
+private:
 	void setup_model();
 	void setup_collider();
 };
