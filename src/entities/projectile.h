@@ -37,7 +37,7 @@ protected:
 
 	Node3D *mdl;
 	CollisionShape3D *coll;
-	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
+	Ref<SphereShape3D> coll_sphere;
 };
 
 } //namespace godot

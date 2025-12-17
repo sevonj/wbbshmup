@@ -28,7 +28,7 @@ class DebugDraw : public Node2D {
 	static constexpr const char *FONT_PATH = "res://assets/font/font_debug.tres";
 
 	static DebugDraw *singleton;
-	Ref<Font> font = Ref<Font>();
+	Ref<Font> font;
 
 	Vector<QueuePoint> point_queue;
 	Vector<QueueLine> line_queue;

@@ -22,7 +22,7 @@ protected:
 	bool invincible = false;
 	bool hitflash_enabled = true;
 
-	Ref<Material> mat_hitflash = Ref<Material>();
+	Ref<Material> mat_hitflash;
 
 	static void _bind_methods();
 

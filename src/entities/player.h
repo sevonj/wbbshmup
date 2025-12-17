@@ -33,7 +33,7 @@ class Player : public Character {
 
 	Node3D *mdl = nullptr;
 	CollisionShape3D *coll = nullptr;
-	Ref<SphereShape3D> coll_sphere = Ref<SphereShape3D>();
+	Ref<SphereShape3D> coll_sphere;
 
 protected:
 	static void _bind_methods();
