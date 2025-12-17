@@ -10,8 +10,8 @@ namespace godot {
 class CameraRigOrbit : public CameraRig {
 	GDCLASS(CameraRigOrbit, CameraRig)
 
-	const double MIN_DIST = 3.0;
-	const double MAX_DIST = 30.0;
+	static constexpr double MIN_DIST = 3.0;
+	static constexpr double MAX_DIST = 30.0;
 
 	Node3D *pivot = nullptr;
 

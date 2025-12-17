@@ -10,7 +10,7 @@ namespace godot {
 class CameraRigFollow : public CameraRig {
 	GDCLASS(CameraRigFollow, CameraRig)
 
-	const Vector3 CAMERA_OFFSET = Vector3(0.0, 8.0, 13.25);
+	static inline const Vector3 CAMERA_OFFSET = Vector3(0.0, 8.0, 13.25);
 
 	Node3D *target = nullptr;
 

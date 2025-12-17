@@ -30,11 +30,11 @@ typedef enum {
 	COL_MASK_ITEMS = COL_LAYER_PLAYER,
 } CollisionMasks;
 
-const AABB DEFAULT_STAGE_BOUNDS = AABB(
+inline const AABB DEFAULT_STAGE_BOUNDS = AABB(
 		Vector3(-512, -64, -512),
 		Vector3(1024, 512, 1024));
 
-const Color COLOR_DEBUG_COLL = Color(0., 1., 0.);
-const Color COLOR_DEBUG_ERROR = Color(1., 0., 1.);
+inline const Color COLOR_DEBUG_COLL = Color(0., 1., 0.);
+inline const Color COLOR_DEBUG_ERROR = Color(1., 0., 1.);
 
 } //namespace godot
