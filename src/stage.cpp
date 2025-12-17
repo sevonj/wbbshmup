@@ -15,9 +15,10 @@ namespace godot {
 void Stage::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_get_player"), &Stage::_get_player);
 	ClassDB::bind_method(D_METHOD("_tool_rebuild_grid"), &Stage::tool_rebuild_grid);
-	ClassDB::bind_method(D_METHOD("sample_rail_start"), &Stage::sample_rail_start);
-	ClassDB::bind_method(D_METHOD("sample_rail_end"), &Stage::sample_rail_end);
 	ClassDB::bind_method(D_METHOD("sample_rail_at_time"), &Stage::sample_rail_at_time);
+	ClassDB::bind_method(D_METHOD("sample_rail_at_gameplay_time"), &Stage::sample_rail_at_gameplay_time);
+	ClassDB::bind_method(D_METHOD("sample_rail_at_gameplay_start"), &Stage::sample_rail_at_gameplay_start);
+	ClassDB::bind_method(D_METHOD("sample_rail_at_gameplay_end"), &Stage::sample_rail_at_gameplay_end);
 	ClassDB::bind_method(D_METHOD("spawn_player"), &Stage::spawn_player);
 	ClassDB::bind_method(D_METHOD("add_entity"), &Stage::add_entity);
 	ClassDB::bind_method(D_METHOD("add_ui"), &Stage::add_ui);
@@ -45,17 +46,9 @@ void Stage::_notification(int what) {
 			}
 			bool intro_wait = intro_screen_timer > 0.;
 
-			rail_follow_offset += delta * rail_speed;
 			Player *player = Game::get_player();
 			if (player) {
-				player->set_rail_vel(-rail_follow->get_basis().get_column(2) * rail_speed);
-				player->set_enabled(!intro_wait);
-			}
-
-			if (rail_follow) {
-				Transform3D sampled_xform = rail_path->get_curve()->sample_baked_with_rotation(rail_follow_offset);
-				sampled_xform.origin += rail_path->get_global_position();
-				rail_follow->set_transform(sampled_xform);
+				player->set_input_enabled(!intro_wait);
 			}
 		} break;
 
@@ -102,7 +95,24 @@ void Stage::add_ui(Control *ui) {
 	local_ui->add_child(ui);
 }
 
-Transform3D Stage::sample_rail_start() {
+Transform3D Stage::sample_rail_at_time(double time) {
+	ensure_rail_path();
+	double offset = time * rail_speed;
+	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(offset);
+	xform.origin += rail_path->get_global_position();
+	return xform;
+}
+
+Transform3D Stage::sample_rail_at_gameplay_time(double time) {
+	time += INTRO_SCREEN_DURATION;
+	ensure_rail_path();
+	double offset = time * rail_speed;
+	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(offset);
+	xform.origin += rail_path->get_global_position();
+	return xform;
+}
+
+Transform3D Stage::sample_rail_at_gameplay_start() {
 	ensure_rail_path();
 	double start_off = DEFAULT_RAIL_SPEED * INTRO_SCREEN_DURATION;
 	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(start_off);
@@ -110,19 +120,10 @@ Transform3D Stage::sample_rail_start() {
 	return xform;
 }
 
-Transform3D Stage::sample_rail_end() {
+Transform3D Stage::sample_rail_at_gameplay_end() {
 	ensure_rail_path();
 	double end_off = rail_path->get_curve()->get_baked_length();
 	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(end_off);
-	xform.origin += rail_path->get_global_position();
-	return xform;
-}
-
-Transform3D Stage::sample_rail_at_time(double time) {
-	time += INTRO_SCREEN_DURATION;
-	ensure_rail_path();
-	double offset = time * rail_speed;
-	Transform3D xform = rail_path->get_curve()->sample_baked_with_rotation(offset);
 	xform.origin += rail_path->get_global_position();
 	return xform;
 }
@@ -143,12 +144,8 @@ void Stage::spawn_player() {
 	CameraRigFollow *camera = memnew(CameraRigFollow);
 
 	player->connect("died", callable_mp(this, &Stage::on_player_death));
-	rail_follow_offset = 0.;
-	rail_follow = memnew(Marker3D);
-	rail_follow->add_child(player);
-	add_entity(rail_follow);
+	add_entity(player);
 
-	camera->set_target(rail_follow);
 	add_entity(camera);
 	camera->get_camera()->make_current();
 	is_playing = true;
@@ -159,9 +156,9 @@ void Stage::clear_player() {
 		return;
 	}
 
-	if (rail_follow) {
-		rail_follow->queue_free();
-		rail_follow = nullptr;
+	Player *player = Game::get_player();
+	if (player) {
+		player->queue_free();
 	}
 
 	CameraRig *camera = Game::get_current_camera();

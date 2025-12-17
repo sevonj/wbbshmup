@@ -18,7 +18,7 @@ void ToolStagePathMarker::_process(double delta) {
 	if (!stage) {
 		return;
 	}
-	set_transform(stage->sample_rail_at_time(time));
+	set_transform(stage->sample_rail_at_gameplay_time(time));
 }
 
 } //namespace godot

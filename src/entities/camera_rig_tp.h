@@ -6,17 +6,15 @@
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
-#define deg2rad Math_PI / 180.0;
-
 namespace godot {
 
 class CameraRigTp : public CameraRig {
 	GDCLASS(CameraRigTp, CameraRig)
 
 	static constexpr float FOLLOW_SPEED = 4.0;
-	static constexpr float PITCH_MAX_ANGLE = 45.0 * deg2rad;
-	static constexpr float PITCH_MIN_ANGLE = -60.0 * deg2rad;
-	static constexpr float PITCH_DEFAULT_ANGLE = -10.0 * deg2rad;
+	static constexpr float PITCH_MAX_ANGLE = 45.0 * DEG_TO_RAD;
+	static constexpr float PITCH_MIN_ANGLE = -60.0 * DEG_TO_RAD;
+	static constexpr float PITCH_DEFAULT_ANGLE = -10.0 * DEG_TO_RAD;
 	static constexpr float PITCH_RETURN_SPEED = 1.0;
 	static constexpr float CAMERA_DIST = 4.0;
 	static inline const Vector3 CAMERA_OFFSET = Vector3(0.0, 0.5, 0.0);

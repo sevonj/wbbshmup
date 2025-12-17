@@ -3,6 +3,7 @@
 #include <config.h>
 #include <entities/player.h>
 #include <game.h>
+#include <stage.h>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/input_event_mouse_motion.hpp>
 #include <godot_cpp/classes/physics_direct_space_state3d.hpp>
@@ -25,12 +26,19 @@ void CameraRigFollow::_process(double delta) {
 }
 
 void CameraRigFollow::_process_camera_arm(double delta) {
-	if (!target) {
+	Player *player = Game::get_player();
+	Stage *stage = Game::get_stage();
+	if (!player || !stage) {
 		return;
 	}
 
-	set_global_transform(target->get_global_transform());
+	const Transform3D rail_xform = stage->sample_rail_at_time(player->get_t_stage());
+	const Vector3 rail_offset_x = player->get_rail_offset() * Vector3(1., 0., 0.);
+
+	set_global_transform(rail_xform);
 	translate(CAMERA_OFFSET);
+	translate(rail_offset_x * RAIL_OFFSET_SCALE);
+
 	camera->set_rotation_degrees(Vector3(-22.4, 0., 0.));
 }
 

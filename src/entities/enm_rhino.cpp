@@ -49,7 +49,7 @@ void EnmRhino::_process(double delta) {
 	}
 
 	Player *player = Game::get_player();
-	if (!player || !player->get_enabled() || has_lost_tgt) {
+	if (!player || !player->get_input_enabled() || has_lost_tgt) {
 		move_and_slide();
 		return;
 	}

@@ -44,7 +44,7 @@ func _redraw(gizmo: EditorNode3DGizmo):
 	
 	st.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 	st.set_material(load("res://assets/materials/mat_tool_stage_start.tres"))
-	var start_xform := stage.sample_rail_start()
+	var start_xform := stage.sample_rail_at_gameplay_start()
 	start_xform.origin -= stage.global_position
 	
 	st.set_uv(uv_a)
@@ -60,7 +60,7 @@ func _redraw(gizmo: EditorNode3DGizmo):
 	
 	st.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 	st.set_material(load("res://assets/materials/mat_tool_stage_end.tres"))
-	var end_xform := stage.sample_rail_end()
+	var end_xform := stage.sample_rail_at_gameplay_end()
 	end_xform.origin -= stage.global_position
 	
 	st.set_uv(uv_a)

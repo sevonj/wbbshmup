@@ -20,7 +20,6 @@ class Stage : public Node3D {
 	static constexpr double DEFAULT_RAIL_SPEED = 10.0;
 
 	bool is_playing = false;
-	double rail_follow_offset = 0.;
 	double rail_speed = DEFAULT_RAIL_SPEED;
 	double intro_screen_timer = INTRO_SCREEN_DURATION;
 
@@ -32,8 +31,6 @@ class Stage : public Node3D {
 
 	/// @brief Path for the on-rail gameplay.
 	Path3D *rail_path = nullptr;
-	/// @brief Parent of player. Is moved along the path.
-	Marker3D *rail_follow = nullptr;
 	StagePathGrid *rail_grid = nullptr;
 
 protected:
@@ -52,9 +49,10 @@ public:
 	void add_entity(Node3D *ent);
 	void add_ui(Control *ui);
 
-	Transform3D sample_rail_start();
-	Transform3D sample_rail_end();
 	Transform3D sample_rail_at_time(double time);
+	Transform3D sample_rail_at_gameplay_time(double time);
+	Transform3D sample_rail_at_gameplay_start();
+	Transform3D sample_rail_at_gameplay_end();
 
 private:
 	Player *_get_player();

@@ -41,7 +41,7 @@ void EnmTank::_process(double delta) {
 	t_since_fired += delta;
 
 	Player *player = Game::get_player();
-	if (!player || !player->get_enabled()) {
+	if (!player || !player->get_input_enabled()) {
 		return;
 	}
 

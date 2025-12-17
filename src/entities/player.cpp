@@ -38,6 +38,8 @@ void Player::_process(double delta) {
 		DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);
 	}
 
+	t_stage += delta;
+
 	WbbInput *input = WbbInput::get_singleton();
 	Vector2 input_axis = input->get_axis();
 
@@ -51,22 +53,31 @@ void Player::_process(double delta) {
 		DebugDraw::draw_line_3d(xform.origin, xform.xform(orientation), Color(0, 0, 1));
 	}
 
-	if (!enabled) {
+	Stage *stage = Game::get_stage();
+	if (!stage) {
 		return;
 	}
 
-	mdl->set_rotation(Vector3(Vector3(input_axis.y, 0, -input_axis.x) * MDL_LEAN_SCALE));
+	const Transform3D old_xform = get_transform();
+	const Transform3D rail_xform = stage->sample_rail_at_time(t_stage);
+	Transform3D new_xform = rail_xform;
 
-	Vector3 pos = get_position();
-	Vector3 old_pos = pos;
+	float angle = 0.0;
+	if (input_enabled) {
+		rail_offset += input_dir * delta * LEAN_MOVE_SPEED;
+		const Vector3 lean = Vector3(input_axis.y, 0, -input_axis.x) * LEAN_SCALE;
+		angle = -input_axis.x * LEAN_TURN_MAX_ANGLE;
+		mdl->set_rotation(lean);
+	}
 
-	pos += input_dir * delta * LEAN_MOVE_SPEED;
-	pos.x = Math::clamp(pos.x, -MAX_X, MAX_X);
-	pos.z = Math::clamp(pos.z, -MAX_Z, MAX_Z);
-	set_position(pos);
+	rail_offset.x = Math::clamp(rail_offset.x, -MAX_RAIL_OFF_X, MAX_RAIL_OFF_X);
+	rail_offset.z = Math::clamp(rail_offset.z, -MAX_RAIL_OFF_Z, MAX_RAIL_OFF_Z);
+	new_xform.translate_local(rail_offset);
+	new_xform.basis.rotate(Vector3(0., 1., 0.), angle);
 
-	// We don't actually use velocity here, but some enemies do to predict player movement.
-	set_velocity(pos - old_pos + rail_vel);
+	set_transform(new_xform);
+	// Player doesn't use velocity, but some enemies will look at it to predict player movement.
+	set_velocity(new_xform.origin - old_xform.origin);
 }
 
 void Player::_physics_process(double delta) {
@@ -76,7 +87,7 @@ void Player::_physics_process(double delta) {
 
 	t_since_fired += delta;
 
-	if (!enabled) {
+	if (!input_enabled) {
 		return;
 	}
 
