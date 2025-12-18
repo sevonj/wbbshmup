@@ -27,7 +27,7 @@ class Player : public Character {
 
 	bool input_enabled = false;
 	bool noclip = false;
-	double t_stage = 0.0;
+	double t_stage_progress = 0.0;
 	double t_since_fired = 1.0 / FIRE_RATE;
 	Vector3 rail_offset;
 
@@ -46,8 +46,8 @@ public:
 	void set_input_enabled(bool v) { input_enabled = v; }
 	bool get_noclip() const { return noclip; }
 	void set_noclip(bool v) { noclip = v; }
-	double get_t_stage() const { return t_stage; }
-	void set_t_stage(double v) { t_stage = v; }
+	double get_t_stage_progress() const { return t_stage_progress; }
+	void set_t_stage_progress(double v) { t_stage_progress = v; }
 	Vector3 get_rail_offset() const { return rail_offset; }
 	void set_rail_offset(Vector3 v) { rail_offset = v; }
 

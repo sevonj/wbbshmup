@@ -32,12 +32,11 @@ void CameraRigFollow::_process_camera_arm(double delta) {
 		return;
 	}
 
-	const Transform3D rail_xform = stage->sample_rail_at_time(player->get_t_stage());
-	const Vector3 rail_offset_x = player->get_rail_offset() * Vector3(1., 0., 0.);
+	const Transform3D rail_xform = stage->sample_rail_at_time(player->get_t_stage_progress());
+	const Vector3 rail_offset_x = player->get_rail_offset() * Vector3(1., 0., 0.) * RAIL_OFFSET_SCALE;
 
 	set_global_transform(rail_xform);
-	translate(CAMERA_OFFSET);
-	translate(rail_offset_x * RAIL_OFFSET_SCALE);
+	translate(CAMERA_OFFSET + rail_offset_x);
 
 	camera->set_rotation_degrees(Vector3(-22.4, 0., 0.));
 }

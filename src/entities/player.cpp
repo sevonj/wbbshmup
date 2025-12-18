@@ -14,7 +14,20 @@
 
 namespace godot {
 
-void Player::_bind_methods() {}
+void Player::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_input_enabled"), &Player::get_input_enabled);
+	ClassDB::bind_method(D_METHOD("set_input_enabled"), &Player::set_input_enabled);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "input_enabled"), "set_input_enabled", "get_input_enabled");
+	ClassDB::bind_method(D_METHOD("get_noclip"), &Player::get_noclip);
+	ClassDB::bind_method(D_METHOD("set_noclip"), &Player::set_noclip);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "noclip"), "set_noclip", "get_noclip");
+	ClassDB::bind_method(D_METHOD("get_t_stage_progress"), &Player::get_t_stage_progress);
+	ClassDB::bind_method(D_METHOD("set_t_stage_progress"), &Player::set_t_stage_progress);
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "t_stage_progress"), "set_t_stage_progress", "get_t_stage_progress");
+	ClassDB::bind_method(D_METHOD("get_rail_offset"), &Player::get_rail_offset);
+	ClassDB::bind_method(D_METHOD("set_rail_offset"), &Player::set_rail_offset);
+	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "rail_offset"), "set_rail_offset", "get_rail_offset");
+}
 
 Player::Player() {
 	Game::set_player(this);
@@ -38,7 +51,7 @@ void Player::_process(double delta) {
 		DebugDraw::draw_sphere3d(get_global_position(), coll_sphere->get_radius(), COLOR_DEBUG_COLL);
 	}
 
-	t_stage += delta;
+	t_stage_progress += delta;
 
 	WbbInput *input = WbbInput::get_singleton();
 	Vector2 input_axis = input->get_axis();
@@ -59,7 +72,7 @@ void Player::_process(double delta) {
 	}
 
 	const Transform3D old_xform = get_transform();
-	const Transform3D rail_xform = stage->sample_rail_at_time(t_stage);
+	const Transform3D rail_xform = stage->sample_rail_at_time(t_stage_progress);
 	Transform3D new_xform = rail_xform;
 
 	float angle = 0.0;
