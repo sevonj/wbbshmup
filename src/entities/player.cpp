@@ -21,6 +21,9 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_noclip"), &Player::get_noclip);
 	ClassDB::bind_method(D_METHOD("set_noclip"), &Player::set_noclip);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "noclip"), "set_noclip", "get_noclip");
+	ClassDB::bind_method(D_METHOD("get_lock_rail_rotation"), &Player::get_lock_rail_rotation);
+	ClassDB::bind_method(D_METHOD("set_lock_rail_rotation"), &Player::set_lock_rail_rotation);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "lock_rail_rotation"), "set_lock_rail_rotation", "get_lock_rail_rotation");
 	ClassDB::bind_method(D_METHOD("get_t_stage_progress"), &Player::get_t_stage_progress);
 	ClassDB::bind_method(D_METHOD("set_t_stage_progress"), &Player::set_t_stage_progress);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "t_stage_progress"), "set_t_stage_progress", "get_t_stage_progress");
@@ -74,6 +77,10 @@ void Player::_process(double delta) {
 	const Transform3D old_xform = get_transform();
 	const Transform3D rail_xform = stage->sample_rail_at_time(t_stage_progress);
 	Transform3D new_xform = rail_xform;
+	if (!lock_rail_rotation) {
+		rail_basis = rail_xform.basis;
+	}
+	new_xform.basis = rail_basis;
 
 	float angle = 0.0;
 	if (input_enabled) {
