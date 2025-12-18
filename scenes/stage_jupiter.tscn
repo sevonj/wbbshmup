@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=4 uid="uid://cl5kcl302cuxg"]
+[gd_scene load_steps=48 format=4 uid="uid://cl5kcl302cuxg"]
 
 [ext_resource type="Script" uid="uid://8u6amb7sn2tn" path="res://scenes/stage_jupiter.gd" id="1_fao2i"]
 [ext_resource type="PackedScene" uid="uid://dcfi7se8tn1yb" path="res://assets/models/stage/pdm_jupiter_floor.blend" id="2_6hrpm"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://dy3558r774qir" path="res://assets/models/stage/pdm_ducting.blend" id="6_au1sw"]
 [ext_resource type="Texture2D" uid="uid://c7q0t1ukig1ij" path="res://assets/materials/tex_mod_metal1.png" id="7_6hrpm"]
 [ext_resource type="PackedScene" uid="uid://oexnx3eaiw5g" path="res://assets/models/stage/mdl_room_.blend" id="8_ajsbk"]
-[ext_resource type="Texture2D" uid="uid://beccfc7pawcdl" path="res://assets/ui/tex_hud_powerbutton.png" id="8_kr1wd"]
 [ext_resource type="Material" uid="uid://ef54bf0qnk8y" path="res://assets/materials/mat_grid.tres" id="9_au1sw"]
 [ext_resource type="PackedScene" uid="uid://dgvbsxlefvn6f" path="res://assets/models/mdl_door_001.blend" id="18_ncdjp"]
 
@@ -667,63 +666,13 @@ transform = Transform3D(-1, -8.742278e-08, 1.7484555e-07, 8.742278e-08, -1, -7.6
 
 [node name="FuncLockRailRotation" type="FuncLockRailRotation" parent="entities/seg2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.780098, 0, -317.2942)
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="entities/seg2/FuncLockRailRotation"]
 shape = SubResource("BoxShape3D_rekvf")
 
 [node name="ui" type="Node" parent="."]
-
-[node name="hud" type="MarginContainer" parent="ui"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ui/hud"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="ui/hud/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="MarginContainer3" type="MarginContainer" parent="ui/hud/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 8.0
-
-[node name="MarginContainer2" type="MarginContainer" parent="ui/hud/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ui/hud/VBoxContainer/MarginContainer2"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer"]
-layout_mode = 2
-
-[node name="TextureProgressBar" type="TextureProgressBar" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-value = 100.0
-nine_patch_stretch = true
-stretch_margin_left = 8
-stretch_margin_top = 8
-stretch_margin_right = 8
-stretch_margin_bottom = 8
-texture_progress = ExtResource("7_6hrpm")
-
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer/AspectRatioContainer"]
-layout_mode = 2
-texture = ExtResource("8_kr1wd")
-stretch_mode = 6
-
-[node name="Label" type="Label" parent="ui/hud/VBoxContainer/MarginContainer2/HBoxContainer/VBoxContainer/AspectRatioContainer"]
-layout_mode = 2
-text = "SUPER"
 
 [node name="rail_path" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.898926, 0, 476.4381)

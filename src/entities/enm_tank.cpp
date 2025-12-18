@@ -68,6 +68,7 @@ void EnmTank::die() {
 	print_line(get_class(), " died");
 	coll->set_disabled(true);
 	get_tree()->create_timer(HITFLASH_DURATION)->connect("timeout", callable_mp((Node *)this, &EnmTank::queue_free));
+	Game::get_stage()->add_score(KILL_SCORE);
 }
 
 void EnmTank::setup_model() {

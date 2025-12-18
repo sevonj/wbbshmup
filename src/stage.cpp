@@ -7,6 +7,8 @@
 #include <ui/ui_stage_begin_screen.h>
 #include <godot_cpp/classes/curve3d.hpp>
 #include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
+#include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/scene_tree_timer.hpp>
 
@@ -22,6 +24,9 @@ void Stage::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("spawn_player"), &Stage::spawn_player);
 	ClassDB::bind_method(D_METHOD("add_entity"), &Stage::add_entity);
 	ClassDB::bind_method(D_METHOD("add_ui"), &Stage::add_ui);
+
+	ADD_SIGNAL(MethodInfo("score_added", PropertyInfo(Variant::INT, "delta")));
+	ADD_SIGNAL(MethodInfo("score_notify", PropertyInfo(Variant::STRING, "text")));
 }
 
 void Stage::_notification(int what) {
@@ -95,6 +100,29 @@ void Stage::add_ui(Control *ui) {
 	local_ui->add_child(ui);
 }
 
+void Stage::add_score(int64_t v) {
+	v *= score_mult;
+	score += v;
+	print_line("score: +", v, " total: ", score);
+	emit_signal("score_added", v);
+}
+
+void Stage::mark_clean_segment() {
+	emit_signal("score_notify", "Clean Section");
+	score_mult += 1;
+}
+
+void Stage::mark_strike() {
+	emit_signal("score_notify", "STRIKE!");
+	score_mult += 1;
+}
+
+void Stage::reset() {
+	spawn_player();
+	score = 0;
+	score_mult = 1;
+}
+
 Transform3D Stage::sample_rail_at_time(double time) {
 	ensure_rail_path();
 	double offset = time * rail_speed;
@@ -144,11 +172,26 @@ void Stage::spawn_player() {
 	CameraRigFollow *camera = memnew(CameraRigFollow);
 
 	player->connect("died", callable_mp(this, &Stage::on_player_death));
+	player->connect("damaged", callable_mp(this, &Stage::on_player_damaged));
 	add_entity(player);
 
 	add_entity(camera);
 	camera->get_camera()->make_current();
 	is_playing = true;
+
+	Ref<PackedScene> hud_res = ResourceLoader::get_singleton()->load(HUD_PATH, "PackedScene");
+	if (!hud_res.is_valid()) {
+		print_error("Player hud resource missing.");
+		return;
+	}
+	Node *hud_node = hud_res->instantiate();
+	Control *hud = cast_to<Control>(hud_node);
+	if (hud) {
+		add_ui(hud);
+	} else {
+		print_error("Player hud wasn't a Control");
+		memdelete(hud_node);
+	}
 }
 
 void Stage::clear_player() {
@@ -165,10 +208,19 @@ void Stage::clear_player() {
 	if (camera) {
 		camera->queue_free();
 	}
+
+	if (hud) {
+		hud->queue_free();
+		hud = nullptr;
+	}
 }
 
 void Stage::on_player_death() {
-	get_tree()->create_timer(3.)->connect("timeout", callable_mp(this, &Stage::spawn_player));
+	get_tree()->create_timer(PLAYER_DEATH_WAIT_DURATION)->connect("timeout", callable_mp(this, &Stage::reset));
+}
+
+void Stage::on_player_damaged() {
+	score_mult = 1;
 }
 
 void Stage::ensure_nodes() {

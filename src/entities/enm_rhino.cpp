@@ -113,6 +113,7 @@ void EnmRhino::die() {
 	print_line("Rhino: Died");
 	coll->set_disabled(true);
 	get_tree()->create_timer(HITFLASH_DURATION)->connect("timeout", callable_mp((Node *)this, &EnmRhino::queue_free));
+	Game::get_stage()->add_score(KILL_SCORE);
 }
 
 void EnmRhino::setup_model() {

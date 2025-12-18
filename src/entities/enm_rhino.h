@@ -18,6 +18,7 @@ class EnmRhino : public Enemy {
 	static constexpr double SPEED = 35.0;
 	static constexpr double LIFETIME = 10.0;
 	static constexpr int32_t MAX_HP = 100;
+	static constexpr int32_t KILL_SCORE = 200;
 
 	static constexpr double AI_ALERT_RADIUS = 200.;
 	static constexpr double AI_NAVGAIN = 3.9;

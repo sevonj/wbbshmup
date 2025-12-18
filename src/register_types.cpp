@@ -29,6 +29,9 @@
 #include <entities/tool_stage_path_marker.h>
 #include <ui/ui_debug_wbbstatus.h>
 #include <ui/ui_hud_rhino_alert.h>
+#include <ui/ui_hud_score.h>
+#include <ui/ui_hud_score_notif_cont.h>
+#include <ui/ui_hud_score_notif_msg.h>
 #include <ui/ui_menu_wbb_connect_prompt.h>
 #include <ui/ui_stage_begin_screen.h>
 #include <ui/ui_startup_wbb_disclaimer.h>
@@ -70,6 +73,9 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(UiDebugWbbstatus);
 	GDREGISTER_CLASS(UiMenuWbbConnectPrompt);
 	GDREGISTER_CLASS(UiHudRhinoAlert);
+	GDREGISTER_CLASS(UiHudScore);
+	GDREGISTER_CLASS(UiHudScoreNotifCont);
+	GDREGISTER_CLASS(UiHudScoreNotifMsg);
 	GDREGISTER_CLASS(UiStageBeginScreen);
 	GDREGISTER_CLASS(UiStartupWbbDisclaimer);
 

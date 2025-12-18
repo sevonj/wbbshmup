@@ -16,6 +16,7 @@ class EnmTank : public Enemy {
 	static constexpr const char *MDL_PATH = "res://assets/entities/enm_tank/mdl_enm_tank.blend";
 
 	static constexpr int32_t MAX_HP = 30;
+	static constexpr int32_t KILL_SCORE = 10;
 
 	static constexpr double AI_ALERT_RADIUS = 100.0;
 	static constexpr double AI_FIRE_RATE = 0.3;
