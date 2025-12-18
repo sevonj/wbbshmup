@@ -12,6 +12,9 @@ namespace godot {
 class WbbInput : public Node {
 	GDCLASS(WbbInput, Node)
 
+	/// @brief It isn't fun to lean forward just to stay "centered".
+	static constexpr float WBB_Y_BIAS = -0.1;
+
 	static WbbInput *singleton;
 	static wiimote **wiimotes;
 	static bool initialized;

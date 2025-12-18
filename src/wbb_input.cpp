@@ -101,7 +101,7 @@ Vector2 WbbInput::get_axis() {
 		float total = tl + tr + bl + br;
 
 		float x = deadzone(tr + br) - deadzone(tl + bl);
-		float y = deadzone(br + bl) - deadzone(tr + tl);
+		float y = deadzone(br + bl) / (1.0 - WBB_Y_BIAS) - deadzone(tr + tl) * (1.0 - WBB_Y_BIAS);
 		Vector2 axis = Vector2(x, y) / 70;
 		if (axis.length() > 1.) {
 			axis.normalize();
