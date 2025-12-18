@@ -18,7 +18,7 @@ class Player : public Character {
 	static constexpr double COLL_R = 1.5;
 	static constexpr const char *MDL_PATH = "res://assets/entities/player/mdl_player_butterfly.blend";
 	static constexpr double FIRE_RATE = 3.0;
-	static constexpr double LEAN_MOVE_SPEED = 12.0;
+	static constexpr double LEAN_MOVE_SPEED = 16.0;
 	static constexpr double LEAN_TURN_MAX_ANGLE = 12.0 * DEG_TO_RAD;
 	static constexpr float LEAN_SCALE = 0.4;
 	static constexpr float MAX_RAIL_OFF_X = 12.0;

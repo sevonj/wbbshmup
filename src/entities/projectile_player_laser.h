@@ -12,8 +12,8 @@ class ProjectilePlayerLaser : public Projectile {
 
 	static constexpr const char *MAT_PATH = "res://assets/materials/mat_fx_playerlaser.tres";
 
-	static constexpr double LIFE_DISTANCE = 100.;
-	static constexpr double SPEED = 80.;
+	static constexpr double LIFE_DISTANCE = 120.;
+	static constexpr double SPEED = 100.;
 
 protected:
 	static void _bind_methods();
