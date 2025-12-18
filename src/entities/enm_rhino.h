@@ -47,6 +47,7 @@ public:
 	void _process(double delta) override;
 
 	void die() override;
+	bool counts_towards_strike() override { return false; }
 
 private:
 	void setup_model();

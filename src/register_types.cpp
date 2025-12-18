@@ -25,6 +25,7 @@
 #include <entities/projectile_enm_generic.h>
 #include <entities/projectile_player_laser.h>
 #include <entities/stage_path_grid.h>
+#include <entities/stage_segment.h>
 #include <entities/tool_path_deform_mesh.h>
 #include <entities/tool_stage_path_marker.h>
 #include <ui/ui_debug_wbbstatus.h>
@@ -67,6 +68,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(ProjectileEnmGeneric);
 	GDREGISTER_CLASS(ProjectilePlayerLaser);
 	GDREGISTER_CLASS(StagePathGrid);
+	GDREGISTER_CLASS(StageSegment);
 	GDREGISTER_CLASS(ToolPathDeformMesh);
 	GDREGISTER_CLASS(ToolStagePathMarker);
 

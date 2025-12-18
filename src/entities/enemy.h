@@ -19,6 +19,8 @@ public:
 	~Enemy() override = default;
 
 	virtual void _ready() override;
+	/// @brief Some enemies can't be killed and therefore shouldn't be included in strike bonus check.
+	virtual bool counts_towards_strike() { return true; }
 };
 
 } //namespace godot
