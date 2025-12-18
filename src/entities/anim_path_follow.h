@@ -18,8 +18,6 @@ class AnimPathFollow : public Node3D {
 	float speed = 1.;
 	double progress = 0.;
 
-	Ref<Curve3D> get_curve();
-
 protected:
 	static void _bind_methods();
 
@@ -63,6 +61,9 @@ public:
 	void stop();
 	void pause();
 	void restart();
+
+private:
+	Ref<Curve3D> get_curve();
 };
 
 } //namespace godot

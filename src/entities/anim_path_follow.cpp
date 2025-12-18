@@ -4,14 +4,6 @@
 
 namespace godot {
 
-Ref<Curve3D> AnimPathFollow::get_curve() {
-	Path3D *parent = cast_to<Path3D>(get_parent());
-	if (parent) {
-		return parent->get_curve();
-	}
-	return Ref<Curve3D>();
-}
-
 void AnimPathFollow::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_autostart"), &AnimPathFollow::get_autostart);
 	ClassDB::bind_method(D_METHOD("set_autostart"), &AnimPathFollow::set_autostart);
@@ -118,6 +110,14 @@ void AnimPathFollow::pause() {
 
 void AnimPathFollow::restart() {
 	progress = 0.;
+}
+
+Ref<Curve3D> AnimPathFollow::get_curve() {
+	Path3D *parent = cast_to<Path3D>(get_parent());
+	if (parent) {
+		return parent->get_curve();
+	}
+	return Ref<Curve3D>();
 }
 
 } //namespace godot
