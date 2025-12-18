@@ -13,6 +13,7 @@
 #include <entities/character.h>
 #include <entities/enemy.h>
 #include <entities/enm_boss_clobster.h>
+#include <entities/enm_mosquito.h>
 #include <entities/enm_rhino.h>
 #include <entities/enm_tank.h>
 #include <entities/func_lock_rail_rotation.h>
@@ -56,6 +57,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(Character);
 	GDREGISTER_CLASS(Enemy);
 	GDREGISTER_CLASS(EnmBossClobster);
+	GDREGISTER_CLASS(EnmMosquito);
 	GDREGISTER_CLASS(EnmRhino);
 	GDREGISTER_CLASS(EnmTank);
 	GDREGISTER_CLASS(FuncLockRailRotation);
