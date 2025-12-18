@@ -104,8 +104,8 @@ public:
 		}
 		return end_offset / curve->get_baked_length();
 	}
-	bool has_start_cap() { return !pdm_asset.is_valid() && pdm_asset->cap_start.is_valid(); }
-	bool has_end_cap() { return !pdm_asset.is_valid() && pdm_asset->cap_end.is_valid(); }
+	bool has_start_cap() { return pdm_asset.is_valid() && pdm_asset->cap_start.is_valid(); }
+	bool has_end_cap() { return pdm_asset.is_valid() && pdm_asset->cap_end.is_valid(); }
 	int32_t get_num_pieces() {
 		if (pdm_asset.is_valid()) {
 			return pdm_asset->pieces.size();
