@@ -2,6 +2,8 @@
 
 Entity generally means a Node that "exists" in the game world. If the player can see an object, it's an entity.
 
+Not to be confused with entities in an entity component system. Think entities in Source engine instead.
+
 Usually an entity should clean itself up based on a timer or position.
 
 ```cpp
