@@ -44,6 +44,10 @@ void Stage::_notification(int what) {
 				get_tree()->quit();
 				return;
 			}
+			if (Input::get_singleton()->is_key_pressed(KEY_R)) {
+				get_tree()->reload_current_scene();
+				return;
+			}
 
 			double delta = get_process_delta_time();
 			if (is_playing) {
