@@ -15,6 +15,7 @@ void ProjectilePlayerLaser::_bind_methods() {
 ProjectilePlayerLaser::ProjectilePlayerLaser() {
 	lifetimer = LIFE_DISTANCE / SPEED;
 	speed = SPEED;
+	damage = DMG;
 }
 
 void ProjectilePlayerLaser::_ready() {

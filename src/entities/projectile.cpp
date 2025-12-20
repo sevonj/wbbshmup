@@ -13,8 +13,7 @@
 
 namespace godot {
 
-void Projectile::_bind_methods() {
-}
+void Projectile::_bind_methods() {}
 
 void Projectile::_ready() {
 	set_collision_layer(0);
@@ -56,7 +55,7 @@ void Projectile::_physics_process(double delta) {
 	Vector3 velocity = get_velocity();
 	Ref<KinematicCollision3D> collision = move_and_collide(velocity * delta);
 	if (collision.is_valid()) {
-		DamageInfo dmg = DamageInfo(10, collision->get_normal() * 2.);
+		DamageInfo dmg = DamageInfo(damage, collision->get_normal() * 2.);
 
 		Node3D *body = cast_to<Node3D>(collision->get_collider());
 		if (body) {

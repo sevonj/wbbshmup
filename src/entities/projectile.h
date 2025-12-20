@@ -13,9 +13,9 @@ class Projectile : public CharacterBody3D {
 	GDCLASS(Projectile, CharacterBody3D)
 
 	static constexpr double COLL_R = 0.1;
-
 	static constexpr double DEFAULT_LIFETIME = 10.0;
 	static constexpr double DEFAULT_SPEED = 6.0;
+	static constexpr int32_t DEFAULT_DAMAGE = 10;
 
 protected:
 	static void _bind_methods();
@@ -32,9 +32,12 @@ public:
 	virtual void setup_collider();
 
 protected:
+	// --- state, config
 	double lifetimer = DEFAULT_LIFETIME;
 	double speed = DEFAULT_SPEED;
+	int32_t damage = DEFAULT_DAMAGE;
 
+	// --- components
 	Node3D *mdl;
 	CollisionShape3D *coll;
 	Ref<SphereShape3D> coll_sphere;
