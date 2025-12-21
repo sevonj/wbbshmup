@@ -111,10 +111,18 @@ void Player::_physics_process(double delta) {
 		return;
 	}
 
-	if (t_since_fired >= 1.0 / FIRE_RATE) {
+	if (t_since_fired >= 1.0 / FIRE_RATE / pow(1.1, firerate_level)) {
 		fire();
 		t_since_fired = 0.0;
 	}
+}
+
+void Player::upgrade_firerate() {
+	set_firerate_level(firerate_level + 1);
+}
+
+void Player::upgrade_projectile() {
+	set_projectile_level(projectile_level + 1);
 }
 
 void Player::setup_model() {
@@ -141,10 +149,24 @@ void Player::setup_collider() {
 }
 
 void Player::fire() {
-	ProjectilePlayerLaser *projectile = memnew(ProjectilePlayerLaser);
-	Game::get_stage()->add_entity(projectile);
-	projectile->set_global_position(get_global_position());
-	projectile->set_global_rotation(get_global_rotation());
+	const int32_t num_projectiles = projectile_level;
+	if (num_projectiles == 1) {
+		ProjectilePlayerLaser *projectile = memnew(ProjectilePlayerLaser);
+		Game::get_stage()->add_entity(projectile);
+		projectile->set_global_position(get_global_position());
+		projectile->set_global_rotation(get_global_rotation());
+		return;
+	}
+
+	// Spawn multiple projectiles in a row
+	Vector3 spread_start_off = Vector3(-(num_projectiles - 1), 0.0, 0.0) / 2.0;
+	Vector3 spread_step = Vector3(-spread_start_off.x / (num_projectiles - 1), 0.0, 0.0) * 2.0;
+	for (int i = 0; i < num_projectiles; i++) {
+		ProjectilePlayerLaser *projectile = memnew(ProjectilePlayerLaser);
+		Game::get_stage()->add_entity(projectile);
+		projectile->set_global_position(get_global_position() + spread_start_off + spread_step * i);
+		projectile->set_global_rotation(get_global_rotation());
+	}
 }
 
 } //namespace godot

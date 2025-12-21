@@ -21,6 +21,8 @@
 #include <entities/func_trigger.h>
 #include <entities/item.h>
 #include <entities/item_energy.h>
+#include <entities/item_upg_firerate.h>
+#include <entities/item_upg_projectile.h>
 #include <entities/player.h>
 #include <entities/projectile.h>
 #include <entities/projectile_enm_generic.h>
@@ -65,6 +67,8 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(FuncTrigger);
 	GDREGISTER_CLASS(Item);
 	GDREGISTER_CLASS(ItemEnergy);
+	GDREGISTER_CLASS(ItemUpgFirerate);
+	GDREGISTER_CLASS(ItemUpgProjectile);
 	GDREGISTER_CLASS(Player);
 	GDREGISTER_CLASS(Projectile);
 	GDREGISTER_CLASS(ProjectileEnmGeneric);

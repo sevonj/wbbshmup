@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://bixf2f2yx6y3t"]
+
+[node name="ItemUpgFirerate" type="ItemUpgFirerate"]
+collision_layer = 0
+collision_mask = 2
