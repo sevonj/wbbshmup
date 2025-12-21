@@ -15,16 +15,8 @@ class Character : public CharacterBody3D {
 	static constexpr int32_t DEFAULT_HP = 100;
 
 protected:
-	static constexpr double HITFLASH_DURATION = 0.1;
-
-	int32_t max_hp = DEFAULT_HP;
-	int32_t hp = DEFAULT_HP;
-	bool invincible = false;
-	bool hitflash_enabled = true;
-
-	Ref<Material> mat_hitflash;
-
 	static void _bind_methods();
+	void _notification(int what);
 
 public:
 	Character();
@@ -47,14 +39,29 @@ public:
 	int32_t get_hp() const {
 		return hp;
 	}
+	
+	void _ready() override {};
 
 	virtual void add_hp(int32_t value);
 	virtual void take_damage(DamageInfo damage);
 	virtual void die();
+	virtual void drop_item();
 	void trigger_hitflash();
 
 protected:
+	static constexpr double HITFLASH_DURATION = 0.1;
+
+	// --- state, config
+	int32_t max_hp = DEFAULT_HP;
+	int32_t hp = DEFAULT_HP;
+	bool invincible = false;
+	bool hitflash_enabled = true;
+
 	void set_hitflash(bool enabled);
+
+private:
+	// --- components
+	Ref<Material> mat_hitflash;
 };
 
 } //namespace godot

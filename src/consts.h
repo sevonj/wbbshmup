@@ -5,7 +5,7 @@
 
 namespace godot {
 
-#define DEG_TO_RAD Math_PI / 180.0;
+static constexpr double DEG_TO_RAD = Math_PI / 180.0;
 
 typedef enum {
 	COL_LAYER_NONE = 0,

@@ -16,6 +16,7 @@ class Cutscene : public Node3D {
 
 protected:
 	static void _bind_methods();
+	void _notification(int what);
 
 public:
 	Cutscene() = default;
@@ -34,9 +35,6 @@ public:
 
 	void play();
 	void stop();
-
-protected:
-	void _notification(int what);
 };
 
 } //namespace godot

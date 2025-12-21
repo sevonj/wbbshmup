@@ -9,6 +9,7 @@ namespace godot {
 class MainMenu : public Node {
 	GDCLASS(MainMenu, Node)
 
+	// --- components
 	UiMenuWbbConnectPrompt *wbb_connect_prompt = nullptr;
 	Button *start_game_button = nullptr;
 

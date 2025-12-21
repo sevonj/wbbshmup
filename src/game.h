@@ -3,7 +3,6 @@
 #include <entities/camera_rig.h>
 #include <entities/player.h>
 #include <stage.h>
-#include <godot_cpp/variant/variant.hpp>
 
 namespace godot {
 

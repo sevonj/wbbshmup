@@ -16,7 +16,7 @@ namespace godot {
 void Projectile::_bind_methods() {}
 
 void Projectile::_ready() {
-	set_collision_layer(0);
+	set_collision_layer(COL_LAYER_NONE);
 	set_collision_mask(COL_MASK_ENEMIES);
 
 	setup_model();
