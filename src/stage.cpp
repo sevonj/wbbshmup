@@ -70,7 +70,9 @@ Stage::Stage() {
 	Game::set_stage(this);
 }
 
-Stage::~Stage() {}
+Stage::~Stage() {
+	Game::set_stage(nullptr);
+}
 
 void Stage::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
