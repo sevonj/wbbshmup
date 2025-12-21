@@ -5,6 +5,7 @@
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/material.hpp>
 #include <godot_cpp/classes/node3d.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
 
 namespace godot {
 
@@ -39,7 +40,9 @@ public:
 	int32_t get_hp() const {
 		return hp;
 	}
-	
+	void set_drop_prefab(Ref<PackedScene> v) { drop_prefab = v; }
+	Ref<PackedScene> get_drop_prefab() { return drop_prefab; }
+
 	void _ready() override {};
 
 	virtual void add_hp(int32_t value);
@@ -60,6 +63,9 @@ protected:
 	void set_hitflash(bool enabled);
 
 private:
+	// --- state, config
+	Ref<PackedScene> drop_prefab;
+
 	// --- components
 	Ref<Material> mat_hitflash;
 };

@@ -15,13 +15,33 @@ void Character::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_hp"), &Character::get_hp);
 	ClassDB::bind_method(D_METHOD("set_hp"), &Character::set_hp);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "set_hp", "get_hp");
+	ClassDB::bind_method(D_METHOD("get_drop_prefab"), &Character::get_drop_prefab);
+	ClassDB::bind_method(D_METHOD("set_drop_prefab"), &Character::set_drop_prefab);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "drop_prefab", PROPERTY_HINT_RESOURCE_TYPE, "PackedScene"), "set_drop_prefab", "get_drop_prefab");
 
 	ClassDB::bind_method(D_METHOD("get_visual_focus_point"), &Character::get_visual_focus_point);
 	ClassDB::bind_method(D_METHOD("get_display_name"), &Character::get_display_name);
 	ClassDB::bind_method(D_METHOD("get_editor_model_path"), &Character::get_editor_model_path);
+	ClassDB::bind_method(D_METHOD("die"), &Character::die);
 
 	ADD_SIGNAL(MethodInfo("died"));
 	ADD_SIGNAL(MethodInfo("damaged"));
+}
+
+void Character::_notification(int what) {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+
+	switch (what) {
+		case NOTIFICATION_READY: {
+			print_line(vformat("%s: ready"), get_class());
+			connect("died", callable_mp(this, &Character::drop_item));
+		} break;
+
+		default:
+			break;
+	}
 }
 
 Character::Character() {
@@ -54,6 +74,20 @@ void Character::die() {
 	emit_signal("died");
 	print_line(get_class(), ": died");
 	queue_free();
+}
+
+void Character::drop_item() {
+	print_line(get_class(), ": trytodrop");
+	if (drop_prefab.is_valid()) {
+		Node *node = drop_prefab->instantiate();
+		Node3D *node3d = cast_to<Node3D>(node);
+		if (node3d) {
+			Game::get_stage()->add_entity(node3d);
+			node3d->set_global_position(get_global_position());
+		} else {
+			memdelete(node);
+		}
+	}
 }
 
 void Character::trigger_hitflash() {

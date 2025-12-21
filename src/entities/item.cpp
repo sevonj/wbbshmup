@@ -1,5 +1,6 @@
 #include "item.h"
 
+#include <assets.h>
 #include <config.h>
 #include <consts.h>
 #include <debug_draw.h>
@@ -16,14 +17,31 @@ void Item::_bind_methods() {
 }
 
 void Item::_ready() {
-	set_collision_layer(0);
+	set_collision_layer(COL_LAYER_NONE);
 	set_collision_mask(COL_MASK_ITEMS);
 
 	setup_collider();
+	setup_model();
 }
 
 void Item::_process(double delta) {
+	if (mdl) {
+		mdl->rotate_y(ROT_SPEED * delta);
+
+		// Enter the world with a funny bounce
+		float spawn_anim_t = Math::clamp(lifetime, 0.0, 1.0);
+		const float h_scale = 4.0;
+		float h = Math::abs(sin(spawn_anim_t * M_PI * 2.0)) * (1.0 - spawn_anim_t) * h_scale;
+		mdl->set_position(Vector3(0., h, 0.));
+		mdl->set_scale(Vector3(1., 1., 1.) * spawn_anim_t);
+	}
+
+	lifetime += delta;
+
 	if (Engine::get_singleton()->is_editor_hint()) {
+		if (lifetime >= 3.0) {
+			lifetime -= 3.0;
+		}
 		return;
 	}
 
@@ -33,23 +51,15 @@ void Item::_process(double delta) {
 }
 
 void Item::_physics_process(double delta) {
-	lifetimer -= delta;
-
-	if (Game::is_out_of_bounds(this) || lifetimer <= 0) {
-		queue_free();
+	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
 
-	Vector3 direction = -get_global_basis().get_column(2).normalized();
-	set_velocity(direction * SPEED);
-
-	Vector3 velocity = get_velocity();
-	Ref<KinematicCollision3D> collision = move_and_collide(velocity * delta);
+	Ref<KinematicCollision3D> collision = move_and_collide(Vector3());
 	if (collision.is_valid()) {
 		Player *playa = cast_to<Player>(collision->get_collider());
 		if (playa) {
 			pickup();
-			queue_free();
 		}
 	}
 }
@@ -63,8 +73,28 @@ void Item::setup_collider() {
 	add_child(coll);
 }
 
+void Item::setup_model() {
+	Node *mdl_node = get_node_or_null("mdl");
+	mdl = cast_to<Node3D>(mdl_node);
+	if (mdl) {
+		return;
+	} else if (mdl_node) {
+		mdl_node->set_name("mdl_wtf");
+	}
+
+	Ref<PackedScene> mdl_res = ResourceLoader::get_singleton()->load(DEFAULT_MDL_PATH, "PackedScene");
+	if (mdl_res.is_valid()) {
+		mdl = cast_to<Node3D>(mdl_res->instantiate());
+	} else {
+		mdl = Assets::instance_fallback_model();
+	}
+	mdl->set_name("mdl");
+	add_child(mdl);
+}
+
 void Item::pickup() {
 	print_line("Picked up an item!");
+	queue_free();
 }
 
 } //namespace godot

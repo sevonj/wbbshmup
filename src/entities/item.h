@@ -1,5 +1,6 @@
 #pragma once
 
+#include <consts.h>
 #include <data/damage_info.h>
 #include <godot_cpp/classes/character_body3d.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
@@ -11,15 +12,17 @@ namespace godot {
 class Item : public CharacterBody3D {
 	GDCLASS(Item, CharacterBody3D)
 
+	static constexpr const char *DEFAULT_MDL_PATH = "res://assets/models/mdl_demo_cube.blend";
 	static constexpr double COLL_R = 0.1;
-
-	static constexpr double LIFETIME = 10.;
-	static constexpr double SPEED = 6.;
+	static constexpr double ROT_SPEED = 120.0 * DEG_TO_RAD;
 
 protected:
-	double lifetimer = LIFETIME;
+	// --- state
+	double lifetime = 0.0;
 
-	CollisionShape3D *coll;
+	// --- components
+	Node3D *mdl = nullptr;
+	CollisionShape3D *coll = nullptr;
 	Ref<SphereShape3D> coll_sphere;
 
 	static void _bind_methods();
@@ -27,6 +30,8 @@ protected:
 public:
 	Item() = default;
 	~Item() override = default;
+
+	virtual String get_display_name() const { return "Base Item"; }
 
 	virtual void _ready() override;
 	virtual void _process(double delta) override;
@@ -36,6 +41,7 @@ public:
 
 private:
 	virtual void setup_collider();
+	void setup_model();
 };
 
 } //namespace godot
