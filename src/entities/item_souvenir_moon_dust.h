@@ -20,7 +20,7 @@ public:
 	~ItemSouvenirMoonDust() override = default;
 
 	String get_display_name() const override { return "Moon dust for the king"; }
-	String get_pickup_message() const override { return vformat("Picked up souvenir: +%d pts", SOUVENIR_PICKUP_POINTS); }
+	String get_pickup_message() const override { return vformat("Souvenir collected! +%d pts", SOUVENIR_PICKUP_POINTS); }
 
 	void pickup() override;
 
