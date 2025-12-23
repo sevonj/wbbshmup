@@ -13,7 +13,7 @@ class Item : public CharacterBody3D {
 	GDCLASS(Item, CharacterBody3D)
 
 	static constexpr const char *DEFAULT_MDL_PATH = "res://assets/models/mdl_demo_cube.blend";
-	static constexpr double COLL_R = 0.1;
+	static constexpr double COLL_R = 0.3;
 	static constexpr double ROT_SPEED = 120.0 * DEG_TO_RAD;
 
 protected:
@@ -32,6 +32,7 @@ public:
 	~Item() override = default;
 
 	virtual String get_display_name() const { return "Base Item"; }
+	virtual String get_pickup_message() const { return vformat("Picked up %s", get_display_name()); }
 
 	virtual void _ready() override;
 	virtual void _process(double delta) override;
@@ -41,7 +42,7 @@ public:
 
 private:
 	virtual void setup_collider();
-	void setup_model();
+	virtual void setup_model();
 };
 
 } //namespace godot

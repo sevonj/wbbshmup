@@ -113,13 +113,17 @@ void Stage::add_score(int64_t v) {
 	emit_signal("score_added", v);
 }
 
+void Stage::toast_message(String msg) {
+	emit_signal("score_notify", msg);
+}
+
 void Stage::mark_clean_segment() {
-	emit_signal("score_notify", "Clean Section");
+	toast_message("Clean Section");
 	score_mult += 1;
 }
 
 void Stage::mark_strike() {
-	emit_signal("score_notify", "STRIKE!");
+	toast_message("STRIKE!");
 	score_mult += 1;
 }
 

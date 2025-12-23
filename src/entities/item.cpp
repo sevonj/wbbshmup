@@ -17,9 +17,6 @@ void Item::_bind_methods() {
 }
 
 void Item::_ready() {
-	set_collision_layer(COL_LAYER_NONE);
-	set_collision_mask(COL_MASK_ITEMS);
-
 	setup_collider();
 	setup_model();
 }
@@ -65,6 +62,9 @@ void Item::_physics_process(double delta) {
 }
 
 void Item::setup_collider() {
+	set_collision_layer(COL_LAYER_NONE);
+	set_collision_mask(COL_MASK_ITEMS);
+
 	coll_sphere = (Ref<SphereShape3D>)memnew(SphereShape3D);
 	coll_sphere->set_radius(COLL_R);
 	coll = memnew(CollisionShape3D);
@@ -93,7 +93,12 @@ void Item::setup_model() {
 }
 
 void Item::pickup() {
-	print_line("Picked up an item!");
+	String message = get_pickup_message();
+	print_line(message);
+	Stage *stage = Game::get_stage();
+	if (stage) {
+		stage->toast_message(message);
+	}
 	queue_free();
 }
 

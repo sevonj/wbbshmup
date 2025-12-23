@@ -60,6 +60,7 @@ public:
 	void add_ui(Control *ui);
 
 	void add_score(int64_t v);
+	void toast_message(String msg);
 	void mark_clean_segment();
 	void mark_strike();
 	void reset();
