@@ -1,9 +1,7 @@
 #include "item_upg_projectile.h"
 
+#include <entities/player.h>
 #include <game.h>
-#include <godot_cpp/classes/packed_scene.hpp>
-#include <godot_cpp/classes/resource_loader.hpp>
-#include <godot_cpp/classes/sphere_shape3d.hpp>
 
 namespace godot {
 

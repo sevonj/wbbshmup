@@ -1,9 +1,6 @@
 #pragma once
 
-#include <data/damage_info.h>
 #include <entities/item.h>
-#include <godot_cpp/classes/character_body3d.hpp>
-#include <godot_cpp/classes/collision_shape3d.hpp>
 
 namespace godot {
 
@@ -17,6 +14,8 @@ protected:
 public:
 	ItemUpgProjectile() = default;
 	~ItemUpgProjectile() override = default;
+
+	String get_display_name() const override { return "Projectile upgrade"; }
 
 	void pickup() override;
 };
