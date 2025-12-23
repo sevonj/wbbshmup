@@ -1,9 +1,41 @@
-[gd_scene format=3 uid="uid://cv1326jnpbdfp"]
+[gd_scene load_steps=4 format=3 uid="uid://cv1326jnpbdfp"]
+
+[ext_resource type="Script" uid="uid://b64ae74jgh1v6" path="res://scenes/main_menu.gd" id="1_bqqt6"]
+[ext_resource type="Texture2D" uid="uid://cprnq6xwwin4j" path="res://assets/ui/tex_bg_stageselect.png" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://c2hta04xntc44" path="res://assets/ui/tex_icon_construction.png" id="2_ekxnf"]
 
 [node name="MainMenu" type="MainMenu"]
+script = ExtResource("1_bqqt6")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 offset_top = 1.0
 offset_right = 54.0
 offset_bottom = 59.0
 text = "main menu"
+
+[node name="bg" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_l6cm7")
+expand_mode = 1
+
+[node name="TexIconConstruction2" type="TextureRect" parent="."]
+offset_left = 15.0
+offset_top = 16.0
+offset_right = 136.0
+offset_bottom = 131.0
+texture = ExtResource("2_ekxnf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="TexIconConstruction2"]
+layout_mode = 0
+offset_left = 137.0
+offset_top = -3.0
+offset_right = 583.0
+offset_bottom = 21.0
+theme_override_font_sizes/font_size = 16
+text = "Solar system under construction"
