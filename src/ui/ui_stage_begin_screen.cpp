@@ -7,13 +7,47 @@
 
 namespace godot {
 
-void UiStageBeginScreen::_bind_methods() {}
+void UiStageBeginScreen::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("set_stage_name"), &UiStageBeginScreen::set_stage_name);
+	ClassDB::bind_method(D_METHOD("set_stage_no"), &UiStageBeginScreen::set_stage_no);
+	ClassDB::bind_method(D_METHOD("set_stage_desc"), &UiStageBeginScreen::set_stage_desc);
+	ClassDB::bind_method(D_METHOD("set_stage_icon"), &UiStageBeginScreen::set_stage_icon);
+}
+
+void UiStageBeginScreen::set_stage_name(String text) {
+	stage_name = text;
+	if (lab_stage_name) {
+		lab_stage_name->set_text(stage_name);
+	}
+}
+
+void UiStageBeginScreen::set_stage_no(String text) {
+	stage_no = text;
+	if (lab_stage_no) {
+		lab_stage_no->set_text(stage_no);
+	}
+}
+
+void UiStageBeginScreen::set_stage_desc(String text) {
+	stage_desc = text;
+	if (lab_stage_desc) {
+		lab_stage_desc->set_text(stage_desc);
+	}
+}
+
+void UiStageBeginScreen::set_stage_icon(Ref<Texture2D> tex) {
+	stage_icon = tex;
+	if (tex_stage_icon) {
+	}
+}
 
 void UiStageBeginScreen::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
-
+	if (!stage_icon.is_valid()) {
+		stage_icon = ResourceLoader::get_singleton()->load(DEFAULT_STAGE_ICON_PATH, "ImageTexture");
+	}
 	setup_layout();
 }
 
@@ -89,22 +123,19 @@ void UiStageBeginScreen::setup_layout() {
 	add_child(bottom_panel);
 
 	lab_stage_name = memnew(Label);
-	lab_stage_name->set_text("Stage Name");
+	lab_stage_name->set_text(stage_name);
 	top_panel->add_child(lab_stage_name);
 
 	lab_stage_no = memnew(Label);
-	lab_stage_no->set_text("Stage No.");
+	lab_stage_no->set_text(stage_no);
 	top_panel->add_child(lab_stage_no);
 
 	lab_stage_desc = memnew(Label);
-	lab_stage_desc->set_text("Stage Description Description Description");
+	lab_stage_desc->set_text(stage_desc);
 	bottom_panel->add_child(lab_stage_desc);
 
 	tex_stage_icon = memnew(TextureRect);
-	Ref<Texture2D> tex = godot::ResourceLoader::get_singleton()->load(tex_stage_icon_path, "ImageTexture");
-	if (tex.is_valid()) {
-		tex_stage_icon->set_texture(tex);
-	}
+	tex_stage_icon->set_texture(stage_icon);
 	tex_stage_icon->set_expand_mode(TextureRect::EXPAND_IGNORE_SIZE);
 	tex_stage_icon->set_stretch_mode(TextureRect::STRETCH_KEEP_ASPECT_CENTERED);
 	top_panel->add_child(tex_stage_icon);
